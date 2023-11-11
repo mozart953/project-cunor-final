@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Rol{
+  ID_Rol Int @id @default(autoincrement())
+  nombreRol String
+  usuarios Usuario[]
+  detalles detalleRol[]
+}
+
+model Permiso{
+  ID_Permiso Int @id @default(autoincrement())
+  nombrePermiso String
+  detalles detalleRol[]
+}
+
+model Restriccion{
+  ID_Restriccion Int @id @default(autoincrement())
+  nombreRestriccion String
+  detalles detalleRol[]
+}
+
+model detalleRol{
+  ID_Detalle Int @id @default(autoincrement())
+  rol Rol  @relation(fields: [ID_rol], references: [ID_Rol])
+  ID_rol Int
+  permiso Permiso  @relation(fields: [ID_permiso], references: [ID_Permiso])
+  ID_permiso Int
+  restriccion Restriccion  @relation(fields: [ID_restriccion], references: [ID_Restriccion])
+  ID_restriccion Int
+
+}
+
+model estadoUsuario{
+  ID_Estado Int @id @default(autoincrement())
+  estado Int
+  usuarios Usuario[]
+}
+
+model Usuario{
+  ID_Usuario Int @id @default(autoincrement())
+  DPI String
+  primerNombre String
+  primerApellido String
+  nombreUsuario String
+  Contrasenia String
+  rol Rol  @relation(fields: [ID_rol], references: [ID_Rol])
+  ID_rol Int
+  estado estadoUsuario  @relation(fields: [ID_estado], references: [ID_Estado])
+  ID_estado Int
+  carrera Carrera @relation(fields: [ID_carrera], references: [ID_Carrera])
+  ID_carrera Int
+  registros registroUsuario[]
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model registroUsuario{
+  ID_Registro Int @id @default(autoincrement())
+  fechaRegistro DateTime @default(now())
+  usuario Usuario  @relation(fields: [ID_usuario], references: [ID_Usuario])
+  ID_usuario Int
+  descripcion String? 
+}
+
+model Carrera{
+  ID_Carrera Int @id @default(autoincrement())
+  nombreCarrera String
+  registroTrabajograd registroTrabajoGraduacion[]
+  usuario Usuario[]
+}
+
+model Categoria{
+  ID_Categoria Int @id @default(autoincrement())
+  nombreCategoria String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model TrabajoGraduacion{
+  ID_Trabajo Int @id @default(autoincrement())
+  titulo String
+  cantidadPaginas Int?
+  descripcion String ?
+  tamanio Int?
+  direccionGuardado String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model Archivo{
+  ID_Archivo Int @id @default(autoincrement())
+  formato String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model estadoTrabajoGraduacion{
+  ID_Estado Int @id @default(autoincrement())
+  estado Int
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model Autor{
+  ID_Autor Int @id @default(autoincrement())
+  primerNombre String
+  segundoNombre String?
+  tercerNombre String?
+  primerApellido String
+  segundoApellido String?
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model registroTrabajoGraduacion{
+  ID_Detalle Int @id @default(autoincrement())
+  fechaCarga DateTime @default(now())
+  trabajoGrad TrabajoGraduacion  @relation(fields: [ID_trabajo], references: [ID_Trabajo])
+  ID_trabajo Int
+  categoria Categoria  @relation(fields: [ID_categoria], references: [ID_Categoria])
+  ID_categoria Int
+  archivo Archivo  @relation(fields: [ID_archivo], references: [ID_Archivo])
+  ID_archivo Int
+  carrera Carrera  @relation(fields: [ID_carrera], references: [ID_Carrera])
+  ID_carrera Int
+  autor Autor  @relation(fields: [ID_autor], references: [ID_Autor])
+  ID_autor Int
+  usuario Usuario  @relation(fields: [ID_usuario], references: [ID_Usuario])
+  ID_usuario Int
+  estado estadoTrabajoGraduacion  @relation(fields: [ID_estado], references: [ID_Estado])
+  ID_estado Int
+
+}
+
