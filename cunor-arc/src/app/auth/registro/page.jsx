@@ -1,8 +1,21 @@
 "use client"
+import { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 
 function RegisterPage(){
     const {register, handleSubmit, formState:{errors}} = useForm();
+    const [roles, setRoles] = useState([]);
+    const [idrol, setIdrol] = useState(0);
+
+    useEffect(()=>{
+        fetch('/api/datos').then(datos=>datos.json()).then(data=>{
+            console.log(data);
+            console.log(data.nombreRol);
+            setRoles([...data,...roles]);
+            setIdrol(data.ID_Rol);
+        })
+
+    },[]);
     
     const onSubmit = handleSubmit(async (data)=>{
 
@@ -164,7 +177,7 @@ function RegisterPage(){
 
                         </div>  
 
-                        <div className='row mb-3'>
+                        <div className='row mb-2'>
                             <div className='col-4'>
                                 <label htmlFor="disabledTextInput" className="col-form-label">Asignar rol</label>
                             </div>
@@ -172,6 +185,10 @@ function RegisterPage(){
                             <div className='col'>
                                 <input type="number" placeholder="Rol" {...register("rol", {required: {value: true, message:'Es necesario asignar un rol...'}})} className="form-control bg-secondary text-white"/>
                             </div>
+
+                            <select className='col form-select text-white bg-dark'>
+                                {roles.map((datos)=><option key={datos.ID_Rol}>{datos.nombreRol}</option>)}
+                            </select>
 
                             {
                                 errors.rol && (                                   
