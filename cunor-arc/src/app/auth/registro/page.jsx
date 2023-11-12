@@ -6,14 +6,43 @@ function RegisterPage(){
     const {register, handleSubmit, formState:{errors}} = useForm();
     const [roles, setRoles] = useState([]);
     const [idrol, setIdrol] = useState(0);
+    const [idcarrera, setIdcarrera] = useState(0);
+    const [carrera, setCarrera] = useState([]);
+
+
+    const obtenerIdRol = (event)=>{
+        //event.preventDefault();
+        const selectRol = event.target.value;
+        console.log(selectRol);
+        setIdrol(selectRol); 
+        
+    };
+
+    const obtenerIdCarrera = (event)=>{
+        event.preventDefault();
+        const selectCarrera = event.target.value;
+        console.log(selectCarrera);
+        setIdcarrera(selectCarrera);
+    }
+
 
     useEffect(()=>{
-        fetch('/api/datos').then(datos=>datos.json()).then(data=>{
-            console.log(data);
-            console.log(data.nombreRol);
+        fetch('/api/datos/reRoles').then(datos=>datos.json()).then(data=>{
+            //console.log(data);
+           // console.log(data.nombreRol);
             setRoles([...data,...roles]);
-            setIdrol(data.ID_Rol);
+            setIdrol(data[0].ID_Rol);
+            console.log(data[0].ID_Rol);
+            
         })
+
+        fetch('/api/datos/reCarrera').then(datos1=>datos1.json()).then(data1=>{
+            console.log(data1);
+            setCarrera([...data1,...carrera]);
+            setIdcarrera(data1[0].ID_Carrera);
+            console.log(data1[0].ID_Carrera);
+        })
+
 
     },[]);
     
@@ -32,9 +61,9 @@ function RegisterPage(){
                 primerApellido:data.primerApellido,
                 nombreUsuario: data.nombreUsuario,
                 Contrasenia: data.contrasenia,
-                ID_rol: Number(data.rol),
-                ID_estado: Number(data.estado),
-                ID_carrera: Number(data.carrera),                
+                ID_rol: Number(idrol),
+                ID_estado: 1,
+                ID_carrera:Number(idcarrera),                
                   
 
             }),
@@ -43,7 +72,7 @@ function RegisterPage(){
             }
         });
         const respuesta = await datos.json();
-        console.log(respuesta);
+       // console.log(respuesta);
     }) 
 
 
@@ -182,25 +211,25 @@ function RegisterPage(){
                                 <label htmlFor="disabledTextInput" className="col-form-label">Asignar rol</label>
                             </div>
 
-                            <div className='col'>
+                            {/* <div className='col'>
                                 <input type="number" placeholder="Rol" {...register("rol", {required: {value: true, message:'Es necesario asignar un rol...'}})} className="form-control bg-secondary text-white"/>
-                            </div>
+                            </div> */}
 
-                            <select className='col form-select text-white bg-dark'>
-                                {roles.map((datos)=><option key={datos.ID_Rol}>{datos.nombreRol}</option>)}
-                            </select>
+                            <select className='col form-select text-white bg-dark' onChange={obtenerIdRol}>
+                                {roles.map((datos)=><option key={datos.ID_Rol} value={datos.ID_Rol}>{datos.nombreRol}</option>)}
+                            </select> 
 
-                            {
+                            {/* {
                                 errors.rol && (                                   
                                     
                                     <span className="badge rounded-pill text-bg-danger">{errors.rol.message}</span> 
 
 
                                 )
-                            }
+                            } */}
                         </div>                   
 
-                        <div className='row mb-3'>
+                        {/* <div className='row mb-3'>
                             <div className='col-4'>
                                 <label htmlFor="disabledTextInput" className="col-form-label">Habilitar/Deshabilitar usuario</label>
                                 
@@ -220,27 +249,31 @@ function RegisterPage(){
                                 )
                             }     
 
-                        </div>
+                        </div> */}
 
                         <div className='row mb-3'>
                             <div className='col-4'>
                                 <label htmlFor="disabledTextInput" className="col-form-label">Asignar Carrera</label>
                             </div>  
 
-                            <div className='col'>
+                            {/* <div className='col'>
                                 <input type="number" placeholder="Carrera" {...register("carrera", {required: {value: true, message:'Establecer carrera...'}})} className="form-control bg-secondary text-white"/>
-                            </div>    
+                            </div> */}
 
-                            {
+                            <select className='col form-select text-white bg-dark' onChange={obtenerIdCarrera}>
+                                {carrera.map((datos1)=><option key={datos1.ID_Carrera} value={datos1.ID_Carrera}>{datos1.nombreCarrera}</option>)}
+                            </select>    
+
+                            {/* {
                                 errors.carrera && (                                   
                                     
                                     <span className="badge rounded-pill text-bg-danger">{errors.carrera.message}</span> 
 
 
                                 ) 
-                            }                
+                            }                 */}
                     
-                        </div>
+                        </div> 
                        
 
                         <button type="submit" className="btn btn-primary w-100 mt-3">
