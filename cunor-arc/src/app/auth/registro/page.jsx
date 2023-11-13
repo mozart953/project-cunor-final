@@ -8,6 +8,17 @@ function RegisterPage(){
     const [idrol, setIdrol] = useState(0);
     const [idcarrera, setIdcarrera] = useState(0);
     const [carrera, setCarrera] = useState([]);
+    const [registro, setRegistro] = useState(false);
+
+    useEffect(() => {
+        if (registro) {
+            const timer = setTimeout(() => {
+                setRegistro(false);
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [registro]);  
 
 
     const obtenerIdRol = (event)=>{
@@ -71,14 +82,21 @@ function RegisterPage(){
                 'Content-Type':'application/json'
             }
         });
-        const respuesta = await datos.json();
-       // console.log(respuesta);
-    }) 
+        //const respuesta = await datos.json();
+        if(datos.ok){
+           setRegistro(true);
+        }else{
+            alert("El usuario ya existe..."); //cambiar diseno
+        }
+        console.log(datos);
+        
+    }); 
 
 
 
     return(
         <>
+
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
@@ -283,6 +301,19 @@ function RegisterPage(){
                 </form>
 
             </div>
+
+            {
+                registro &&(
+
+                    <div className="d-flex justify-content-end">
+                        <div className="alert alert-success" role="alert">
+                            ¡Usuario registrado correctamente!
+                        </div>
+
+                    </div>
+                    
+                )
+            }
         </>
     );
 }

@@ -50,9 +50,9 @@ model estadoUsuario{
 model Usuario{
   ID_Usuario Int @id @default(autoincrement())
   DPI String
-  primerNombre String
+  primerNombre String 
   primerApellido String
-  nombreUsuario String
+  nombreUsuario String @unique
   Contrasenia String
   rol Rol  @relation(fields: [ID_rol], references: [ID_Rol])
   ID_rol Int

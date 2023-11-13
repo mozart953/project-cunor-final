@@ -121,3 +121,6 @@ CREATE TABLE "registroTrabajoGraduacion" (
     CONSTRAINT "registroTrabajoGraduacion_ID_usuario_fkey" FOREIGN KEY ("ID_usuario") REFERENCES "Usuario" ("ID_Usuario") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "registroTrabajoGraduacion_ID_estado_fkey" FOREIGN KEY ("ID_estado") REFERENCES "estadoTrabajoGraduacion" ("ID_Estado") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Usuario_nombreUsuario_key" ON "Usuario"("nombreUsuario");
