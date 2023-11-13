@@ -22,7 +22,8 @@ function LoginPage() {
 
         }else{
             console.log("Enviando...");
-            router.push('/dashboardAdmin')
+            router.push('/dashboardAdmin');
+            router.refresh();
         }
         console.log(res);
 
