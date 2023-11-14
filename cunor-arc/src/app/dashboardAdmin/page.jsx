@@ -1,14 +1,45 @@
 "use client"
-import { signOut } from "next-auth/react";
+import { signOut} from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
+import CompRolPage from "@/components/compRol";
 
-function DashboardPage(){
+
+ function DashboardPage(){
+
+    // const sesion = await getServerSession(authOptions);
+
+    // const rol = sesion?.user?.role;
+    // console.log(rol);
+
+    // const role = session?.user?.data?.role;
+   
+    // console.log(role);
+   
+
+
     return(
         <>
-            <div>
-                Bienvenido 
-            </div>
+        
 
-            <button onClick={()=>signOut({ callbackUrl: '/auth/login' })}>Cerrar sesion</button>
+          
+                    {/* <div>
+                        Bienvenido 
+                    </div> */}
+
+
+                    <SessionProvider>
+               
+                        <CompRolPage />
+                    </SessionProvider>
+
+     
+                    
+
+                    {/* <button onClick={()=>signOut({ callbackUrl: '/auth/login' })}>Cerrar sesion</button> */}
+
+
+                   
+            
         
         </>
     );

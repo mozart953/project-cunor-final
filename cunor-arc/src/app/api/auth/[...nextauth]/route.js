@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import db from '@/libs/db.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 
 export const authOptions ={
@@ -21,7 +22,10 @@ export const authOptions ={
                         where:{
                             nombreUsuario: credentials.username,
                             
-                        }
+                        },
+                        include:{
+                            rol:true,
+                        },
                     });
 
                     if(!usuarioEncontrado){throw new Error('Usuario no encontrado...')}
@@ -34,10 +38,20 @@ export const authOptions ={
                         throw new Error('Contraseña incorrecta')
                     }
 
-                    return {
+                    const user = {
+                        
                         id: usuarioEncontrado.ID_Usuario,
                         name: usuarioEncontrado.nombreUsuario,
+                        role: usuarioEncontrado.rol.nombreRol,
+                        
 
+                    };
+
+                    const token = jwt.sign(user, process.env.NEXTAUTH_SECRET);
+
+                    return {
+                        ...user,
+                        token,
                     };
                 },
             }
@@ -45,9 +59,11 @@ export const authOptions ={
     ],
     pages: {
         signIn:"/auth/login",
-    }
+    }, 
+        
+    
 };
 
-const handler = NextAuth(authOptions);
+export const handler = NextAuth(authOptions);
 
-export {handler as GET, handler as POST}
+export {handler as GET, handler as POST};

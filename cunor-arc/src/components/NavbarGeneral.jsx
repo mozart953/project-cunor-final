@@ -2,10 +2,12 @@ import Link from "next/link";
 import {getServerSession} from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+
 async function Navbar(){
 
     const sesion = await getServerSession(authOptions);
-    console.log(sesion);
+    console.log(sesion); 
+    
 
     return(
         <nav className="navbar navbar-expand-lg  navbar-dark bg-primary">
@@ -41,10 +43,14 @@ async function Navbar(){
                                     <li className="nav-item">
                                         <Link href='/dashboardAdmin' className="nav-link">Dashboard</Link>
                                     </li>
+
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminUsuarios' className="nav-link">Gestión de usuarios</Link>
+                                    </li>
                         
                     
                                     <li className="nav-item">
-                                        <Link href='/auth/registro' className="nav-link">Registro de usuarios</Link>
+                                        <Link href='/dashboardAdmin/registro' className="nav-link">Registro de usuarios</Link>
                                     </li>
 
                                     <li className="nav-item"> 

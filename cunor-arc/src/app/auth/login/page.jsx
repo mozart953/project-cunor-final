@@ -21,7 +21,7 @@ function LoginPage() {
             alert(res.error);
 
         }else{
-            console.log("Enviando...");
+            console.log("Enviando..." );
             router.push('/dashboardAdmin');
             router.refresh();
         }
