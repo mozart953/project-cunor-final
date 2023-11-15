@@ -280,17 +280,26 @@ function EditPage({params}){
                         <button type="submit" className="btn btn-primary w-100 mt-3">
                             Actualizar usuario
                         </button>
+                        
+                    
                     
                 </form>
 
             </div>
+            <div className="d-flex justify-content-center ">
+                <button type="submit" className="btn btn-outline-danger w-50 mt-3" onClick={()=>route.push(`/dashboardAdmin/editarContrasenia/${params.id}`)}> 
+                                Actualizar contraseña
+                </button>
+
+            </div>
+           
 
             {
                 registro &&(
 
                     <div className="d-flex justify-content-end">
                         <div className="alert alert-success" role="alert">
-                            ¡Usuario registrado correctamente!
+                            ¡Usuario editado correctamente!
                         </div>
 
                     </div>
