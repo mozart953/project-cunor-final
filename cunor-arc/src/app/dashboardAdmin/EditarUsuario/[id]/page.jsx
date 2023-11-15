@@ -2,6 +2,7 @@
 import React from "react";
 import { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
+import { useRouter } from "next/navigation";
 
 function EditPage({params}){
     const {register, handleSubmit, formState:{errors}} = useForm();
@@ -16,13 +17,13 @@ function EditPage({params}){
     const [apellido, setApellido] = useState("");
     const [nombreusuario, setNombreusuario] = useState("");
 
-    
+    const route = useRouter();
 
     useEffect(() => {
         if (registro) {
             const timer = setTimeout(() => {
                 setRegistro(false);
-            }, 5000);
+            }, 6000);
 
             return () => clearTimeout(timer);
         }
@@ -136,6 +137,8 @@ function EditPage({params}){
         //const respuesta = await datos.json();
         if(datos.ok){
            setRegistro(true);
+           route.push('/dashboardAdmin/adminUsuarios');
+           route.refresh();
         }else{
             alert("El usuario ya existe..."); //cambiar diseno
         }

@@ -1,12 +1,28 @@
 "use client"
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function compoUsuariosPage({datos}){
     const router = useRouter();
+    const [estado, setEstado] = useState({});
+    
 
     const datos2 = datos.map(data=>data.rol);
     console.log("Viendo datos en Usuarios " + datos2 )
     console.log("Usuario " + datos.ID_Usuario );
+
+
+    useEffect(()=>{
+            console.log(estado)
+
+            const estadoInicial = {};
+            datos.forEach((data)=>{
+                estadoInicial[data.ID_Usuario]=true;
+            });
+                   
+            setEstado(estadoInicial);
+        
+    },[datos])
 
     
 
@@ -39,7 +55,20 @@ function compoUsuariosPage({datos}){
                                         <td>{data.carrera.nombreCarrera}</td>
                                         <td>
                                         <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/EditarUsuario/${data.ID_Usuario}`)}}>Editar</button>
-                                        <button type="button" className="btn btn-warning mr-8" style={{ marginRight: '10px' }}>Habilitar/Deshabilitar</button>
+                                        
+                                        {
+                                          
+                                           estado[data.ID_Usuario]?(
+                                            <button type="button" className="btn  btn-outline-danger mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false})}}>Deshabilitar</button>
+                                        
+
+                                           ):(
+                                            <button type="button" className="btn  btn-outline-success"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true})}}>Habilitar</button>
+
+
+                                           )
+                                        }
+                                        
                                         <button type="button" className="btn btn-light">Detalles</button>
 
                                         </td>
