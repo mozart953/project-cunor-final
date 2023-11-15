@@ -17,12 +17,43 @@ function compoUsuariosPage({datos}){
 
             const estadoInicial = {};
             datos.forEach((data)=>{
-                estadoInicial[data.ID_Usuario]=true;
+
+                if(data.ID_estado==1){
+                    estadoInicial[data.ID_Usuario]=true; 
+
+                }else{
+                    estadoInicial[data.ID_Usuario]=false;
+                }
+
+              
             });
                    
             setEstado(estadoInicial);
         
     },[datos])
+
+
+    const actualizarEstado = async (id,estado)=>{
+        console.log("valor"+estado);
+        if(estado==1){
+            estado=2;
+        }else{
+            estado=1;
+        }
+
+        const estaDo= await fetch(`/api/datos/reEstadoU/${id}`,{
+            method:'PUT',
+            body:JSON.stringify({
+                ID_estado:Number(estado),
+
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(data=>data.json())
+        .then(datos=>console.log(datos));
+        console.log(estaDo);
+    }
 
     
 
@@ -59,14 +90,14 @@ function compoUsuariosPage({datos}){
                                         {
                                           
                                            estado[data.ID_Usuario]?(
-                                            <button type="button" className="btn  btn-outline-danger mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false})}}>Deshabilitar</button>
+                                            <button type="button" className="btn  btn-outline-danger mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Deshabilitar</button>
                                         
 
                                            ):(
-                                            <button type="button" className="btn  btn-outline-success"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true})}}>Habilitar</button>
+                                            <button type="button" className="btn  btn-outline-success"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Habilitar</button>
 
 
-                                           )
+                                           ) 
                                         }
                                         
                                         <button type="button" className="btn btn-light">Detalles</button>
