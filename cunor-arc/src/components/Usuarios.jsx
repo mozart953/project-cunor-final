@@ -1,10 +1,14 @@
 "use client"
+import { useRouter } from "next/navigation";
 
 function compoUsuariosPage({datos}){
+    const router = useRouter();
 
     const datos2 = datos.map(data=>data.rol);
     console.log("Viendo datos en Usuarios " + datos2 )
     console.log("Usuario " + datos.ID_Usuario );
+
+    
 
     return(
         <>
@@ -34,7 +38,7 @@ function compoUsuariosPage({datos}){
                                         <td>{data.rol.nombreRol}</td>
                                         <td>{data.carrera.nombreCarrera}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }}>Editar</button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/EditarUsuario/${data.ID_Usuario}`)}}>Editar</button>
                                         <button type="button" className="btn btn-warning mr-8" style={{ marginRight: '10px' }}>Habilitar/Deshabilitar</button>
                                         <button type="button" className="btn btn-light">Detalles</button>
 
