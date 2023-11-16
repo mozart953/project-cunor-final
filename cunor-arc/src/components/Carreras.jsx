@@ -9,7 +9,9 @@ function compoCarrerasPage({datos}){
     return(
         <>
             <div style={{paddingTop:'20px', paddingLeft:'10px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-outline-success">Agregar carrera</button>
+                <button type="button" className="btn btn-outline-success" 
+                    onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
+                >Agregar carrera</button>
             </div>
             
 

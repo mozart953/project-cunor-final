@@ -6,3 +6,18 @@ export async function GET(){
 
     return NextResponse.json(carreras);
 }
+
+export async function POST(request){
+    const datos = await request.json();
+
+    const carrera = await db.carrera.create({
+        data:{
+            nombreCarrera:datos.nombreCarrera,
+        }
+    }
+
+    );
+
+    return NextResponse.json(carrera);
+
+}
