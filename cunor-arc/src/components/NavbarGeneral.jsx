@@ -53,6 +53,11 @@ async function Navbar(){
                                         <Link href='/dashboardAdmin/registro' className="nav-link">Registro de usuarios</Link>
                                     </li>
 
+                                    
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminCarreras' className="nav-link">Gestión de carreras</Link>
+                                    </li>
+
                                     <li className="nav-item"> 
                                         <Link href='/api/auth/signout' className="nav-link">Cerrar sesion</Link>
                                     </li>
