@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import { useRouter } from "next/navigation";
 
-function EditCarreraPage({params}){
+function CrearPermisoPage(){
+
     const {register, handleSubmit, formState:{errors}} = useForm();
     const [registro, setRegistro] = useState(false);
 
-    const [carrera,setCarrera] = useState();
+    //const [carrera,setCarrera] = useState();
 
     const route = useRouter();
     
@@ -23,7 +24,7 @@ function EditCarreraPage({params}){
     }, [registro]);  
 
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         fetch(`/api/datos/reCarrera/${params.id}`).then(datos=>datos.json())
             .then(data=>{
                  
@@ -31,7 +32,7 @@ function EditCarreraPage({params}){
 
                  console.log(data.nombreCarrera)
                 });
-    },[]);
+    },[]);*/
 
     const onSubmit = handleSubmit(async (data)=>{
 
@@ -40,10 +41,10 @@ function EditCarreraPage({params}){
 
         }*/
 
-        const datos = await fetch(`/api/datos/reCarrera/${params.id}`,{
-            method:'PUT',
+        const datos = await fetch(`/api/datos/rePermisos`,{
+            method:'POST',
             body:JSON.stringify({
-                nombreCarrera:carrera,            
+                nombrePermiso:data.Permiso,            
                   
 
             }),
@@ -54,7 +55,7 @@ function EditCarreraPage({params}){
         //const respuesta = await datos.json();
         if(datos.ok){
            setRegistro(true);
-           route.push('/dashboardAdmin/adminCarreras');
+           route.push('/dashboardAdmin/adminRoles');
            route.refresh();
         }else{
             alert("Algo salio mal..."); //cambiar diseno
@@ -64,23 +65,31 @@ function EditCarreraPage({params}){
     }); 
 
 
+
     return(
         <>
-        
-
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4">Edición de carreas -CUNOR-</legend>
+                        <legend className="text-center mb-4">Creación de permisos -CUNOR-</legend>
 
                         <div className='row mb-3'>
-                            <div className="col-2">
-                                <label htmlFor="disabledTextInput" className="text-white">Carrera</label>
+                            <div className="col-4">
+                                <label htmlFor="disabledTextInput" className="text-white">Nombre del permiso</label>
                             </div>
 
                             <div className="col"> 
-                                <input type="text" placeholder="Carrera"  onChange={(e)=>setCarrera(e.target.value)}  value={carrera} className="form-control bg-secondary text-white" />
+                                <input type="text" placeholder="Permiso"  {...register("Permiso", {required: {value: true, message:'Es necesario escribir el nombre del permiso...'}})}   className="form-control bg-secondary text-white" />
                             </div> 
+
+                            {
+                                errors.Permiso && (                                  
+                                    
+                                    <span className="badge rounded-pill text-bg-danger">{errors.Permiso.message}</span>
+
+
+                                )
+                            }
 
                 
 
@@ -89,7 +98,7 @@ function EditCarreraPage({params}){
                        
 
                         <button type="submit" className="btn btn-outline-success w-100 mt-3">
-                            Actualizar carrera
+                            Crear permiso
                         </button>
                         
                     
@@ -105,15 +114,16 @@ function EditCarreraPage({params}){
 
                     <div className="d-flex justify-content-end">
                         <div className="alert alert-success" role="alert">
-                            ¡Carrera editada correctamente!
+                            ¡Permiso creado correctamente!
                         </div>
 
                     </div>
                     
                 )
             }
+            
         </>
     );
 }
 
-export default EditCarreraPage;
+export default CrearPermisoPage;
