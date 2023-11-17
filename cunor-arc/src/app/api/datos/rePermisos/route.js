@@ -14,3 +14,9 @@ export async function POST(request){
 
     return NextResponse.json(permisoCreado);
 }
+
+export async function GET(){
+    const permiso = await db.permiso.findMany();
+
+    return NextResponse.json(permiso);
+}
