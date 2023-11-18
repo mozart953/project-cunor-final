@@ -37,11 +37,20 @@ function LoginPage() {
         <section className="text-center">
             <div className="p-5 bg-image"></div>
 
-            <div className="card mx-auto shadow-5-strong" style={{maxWidth: '500px'}}>
+            <div className="card mx-auto shadow-5-strong" style={{maxWidth: '500px', maxHeight:'450px'}}>
             <div className="card-body py-5 px-md-5">
                 <div className="row d-flex justify-content-center">
                 <div className="col-lg-10">
-                    <h2 className="fw-bold mb-5">CUNOR</h2>
+                    
+                    {/* <img src="/images/cunor-logo.png" style={{ width: '150px', height: '150px', display: 'block', margin: 'auto' }} /> */}
+                    {/* <h2 className="fw-bold mb-5">CUNOR</h2> */}
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <h2 className="fw-bold mb-6 ml-3">CUNOR</h2>
+                        <img src="/images/cunor-logo.png" style={{ width: '150px', height: '150px' }} />
+                        
+                    </div>
+
 
                     <form onSubmit={onSubmit}>
                     <div className="form-outline mb-4">
