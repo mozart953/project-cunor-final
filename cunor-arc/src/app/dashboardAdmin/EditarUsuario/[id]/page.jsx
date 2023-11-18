@@ -143,6 +143,19 @@ function EditPage({params}){
             alert("El usuario ya existe..."); //cambiar diseno
         }
         console.log(datos);
+
+
+        const registrar = fetch('/api/datos/reDellesU', {
+            method:'POST',
+            body:JSON.stringify({
+                nombreUsuario:nombreusuario,
+                descripcion:'Actualizacion de usuario'
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(data=>data.json())
+        .then(datos=>console.log(datos));
         
     }); 
 

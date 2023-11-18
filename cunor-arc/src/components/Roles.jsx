@@ -41,8 +41,8 @@ function compoRolesPage({datos}){
                                         <td>{data.nombreRol}</td>
                                         <td>
                                         <button type="button" className="btn btn-outline-success mr-4" style={{ marginRight: '10px' , marginLeft:'10px'}} onClick={()=>{router.push(`/dashboardAdmin/adminRoles/asignarPermisos/${data.ID_Rol}`)}}>Agregar permisos</button>
-                                        <button type="button" className="btn btn-outline-warning" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}>Agregar restricciones</button>
-                                        <button type="button" className="btn btn-outline-info" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}>Detalles</button>                                                                              
+                                        <button type="button" className="btn btn-outline-warning" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminRoles`)}}>Agregar restricciones</button>
+                                        <button type="button" className="btn btn-outline-info" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminRoles`)}}>Detalles</button>                                                                              
                                         
 
                                         </td>

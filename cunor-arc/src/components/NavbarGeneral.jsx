@@ -60,7 +60,7 @@ async function Navbar(){
 
                                     
                                     <li className="nav-item"> 
-                                        <Link href='/dashboardAdmin/adminRoles' className="nav-link">Gestión de roles</Link>
+                                        <Link href='/dashboardAdmin/adminRoles' className="nav-link">Roles</Link>
                                     </li> 
 
                                     <li className="nav-item"> 

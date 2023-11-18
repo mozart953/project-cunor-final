@@ -24,7 +24,7 @@ function PermisosPage({datos, id}){
                                         <th scope="row">{data.ID_Permiso}</th>
                                         <td>{data.nombrePermiso}</td>
                                         <td>
-                                        <button type="button" className="btn btn-outline-success mr-4" style={{ marginRight: '10px' , marginLeft:'10px'}} onClick={()=>{router.push(`/dashboardAdmin/adminRoles/asignarPermisos/${data.ID_Rol}`)}}>Agregar permisos</button>
+                                        <button type="button" className="btn btn-outline-success mr-4" style={{ marginRight: '10px' , marginLeft:'10px'}} onClick={()=>{router.push(`/dashboardAdmin/adminRoles/asignarPermisos/${data.ID_Rol}`)}}>Agregar permiso</button>
                                         
                                         </td>
                                         </tr>        

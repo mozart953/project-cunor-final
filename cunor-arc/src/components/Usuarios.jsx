@@ -100,7 +100,7 @@ function compoUsuariosPage({datos}){
                                            ) 
                                         }
                                         
-                                        <button type="button" className="btn btn-light">Detalles</button>
+                                        <button type="button" className="btn btn-light" onClick={()=>{router.push(`/dashboardAdmin/adminUsuarios/detallesUsuario/${data.ID_Usuario}`)}}>Detalles</button>
 
                                         </td>
                                         </tr>        
