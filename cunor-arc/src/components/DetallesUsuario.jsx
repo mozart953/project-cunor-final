@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 function compoDetallesUsuarioPage({id}){
 
-    const [datos, setDatos] = useState({});
+    const [datos0, setDatos] = useState([]);
     const [datos1, setDatos1] = useState({usuario:{}});
     console.log(id);
 
@@ -11,7 +11,7 @@ function compoDetallesUsuarioPage({id}){
         ()=>{
             fetch(`/api/datos/reDellesU/${id}`).then(data=>data.json())
             .then(datos=>{
-                console.log(datos.usuario.nombreUsuario);
+                //console.log(datos0.usuario.nombreUsuario);
                 setDatos(datos);
                 setDatos1(datos);
             }
@@ -20,7 +20,7 @@ function compoDetallesUsuarioPage({id}){
         },[]
     );
 
-    console.log(datos.usuario);
+    console.log(datos0.usuario);
 
     return(
         <>
@@ -28,8 +28,9 @@ function compoDetallesUsuarioPage({id}){
             <div>
 
                 {
-                            datos != null?
-                            <table className="table table-dark table-striped text-center">
+                            datos0.length > 0?
+                            
+                                <table className="table table-dark table-striped text-center">
                                             <thead>
                                                 <tr>
                                                 <th scope="col">No.</th>
@@ -41,18 +42,20 @@ function compoDetallesUsuarioPage({id}){
                                             </thead>
                                             <tbody>
                                                 {
+                                                    datos0.map((data)=>(
                 
-                                                        <tr key={datos.ID_Registro}>
-                                                        <th scope="row">{datos.ID_Registro}</th>
-                                                        <td>{datos.fechaRegistro}</td>
-                                                        <td>{datos1.usuario.nombreUsuario}</td>
-                                                        <td>{datos.descripcion}</td>
+                                                        <tr key={data.ID_Registro}>
+                                                        <th scope="row">{data.ID_Registro}</th>
+                                                        <td>{data.fechaRegistro}</td>
+                                                        <td>{data.usuario.nombreUsuario}</td>
+                                                        <td>{data.descripcion}</td>
                                                         </tr>        
-                
+                                                    ))
                                                 }
                                                
                                             </tbody>
-                            </table>
+                                </table> 
+                            
                             :
 
                             <div className="d-flex justify-content-center align-items-center" style={{height: "100vh", color: "white"}}>

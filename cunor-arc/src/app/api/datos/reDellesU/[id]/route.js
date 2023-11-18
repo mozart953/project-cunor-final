@@ -3,7 +3,7 @@ import db from '@/libs/db.js';
 
 export async function GET(request,{params}){
     console.log("viendo el dato" + params.id);
-    const detalleUsuario = await db.registroUsuario.findFirst(
+    const detalleUsuario = await db.registroUsuario.findMany(
         {
             where:{
                 ID_usuario:Number(params.id),
