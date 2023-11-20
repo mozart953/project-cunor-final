@@ -2,11 +2,34 @@
 import {useForm} from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import useLog from '@/hooks/log';
+import { useEffect } from 'react';
 
 function LoginPage() {
 
     const {register, handleSubmit, formState:{errors}} = useForm();
     const router = useRouter();
+    const [rol, setUsuario1] = useLog (null);
+
+
+    useEffect(()=>{
+
+        if (rol === null) {
+            return;
+        }
+        //console.log("Viendo rol: " + JSON.stringify(rol));
+
+        if(rol==='Administrativo'){
+            console.log("Viendo rol " + rol);
+            router.push('/dashboardAdmin');
+            router.refresh(); 
+        }else if(rol==='Operativo'){
+            console.log("Viendo rol " + rol);
+            router.push('/dashboardOperador');
+            router.refresh(); 
+        }
+
+    },[rol]);
 
     const onSubmit = handleSubmit(async data=>{
         console.log(data);
@@ -22,8 +45,12 @@ function LoginPage() {
 
         }else{
             console.log("Enviando..." );
-            router.push('/dashboardAdmin');
-            router.refresh();
+            console.log(data.nombreUsuario);
+            setUsuario1(data.nombreUsuario);
+            //useLog({usuario:data.nombreUsuario})
+            // console.log("valor del rol "+rol);
+            // router.push('/dashboardAdmin');
+            // router.refresh();
         }
         console.log(res);
 

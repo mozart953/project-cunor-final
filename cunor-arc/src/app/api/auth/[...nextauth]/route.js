@@ -47,7 +47,7 @@ export const authOptions ={
 
                     };
 
-                    const token = jwt.sign(user, process.env.NEXTAUTH_SECRET);
+                    const token = jwt.sign({ ...user, exp: Math.floor(Date.now() / 1000) + 60 * 60 }, process.env.NEXTAUTH_SECRET);
 
                     return {
                         ...user,
@@ -60,7 +60,7 @@ export const authOptions ={
     pages: {
         signIn:"/auth/login",
     }, 
-        
+           
     
 };
 

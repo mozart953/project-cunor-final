@@ -10,8 +10,8 @@ function CompRolPage(){
         return <div>Cargando...</div>;
     }
 
-    const role = session?.user?.name;
-    console.log("viendo rol " + role);
+    const role = session?.user?.role;
+    console.log("viendo rol " + JSON.stringify(session, null, 2));
 
 
 
