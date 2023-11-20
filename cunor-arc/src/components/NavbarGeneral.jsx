@@ -6,7 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 async function obtenerRol(usuario1){
 
-    const datos = await fetch(`http://localhost:3000/api/datos/reUsuarioLog?nombreUsuario=${usuario1}`);
+    const datos = await fetch(`${process.env.API_BASE_URL}/api/datos/reUsuarioLog?nombreUsuario=${usuario1}`);
     return datos.json();
 }
 
@@ -97,6 +97,11 @@ async function Navbar(){
                                         <li className="nav-item">
                                             <Link href='/dashboardOperador' className="nav-link d-flex flex-column text-center">
                                                 <i className="bi bi-person-circle"></i><span className="small">Dashboard operativo</span>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link href='/dashboardOperador/subidaTrabajos' className="nav-link d-flex flex-column text-center">
+                                                <i className="bi bi-box-arrow-up"></i><span className="small">Subir trabajo de graduación</span>
                                             </Link>
                                         </li>
                                         <li className="nav-item">

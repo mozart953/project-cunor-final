@@ -18,7 +18,9 @@ function CompRolPage(){
   return (
    
       <>
-        <h1>Rol</h1>
+           <div className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
+                <div className="text-white">Bienvenido administrativo...</div>
+            </div>
       </>
    
   );

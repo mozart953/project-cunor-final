@@ -73,8 +73,8 @@ function LoginPage() {
                     {/* <h2 className="fw-bold mb-5">CUNOR</h2> */}
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <h2 className="fw-bold mb-6 ml-3">CUNOR</h2>
-                        <img src="/images/cunor-logo.png" style={{ width: '150px', height: '150px' }} />
+                        {/* <h2 className="fw-bold mb-6 ml-3">CUNOR</h2> */}
+                        <img src="/images/cunorl-logo3.jpg" style={{ width: '350px', height: '120px' }} />
                         
                     </div>
 

@@ -5,9 +5,9 @@ export default function Home({ DashboardPage,pageProps}) {
   return (
 
     <>
-      <div>
-        <h3>Hola mundo</h3>
-      </div>
+            <div className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
+                <div className="text-white">En construcción...</div>
+            </div>
       
 
     </>
