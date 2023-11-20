@@ -4,11 +4,24 @@ import {getServerSession} from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
+async function obtenerRol(usuario1){
+
+    const datos = await fetch(`http://localhost:3000/api/datos/reUsuarioLog?nombreUsuario=${usuario1}`);
+    return datos.json();
+}
+
 async function Navbar(){
-    
     const sesion = await getServerSession(authOptions);
-    console.log(sesion); 
-    
+    console.log(sesion);  
+    let rolUsuario;
+
+    if(sesion?.user){
+        const datos = await obtenerRol(sesion?.user.name);
+        console.log(datos.rol.nombreRol);
+        rolUsuario = datos.rol.nombreRol;
+    }
+
+        console.log("valor del rol> " + rolUsuario);
 
     return(
         
@@ -43,39 +56,61 @@ async function Navbar(){
                             </Link>
                             </li>
                         </>
-                        ) : (
-                        <>
-                            <li className="nav-item">
-                                <Link href='/dashboardAdmin' className="nav-link d-flex flex-column text-center">
-                                    <i className="bi bi-pencil-square"></i><span className="small">Dashboard</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link href='/dashboardAdmin/adminUsuarios' className="nav-link d-flex flex-column text-center">
-                                    <i className="bi bi-person"></i><span className="small">Gestión de usuarios</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link href='/dashboardAdmin/registro' className="nav-link d-flex flex-column text-center">
-                                    <i className="bi bi-person-badge-fill"></i><span className="small">Registro de usuarios</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link href='/dashboardAdmin/adminCarreras' className="nav-link d-flex flex-column text-center">
-                                    <i className="bi bi-pin-angle-fill"></i><span className="small">Gestión de carreras</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link href='/dashboardAdmin/adminRoles' className="nav-link d-flex flex-column text-center">
-                                    <i className="bi bi-person-lock"></i><span className="small">Roles</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
-                                    <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
-                                </Link> 
-                            </li>
-                        </>
+                        ) : (   
+                           rolUsuario ==="Administrativo" ?(
+                                <>
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-pencil-square"></i><span className="small">Dashboard administrativo</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminUsuarios' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-person"></i><span className="small">Gestión de usuarios</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/registro' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-person-badge-fill"></i><span className="small">Registro de usuarios</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminCarreras' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-pin-angle-fill"></i><span className="small">Gestión de carreras</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminRoles' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-person-lock"></i><span className="small">Roles</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
+                                            <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
+                                        </Link> 
+                                    </li>
+                                </>
+                            ):(
+
+                                rolUsuario === "Operativo" &&(
+                                    <>
+                                        <li className="nav-item">
+                                            <Link href='/dashboardOperador' className="nav-link d-flex flex-column text-center">
+                                                <i className="bi bi-person-circle"></i><span className="small">Dashboard operativo</span>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
+                                                <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
+                                            </Link> 
+                                        </li>   
+
+                                    </>
+                                )
+
+                            ) 
+
+                            
                         )
                     }
                     </ul>
