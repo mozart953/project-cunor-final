@@ -25,7 +25,7 @@ async function Navbar(){
 
     return(
         
-        <nav className="navbar navbar-expand navbar-light bg-light">
+        <nav className="navbar navbar-expand navbar-light bg-light fixed-top">
             <div className="container">
                 <h1 className="navbar-brand">
                     <Link href='/' className="nav-link">CUNOR</Link>
