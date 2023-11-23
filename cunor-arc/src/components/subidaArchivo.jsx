@@ -17,6 +17,9 @@ function SubaArchivoPage(){
     const [idcarrera, setIdcarrera] = useState(0);
     const [categorias, setCategorias] = useState([]);
     const [idcategoria, setIdcategoria] = useState(0);
+    const [secondname, setSecondname] = useState("");
+    const [thirdname, setThirdname] = useState("");
+    const [secondlastname, setSecondlastname] = useState("");
     const { data: session, status } = useSession();
 
 
@@ -79,6 +82,12 @@ function SubaArchivoPage(){
 
         console.log(file);
 
+        const expresion = /^[0-9]+$/;
+
+        if(!expresion.test(data.cantidadPaginas)){
+            alert("Escriba un numero en el numero de paginas");
+        }
+
         if(file!==null){
             const fileref = ref(analytics, 'newfiles/notes');
             uploadBytes(fileref, file).then((data)=>{
@@ -136,7 +145,7 @@ function SubaArchivoPage(){
                             <div className="mb-3">
                                 <label className="col-form-label">Cantidad de páginas</label>
                                 <div className="col-sm-10">
-                                    <input type="number" className="form-control text-white bg-dark" {...register("cantidadPaginas", {required: {value: true, message:'Es necesario escribir la cantidad de paginas...'}})} pattern="\d*"/>
+                                    <input type="number" className="form-control text-white bg-dark" {...register("cantidadPaginas", {required: {value: true, message:'Es necesario escribir la cantidad de paginas...'}})} pattern="/\d+/"/>
                                 </div>
                                 {
                                         errors.cantidadPaginas && (                                  
@@ -203,13 +212,13 @@ function SubaArchivoPage(){
                             <div className="mb-3">
                                 <label className="col-form-label">Segundo nombre</label>
                                 <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" />
+                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{console.log(e.target.value); setSecondname(e.target.value)}}/>
                                 </div>
                             </div>
                             <div className="mb-3">
                                 <label className="col-form-label">Tercer nombre</label>
                                 <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" />
+                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setThirdname(e.target.value)}} />
                                 </div>
                             </div>
                             <div className="mb-3">
@@ -230,7 +239,7 @@ function SubaArchivoPage(){
                             <div className="mb-3">
                                 <label className="col-form-label">Segundo apellido</label>
                                 <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark"  />
+                                    <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setSecondlastname(e.target.value)}}/>
                                 </div>
                             </div>
                         </div>
