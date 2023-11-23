@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import {useForm} from 'react-hook-form';
 import { analytics } from "@/app/firebase/firebase-config";
-import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
+import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
 
@@ -20,6 +20,7 @@ function SubaArchivoPage(){
     const [secondname, setSecondname] = useState("");
     const [thirdname, setThirdname] = useState("");
     const [secondlastname, setSecondlastname] = useState("");
+    const [barraprogreso, setBarraprogreso] = useState("0%");
     const { data: session, status } = useSession();
 
 
@@ -85,14 +86,59 @@ function SubaArchivoPage(){
         const expresion = /^[0-9]+$/;
 
         if(!expresion.test(data.cantidadPaginas)){
-            alert("Escriba un numero en el numero de paginas");
+            alert("Escriba un número en el numero de paginas");
         }
 
         if(file!==null){
             const fileref = ref(analytics, 'newfiles/notes');
-            uploadBytes(fileref, file).then((data)=>{
-                getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
-            })
+            //si ocurre un error, descomentar el codigo siguiente
+            // uploadBytes(fileref, file).then((data)=>{
+            //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
+            // })
+
+            const uploadTask = uploadBytesResumable(fileref,file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    setBarraprogreso(progress+'%');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    // A full list of error codes is available at
+                    // https://firebase.google.com/docs/storage/web/handle-errors
+                    switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+
+                    // ...
+
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                    }
+                }, 
+                () => {
+                    // Upload completed successfully, now we can get the download URL
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                      });
+                  
+                }
+                );
 
         }else{
             alert("seleccionar archivo");
@@ -113,6 +159,10 @@ function SubaArchivoPage(){
     return(
         <>
             <div className="text-white mt-5">
+                            <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'80%', margin:'0 auto'}}>
+                                <div className="progress-bar" style={{width: barraprogreso}}></div>
+                            </div> 
+                            
                 <form onSubmit={onSubmit}>
                     <legend className="text-center mb-4">Publicación de trabajo de graduación</legend>
 
@@ -250,10 +300,12 @@ function SubaArchivoPage(){
                             <div className="input-group mb-3">
                                 <input type="file" className="form-control text-white bg-dark" id="inputGroupFile02" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/>
                             </div>
+                           
 
                             {
                                 file &&(
                                     <embed src={URL.createObjectURL(file)} type="application/pdf"  width="100%" height="300px"  />
+                                    
                                 )
 
                             }
