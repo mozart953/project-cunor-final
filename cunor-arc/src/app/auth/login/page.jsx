@@ -62,7 +62,7 @@ function LoginPage() {
     <>
         <div>
         <section className="text-center">
-            <div className="p-5 bg-image"></div>
+            {/* <div className="p-5 bg-image"></div> */}
 
             <div className="card mx-auto shadow-5-strong" style={{maxWidth: '500px', maxHeight:'450px'}}>
             <div className="card-body py-5 px-md-5">
