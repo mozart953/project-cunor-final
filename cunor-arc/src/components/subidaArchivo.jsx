@@ -26,6 +26,7 @@ function SubaArchivoPage(){
     const [idusuario, setIdusuario] = useState(null);
     const [tamanio, setTamanio] = useState(0);
     const [data1, setData1] = useState(null);
+    const [control, setControl] = useState(false);
     const { data: session, status } = useSession();
 
 
@@ -112,7 +113,7 @@ function SubaArchivoPage(){
 
     useEffect(()=>{
         if(idtrabajo!==null && idautor!==null && idusuario!==null ){
-
+           
             fetch('/api/datos/reDetalleTrabajo',{
                     method:'POST',
                     body:JSON.stringify({
@@ -128,12 +129,28 @@ function SubaArchivoPage(){
                     headers:{
                         'Content-Type':'application/json',
                     }
-                }).then(data=>data.json()).then(datos=>console.log(datos));
+                }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl(true);});
             
 
         }
 
     },[idtrabajo, idautor, idusuario]);
+
+
+    useEffect(()=>{
+        if(control==true){
+            setTamanio(0);
+            setBarraprogreso('0%');
+            setUrl("");
+            //setData1(null);
+            setControl(false);
+            setIdtrabajo(null);
+            setIdautor(null);
+            
+
+        }
+    },[control]);
+
 
     const obtenerIdCategoria = (e)=>{
         e.preventDefault();
