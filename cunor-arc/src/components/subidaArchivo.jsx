@@ -263,7 +263,7 @@ function SubaArchivoPage(){
 
     return(
         <>
-            <div className="text-white mt-5">
+            <div className="text-white">
                         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'black', width:'80%', margin:'0 auto'}}>
                             <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'95%', margin:'0 auto'}}>
                                 <div className="progress-bar" style={{width: barraprogreso}}></div>
