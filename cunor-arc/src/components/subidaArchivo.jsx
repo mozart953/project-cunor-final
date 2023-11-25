@@ -5,6 +5,7 @@ import { analytics } from "@/app/firebase/firebase-config";
 import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import {useRouter} from "next/navigation";
 
 
 function SubaArchivoPage(){
@@ -28,6 +29,8 @@ function SubaArchivoPage(){
     const [data1, setData1] = useState(null);
     const [control, setControl] = useState(false);
     const { data: session, status } = useSession();
+
+    const router = useRouter();
 
 
     useEffect(()=>{
@@ -146,6 +149,8 @@ function SubaArchivoPage(){
             setControl(false);
             setIdtrabajo(null);
             setIdautor(null);
+            router.push("/dashboardOperador/listaTrabajos");
+            router.refresh();
             
 
         }
@@ -168,7 +173,7 @@ function SubaArchivoPage(){
         setData1(data);
 
         console.log(file);
-        setTamanio(file.size);
+        
 
         const expresion = /^[0-9]+$/;
 
@@ -177,7 +182,12 @@ function SubaArchivoPage(){
         }
 
         if(file!==null){
-            const fileref = ref(analytics, 'newfiles/notes');
+            setTamanio(file.size);
+            const tiempoHoy = Date.now();
+            //const nombreArchivo = file.name.split('.').slice(0, -1).join('.');
+            const nombreCompletoArchivo = tiempoHoy + "_archivo";    
+
+            const fileref = ref(analytics, `newfiles/${nombreCompletoArchivo}`);
             //si ocurre un error, descomentar el codigo siguiente
             // uploadBytes(fileref, file).then((data)=>{
             //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
@@ -327,7 +337,7 @@ function SubaArchivoPage(){
                             </div>
 
                             <div className="mb-3 ">
-                                <label className="form-label">Descripción</label>
+                                <label className="form-label">Descripción (Resumen)</label>
 
                                 <div className="col-sm-10">
                                     <textarea className="form-control text-white bg-dark"  rows="3" {...register("descripcion", {required: {value: true, message:'Es necesario escribir una descripción...'}})} ></textarea>

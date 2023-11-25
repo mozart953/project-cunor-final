@@ -105,6 +105,11 @@ async function Navbar(){
                                             </Link>
                                         </li>
                                         <li className="nav-item">
+                                            <Link href='/dashboardOperador/listaTrabajos' className="nav-link d-flex flex-column text-center">
+                                                <i className="bi bi-file-earmark-pdf-fill"></i><span className="small">Listado de trabajos</span>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
                                             <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
                                                 <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
                                             </Link> 
