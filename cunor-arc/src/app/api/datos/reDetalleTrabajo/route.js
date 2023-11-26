@@ -26,6 +26,8 @@ export async function GET(request){
     const paramametros = new URLSearchParams(request.url.split('?')[1]);
     const idUsuario = paramametros.get('idUsuario');
     const idCarrera = paramametros.get('idCarrera');
+    const page = Number(paramametros.get('page')) || 1;
+    const itemsPerPage = 10; 
 
     const detalles = await db.registroTrabajoGraduacion.findMany(
         {
@@ -41,7 +43,9 @@ export async function GET(request){
                 autor: true,
                 usuario:true,
 
-            }
+            },
+            skip: (page-1) * itemsPerPage,
+            take: itemsPerPage,
         }
     )
 

@@ -10,9 +10,13 @@ function CompoListarArchivosPage(){
     const [idcarrera, setIdcarrera] = useState(0);
     const [idusuario, setIdusuario] = useState(null);
     const [trabajos, setTrabajos] = useState([]);
+    const [currentpage, setCurrentpage] = useState(1);
+    const [itemsperpage, setItemsperpage] = useState(10);
+
+    const [idcarrera1, setIdcarrera1]= useState(null);
+    const [iduser1, setIduser1] = useState(null);
     const { data: session, status } = useSession();
-
-
+    
     
 
     useEffect(()=>{
@@ -50,15 +54,37 @@ function CompoListarArchivosPage(){
     ,[datosg]);
 
     useEffect(()=>{
-        if(idcarrera!==0 && idusuario!==null){
-            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${idusuario}&idCarrera=${idcarrera}`)
-            .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos([...datos,...trabajos])});
+        if(idcarrera !==0 && idusuario!==null){
+            if(!idcarrera1 && !iduser1){
+                setIdcarrera1(idcarrera);
+                setIduser1(idusuario);
+            }
         }
-
     },[idcarrera, idusuario])
 
+    useEffect(()=>{
+        if(idcarrera1 && iduser1){
+            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}`)
+            .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos)});
+        }
 
+    },[idcarrera1, iduser1,currentpage]); 
 
+    function paginate(data){
+        return data.slice((currentpage-1) * itemsperpage, currentpage * itemsperpage);
+    }
+
+    function nextPage(){
+        setCurrentpage(currentpage+1);
+    }
+
+    function beforePage(){
+        if(currentpage>1){
+            setCurrentpage(currentpage-1);
+        }
+    }
+
+   
 
 
     return(
@@ -95,14 +121,14 @@ function CompoListarArchivosPage(){
                                             <div className="card text-bg-secondary mb-3" >
                                                 <div className="card-body">
                                                     <h5 className="card-title">Resumen:</h5>
-                                                    <p className="card-text">{data.trabajoGrad.descripcion}</p>
+                                                    <p className="card-text"  style={{ fontSize: '0.8em' }}>{data.trabajoGrad.descripcion}</p>
                                                 </div>
                                             </div>
 
 
-                                            <div className="card-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                            <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                                 
-                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Carrera: </h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
                                                 </div>
@@ -151,6 +177,9 @@ function CompoListarArchivosPage(){
                             
                         )
             }
+
+            <button type="button" className="btn btn-primary" onClick={nextPage}>Siguiente</button>
+            <button type="button" className="btn btn-primary" onClick={beforePage}>Anterior</button>
 
             </div>
 
