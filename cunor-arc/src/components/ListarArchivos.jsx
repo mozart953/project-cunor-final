@@ -64,7 +64,15 @@ function CompoListarArchivosPage(){
     return(
         <>
             <div className="text-white mb-5" style={{width:'80%', margin:'0 auto'}}>
-                <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>
+
+                <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
+                    <div className="card-header">Usuario operativo: {nombreusuario}</div>
+                    <div className="card-body">
+                        <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>                       
+                    </div>
+                </div>
+
+                
 
 
             {
@@ -77,14 +85,62 @@ function CompoListarArchivosPage(){
                                         <div className="card-header">
                                              Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                         </div>
+
+                                        
+
                                         <div className="card-body">
+                                            
                                             <h5 className="card-title">Título: {data.trabajoGrad.titulo}</h5>
-                                            <p className="card-text">Resumen: {data.trabajoGrad.descripcion} </p>
+
+                                            <div className="card text-bg-secondary mb-3" >
+                                                <div className="card-body">
+                                                    <h5 className="card-title">Resumen:</h5>
+                                                    <p className="card-text">{data.trabajoGrad.descripcion}</p>
+                                                </div>
+                                            </div>
+
+
+                                            <div className="card-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                                
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Carrera: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Categoría: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.cantidadPaginas} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Formato: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Fecha de carga: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                        {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
+                                                         - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
+                                                    </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>URL: </h6>
+                                                    <h6 className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                       <a href={data.trabajoGrad.direccionGuardado}>{data.trabajoGrad.titulo}</a>  
+                                                    </h6>
+                                                </div>
+
+                                            </div>
+
                                             <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
-                                            <button type="button" className="btn btn-warning">Editar</button>
-                                            <button type="button" className="btn btn-danger">Eliminar</button>
-                        
-                        
+                                             
+                                            <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                                                <button type="button" className="btn btn-danger">Eliminar</button>
+                                                <button type="button" className="btn btn-warning">Editar</button>
+                                            </div>
+
                                         </div>
                                     </div>
                                
