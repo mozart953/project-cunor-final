@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import {useRouter} from "next/navigation";
 
 function CompoListarArchivosPage(){
     const [datosg, setUsuario1] = useLog2(null);
@@ -22,7 +23,7 @@ function CompoListarArchivosPage(){
     const [iduser1, setIduser1] = useState(null);
     const { data: session, status } = useSession();
     
-    
+    const router = useRouter();
 
     useEffect(()=>{
 
@@ -199,7 +200,7 @@ function CompoListarArchivosPage(){
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                                                 <button type="button" className="btn btn-danger">Eliminar</button>
-                                                <button type="button" className="btn btn-primary">Editar</button>
+                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}>Editar</button>
                                             </div> 
 
                                         </div>
