@@ -27,7 +27,16 @@ export async function GET(request){
     const idUsuario = paramametros.get('idUsuario');
     const idCarrera = paramametros.get('idCarrera');
     const page = Number(paramametros.get('page')) || 1;
-    const itemsPerPage = 10; 
+    const itemsPerPage = Number(paramametros.get('itemsPagina')); 
+
+    const totalItems = await db.registroTrabajoGraduacion.count(
+        {
+            where:{
+                ID_usuario: Number(idUsuario),
+                ID_carrera: Number(idCarrera),
+            }
+        }
+    ); 
 
     const detalles = await db.registroTrabajoGraduacion.findMany(
         {
@@ -49,6 +58,6 @@ export async function GET(request){
         }
     )
 
-    return NextResponse.json(detalles);
+    return NextResponse.json({items:detalles, total:totalItems});
 
 }

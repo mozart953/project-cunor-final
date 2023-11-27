@@ -11,7 +11,12 @@ function CompoListarArchivosPage(){
     const [idusuario, setIdusuario] = useState(null);
     const [trabajos, setTrabajos] = useState([]);
     const [currentpage, setCurrentpage] = useState(1);
-    const [itemsperpage, setItemsperpage] = useState(10);
+    //const [itemsperpage, setItemsperpage] = useState(10);
+
+    const [totalitems, setTotalitems] = useState(null);
+    const [itemspagina, setItemspagina] = useState(5);
+    const [totalPaginas, setTotalpaginas] = useState(null);
+    const [paginasmaximas, setPaginasmaximas] = useState(5);
 
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -64,25 +69,36 @@ function CompoListarArchivosPage(){
 
     useEffect(()=>{
         if(idcarrera1 && iduser1){
-            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}`)
-            .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos)});
+            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}`)
+            .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
         }
 
     },[idcarrera1, iduser1,currentpage]); 
 
-    function paginate(data){
-        return data.slice((currentpage-1) * itemsperpage, currentpage * itemsperpage);
-    }
+    // function paginate(data){
+    //     return data.slice((currentpage-1) * itemsperpage, currentpage * itemsperpage);
+    // }
+
+    useEffect(()=>{
+        if(totalitems!==null){
+            const totalPaginas = Math.ceil(totalitems/itemspagina);
+            setTotalpaginas(totalPaginas);
+        }
+    },[totalitems])
 
     function nextPage(){
-        setCurrentpage(currentpage+1);
+        const totalPaginas = Math.ceil(totalitems/itemspagina);
+        if(currentpage<totalPaginas){
+            setCurrentpage(currentpage+1);
+        }
+        
     }
 
     function beforePage(){
         if(currentpage>1){
             setCurrentpage(currentpage-1);
         }
-    }
+    } 
 
    
 
@@ -97,6 +113,25 @@ function CompoListarArchivosPage(){
                         <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>                       
                     </div>
                 </div>
+
+                <div className="content-center d-flex justify-content-center align-items-center">
+                    <nav aria-label="..." style={{cursor:"pointer"}}>
+                        <ul className="pagination">
+                        <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+                            <a className="page-link" onClick={beforePage}>Anterior</a>
+                        </li>
+                        {[...Array(Math.min(totalPaginas,paginasmaximas))].map((_, i) => (
+                            <li className={`page-item ${i + 1 === currentpage ? 'active' : ''}`} key={i}>
+                            <a className="page-link" onClick={() => setCurrentpage(i + 1+ (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas))}>{i + 1 + (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas)}</a>
+                            </li>
+                        ))}
+                        <li className={`page-item ${currentpage === totalPaginas ? 'disabled' : ''}`}>
+                            <a className="page-link" onClick={nextPage}>Siguiente</a>
+                        </li>
+                        </ul>
+                    </nav>
+                </div>
+                
 
                 
 
@@ -164,8 +199,8 @@ function CompoListarArchivosPage(){
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                                                 <button type="button" className="btn btn-danger">Eliminar</button>
-                                                <button type="button" className="btn btn-warning">Editar</button>
-                                            </div>
+                                                <button type="button" className="btn btn-primary">Editar</button>
+                                            </div> 
 
                                         </div>
                                     </div>
@@ -178,9 +213,25 @@ function CompoListarArchivosPage(){
                         )
             }
 
-            <button type="button" className="btn btn-primary" onClick={nextPage}>Siguiente</button>
-            <button type="button" className="btn btn-primary" onClick={beforePage}>Anterior</button>
+                <div className="content-center d-flex justify-content-center align-items-center">
+                    <nav aria-label="..." style={{cursor:"pointer"}}>
+                        <ul className="pagination">
+                        <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+                            <a className="page-link" onClick={beforePage}>Anterior</a>
+                        </li>
+                        {[...Array(Math.min(totalPaginas, paginasmaximas))].map((_, i) => (
+                            <li className={`page-item ${i + 1 === currentpage ? 'active' : ''}`} key={i}>
+                            <a className="page-link" onClick={() => setCurrentpage(i + 1+ (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas))}>{i + 1 + (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas)}</a>
+                            </li>
+                        ))}
+                        <li className={`page-item ${currentpage === totalPaginas ? 'disabled' : ''}`}>
+                            <a className="page-link" onClick={nextPage}>Siguiente</a>
+                        </li>
+                        </ul>
+                    </nav>
+                </div>
 
+            
             </div>
 
             
