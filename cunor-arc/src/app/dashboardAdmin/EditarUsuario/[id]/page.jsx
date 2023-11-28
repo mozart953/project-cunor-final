@@ -5,7 +5,7 @@ import {useForm} from 'react-hook-form';
 import { useRouter } from "next/navigation";
 
 function EditPage({params}){
-    const {register, handleSubmit, formState:{errors}} = useForm();
+    const {register, handleSubmit,setValue, formState:{errors}} = useForm();
     const [roles, setRoles] = useState([]);
     const [idrol, setIdrol] = useState(0);
     const [idcarrera, setIdcarrera] = useState(0);
@@ -16,6 +16,8 @@ function EditPage({params}){
     const [nombre , setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [nombreusuario, setNombreusuario] = useState("");
+
+    const [valores, setValores] = useState({});
 
     const route = useRouter();
 
@@ -47,6 +49,17 @@ function EditPage({params}){
 
 
     useEffect(()=>{
+        if(valores){
+            setValue('DPI', dpi);
+            setValue('primerNombre', nombre);
+            setValue('primerApellido', apellido);
+            setValue('nombreUsuario', nombreusuario);
+        }
+
+    },[valores])
+
+
+    useEffect(()=>{
         fetch('/api/datos/reRoles').then(datos=>datos.json()).then(data=>{
             //console.log(data);
            // console.log(data.nombreRol);
@@ -68,6 +81,8 @@ function EditPage({params}){
             fetch(`/api/datos/reUsuarios/${params.id}`).then(datos=>datos.json())
             .then(data=>{
                  setUsuario(data)
+
+                 setValores(data)
 
                  setDpi(data.DPI)
 
@@ -111,6 +126,7 @@ function EditPage({params}){
  
     
     const onSubmit = handleSubmit(async (data)=>{
+        console.log(data);
 
         /*if(data.contrasenia != data.contrasenia2){
             return alert("Las contrasenias no coinciden...");
@@ -120,10 +136,10 @@ function EditPage({params}){
         const datos = await fetch(`/api/datos/reUsuarios/${params.id}`,{
             method:'PUT',
             body:JSON.stringify({
-                DPI:dpi,
-                primerNombre:nombre,
-                primerApellido:apellido,
-                nombreUsuario: nombreusuario,
+                DPI:data.DPI,
+                primerNombre:data.primerNombre,
+                primerApellido:data.primerApellido,
+                nombreUsuario: data.nombreUsuario,
                 ID_rol: Number(idrol),
                 ID_estado: 1,
                 ID_carrera:Number(idcarrera),                 
@@ -173,8 +189,20 @@ function EditPage({params}){
                             </div>
 
                             <div className="col"> 
-                                <input type="text" placeholder="DPI"  onChange={(e)=>setDpi(e.target.value)}  value={dpi} className="form-control bg-secondary text-white" />
+                                <input type="text" placeholder="DPI"  onChange={(e)=>{setValue('DPI', e.target.value, {shouldValidate:true} );setDpi(e.target.value)}} {...register("DPI", {required: {value: true, message:'Es necesario escribir el DPI...'}})}  className="form-control bg-secondary text-white" />
                             </div> 
+
+                            
+                            {
+                                    errors.DPI && (                                  
+                                                                
+                                          <span className="badge rounded-pill text-bg-danger">{errors.DPI.message}</span>
+
+
+                                    )
+                            }
+
+
 
                 
 
@@ -186,8 +214,17 @@ function EditPage({params}){
                             </div>
 
                             <div className='col'>
-                                <input type="text" placeholder="Primer Nombre" value={nombre} onChange={(e)=>setNombre(e.target.value)} className="form-control bg-secondary text-white"/>
+                                <input type="text" placeholder="Primer Nombre" onChange={(e)=>{setValue('primerNombre', e.target.value, {shouldValidate:true} );setNombre(e.target.value)}} {...register("primerNombre", {required: {value: true, message:'Es necesario escribir el nombre...'}})}  className="form-control bg-secondary text-white"/>
                             </div>
+
+                            {
+                                    errors.primerNombre && (                                  
+                                                                
+                                          <span className="badge rounded-pill text-bg-danger">{errors.primerNombre.message}</span>
+
+
+                                    )
+                            }
 
                 
 
@@ -199,8 +236,17 @@ function EditPage({params}){
                             </div>
 
                             <div className='col'>
-                                <input type="text" placeholder="Primer Apellido" value={apellido} onChange={(e)=>setApellido(e.target.value)}  className="form-control bg-secondary text-white"/>
+                                <input type="text" placeholder="Primer Apellido" onChange={(e)=>{setValue('primerApellido', e.target.value, {shouldValidate:true} );setApellido(e.target.value)}} {...register("primerApellido", {required: {value: true, message:'Es necesario escribir el apellido...'}})} className="form-control bg-secondary text-white"/>
                             </div>
+
+                            {
+                                    errors.primerApellido && (                                  
+                                                                
+                                          <span className="badge rounded-pill text-bg-danger">{errors.primerApellido.message}</span>
+
+
+                                    )
+                            }
 
                     
 
@@ -212,8 +258,17 @@ function EditPage({params}){
                             </div>
 
                             <div className='col'>
-                                <input type="username" placeholder="Nombre de usuario" value={nombreusuario} onChange={(e)=>setNombreusuario(e.target.value)} className="form-control bg-secondary text-white" />
+                                <input type="username" placeholder="Nombre de usuario"  onChange={(e)=>{setValue('nombreUsuario', e.target.value, {shouldValidate:true} );setNombreusuario(e.target.value)}} {...register("nombreUsuario", {required: {value: true, message:'Es necesario escribir el nombre de usuario...'}})}  className="form-control bg-secondary text-white" />
                             </div>
+
+                            {
+                                    errors.nombreUsuario && (                                  
+                                                                
+                                          <span className="badge rounded-pill text-bg-danger">{errors.nombreUsuario.message}</span>
+
+
+                                    )
+                            }
 
                         </div>
 
