@@ -5,10 +5,12 @@ import {useForm} from 'react-hook-form';
 import { useRouter } from "next/navigation";
 
 function EditCarreraPage({params}){
-    const {register, handleSubmit, formState:{errors}} = useForm();
+    const {register, handleSubmit, setValue,formState:{errors}} = useForm();
     const [registro, setRegistro] = useState(false);
 
     const [carrera,setCarrera] = useState();
+
+    const [datoscarrera, setDatoscarrera] = useState({});
 
     const route = useRouter();
     
@@ -22,11 +24,19 @@ function EditCarreraPage({params}){
         }
     }, [registro]);  
 
+    useEffect(()=>{
+        if(datoscarrera){
+            setValue('nombreCarrera', carrera);
+        }
+    },[datoscarrera])
+
 
     useEffect(()=>{
         fetch(`/api/datos/reCarrera/${params.id}`).then(datos=>datos.json())
             .then(data=>{
-                 
+                
+                setDatoscarrera(data);
+
                  setCarrera(data.nombreCarrera)
 
                  console.log(data.nombreCarrera)
@@ -39,11 +49,12 @@ function EditCarreraPage({params}){
             return alert("Las contrasenias no coinciden...");
 
         }*/
+        console.log("Comprobando datos: "+data.nombreCarrera);
 
         const datos = await fetch(`/api/datos/reCarrera/${params.id}`,{
             method:'PUT',
             body:JSON.stringify({
-                nombreCarrera:carrera,            
+                nombreCarrera:data.nombreCarrera,            
                   
 
             }),
@@ -79,8 +90,17 @@ function EditCarreraPage({params}){
                             </div>
 
                             <div className="col"> 
-                                <input type="text" placeholder="Carrera"  onChange={(e)=>setCarrera(e.target.value)}  value={carrera} className="form-control bg-secondary text-white" />
+                                <input type="text" placeholder="Carrera"  onChange={(e)=>{setValue('nombreCarrera', e.target.value, {shouldValidate: true});setCarrera(e.target.value)}}  {...register("nombreCarrera", {required: {value: true, message:'Es necesario escribir la carrera...'}})} className="form-control bg-secondary text-white" />
                             </div> 
+
+                            {
+                                    errors.nombreCarrera && (                                  
+                                                                
+                                            <span className="badge rounded-pill text-bg-danger">{errors.nombreCarrera.message}</span>
+
+
+                                    )
+                            }
 
                 
 
