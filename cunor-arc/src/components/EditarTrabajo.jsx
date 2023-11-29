@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import {useForm} from 'react-hook-form';
 import { analytics } from "@/app/firebase/firebase-config";
-import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
@@ -40,12 +41,15 @@ function CompoEditarTrabajos({idDetalle}){
     const [cantidadpaginas, setCantidadpaginas]= useState(null);
     const [descripcion, setDescripcion]=useState(null);
     const [url, setUrl] = useState("");
-        
+
+    const [ocultar, setOcultar] = useState(true);
+
+            
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
     const { data: session, status } = useSession();
 
-
+    const router = useRouter();
     
     useEffect(()=>{
 
@@ -142,6 +146,75 @@ function CompoEditarTrabajos({idDetalle}){
     },[]);
 
 
+    
+    useEffect(()=>{
+        if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null){
+
+            fetch(`/api/datos/reTrabajoGraduacion/${idtrabajo}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    titulo: data1.titulo,
+                    cantidadPaginas: Number(data1.cantidadPaginas),
+                    descripcion:data1.descripcion,
+                    tamanio:Number(file.size),
+                    direccionGuardado:url,
+                }),
+                headers:{
+                    'Content-Type':'application/json',
+                }
+            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdtrabajo(datos.ID_Trabajo)});
+    
+            fetch(`/api/datos/reAutor/${idautor}`,{
+                method:'PUT',
+                body: JSON.stringify({
+                    primerNombre: data1.primerNombre,
+                    segundoNombre: data1.segundoNombre,
+                    tercerNombre: data1.tercerNombre,
+                    primerApellido: data1.primerApellido,
+                    segundoApellido: data1.segundoApellido,
+                }),
+                headers:{
+                    'Content-Type':'application/json',
+                }
+            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdautor(datos.ID_Autor)});
+
+            
+            fetch(`/api/datos/reDetalleTrabajo/${idDetalle}`,{
+                method:'PUT',
+                body:JSON.stringify({
+                    ID_categoria:Number(idcategoria),                        
+
+                }),
+                headers:{
+                    'Content-Type':'application/json',
+                }
+            }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl(true);});
+
+
+
+        }
+    },[tamanio,barraprogreso, url, data1]);
+
+    
+    useEffect(()=>{
+        if(control==true){
+            setTamanio(0);
+            setBarraprogreso('0%');
+            setUrl("");
+            //setData1(null);
+            setControl(false);
+            setIdtrabajo(null);
+            setIdautor(null);
+            router.push("/dashboardOperador/listaTrabajos");
+            router.refresh();
+            
+
+        }
+    },[control]);
+
+    
+
+
     const obtenerIdCategoria = (e)=>{
         e.preventDefault();
 
@@ -225,6 +298,8 @@ function CompoEditarTrabajos({idDetalle}){
 
         }else{
             alert("seleccionar archivo");
+            const valor = confirm("¿Desea conservar el mismo archivo?");
+            console.log(valor);
         }
 
         // if(file!==null && barraprogreso=='100%'){
@@ -411,21 +486,40 @@ function CompoEditarTrabajos({idDetalle}){
                                             </div>
 
                                             <div className="col">
-                                                <legend className="text-center mb-4">Subir archivo</legend>
-                                                {/* <input type="file" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/> */}
-                                                <div className="input-group mb-3">
-                                                    <input type="file" className="form-control text-white bg-dark" id="inputGroupFile02" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/>
+                                                <embed className="mt-4" src={!file?url:(URL.createObjectURL(file))} type="application/pdf"  width="100%" height="300px"  />
+                                                                            
+                                                <div className="mt-4 d-flex justify-content-center align-items-center">
+                                                    <button type="button" className="btn btn-primary" onClick={()=>{
+                                                        if(ocultar){
+                                                            setOcultar(!ocultar);
+                                                        }else{
+                                                            setOcultar(!ocultar);
+                                                            setFile(null);
+                                                        }
+                                                        
+                                                        }}>
+                                                            {ocultar?"Cambiar archivo":"Conservar archivo anterior"}
+                                                    </button>
+                                                    
                                                 </div>
-                                            
 
                                                 {
-                                                    file &&(
-                                                        <embed src={URL.createObjectURL(file)} type="application/pdf"  width="100%" height="300px"  />
-                                                        
-                                                    )
+                                                            
+                                                        !ocultar &&(
+                                                                
+                                                                <div className="justify-content-center align-items-center">
+                                                                    <legend className="text-center mb-4">Subir archivo</legend>
+                                                                    
+                                                                    <div className="input-group mb-3">
+                                                                        <input type="file" className="form-control text-white bg-dark" id="inputGroupFile02" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/>
+                                                                    </div>
+                                                                
+                                                                </div>
+                                                        ) 
 
                                                 }
 
+                                                                                                                                      
 
 
                                                 <button className="btn btn-success mt-4 w-100">Actualizar datos</button>
