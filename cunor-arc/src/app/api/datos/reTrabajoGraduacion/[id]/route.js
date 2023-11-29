@@ -19,6 +19,7 @@ export async function PUT(request, {params}){
             }
         }
     )
+    console.log(trabajo);
 
     return NextResponse.json(trabajo);
 }

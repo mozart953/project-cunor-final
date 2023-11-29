@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import {useForm} from 'react-hook-form';
 import { analytics } from "@/app/firebase/firebase-config";
-import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import {ref,deleteObject, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
@@ -43,7 +43,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [url, setUrl] = useState("");
 
     const [ocultar, setOcultar] = useState(true);
-
+    const [eliminado, setEliminado] = useState(false);
             
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -156,7 +156,7 @@ function CompoEditarTrabajos({idDetalle}){
                     titulo: data1.titulo,
                     cantidadPaginas: Number(data1.cantidadPaginas),
                     descripcion:data1.descripcion,
-                    tamanio:Number(file.size),
+                    tamanio:Number(tamanio),
                     direccionGuardado:url,
                 }),
                 headers:{
@@ -203,6 +203,8 @@ function CompoEditarTrabajos({idDetalle}){
             setUrl("");
             //setData1(null);
             setControl(false);
+            setEliminado(false);
+
             setIdtrabajo(null);
             setIdautor(null);
             router.push("/dashboardOperador/listaTrabajos");
@@ -241,60 +243,79 @@ function CompoEditarTrabajos({idDetalle}){
 
         if(file!==null){
             setTamanio(file.size);
-            const tiempoHoy = Date.now();
-            //const nombreArchivo = file.name.split('.').slice(0, -1).join('.');
-            const nombreCompletoArchivo = tiempoHoy + "_archivo";    
 
-            const fileref = ref(analytics, `newfiles/${nombreCompletoArchivo}`);
-            //si ocurre un error, descomentar el codigo siguiente
-            // uploadBytes(fileref, file).then((data)=>{
-            //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
-            // })
+            let urldecodificada = decodeURIComponent(url);
+            let inicioNombre = urldecodificada.lastIndexOf('/')+1;
+            let finNombre = urldecodificada.indexOf('?');
+            let nombre = urldecodificada.slice(inicioNombre, finNombre);
+            console.log(nombre);
 
-            const uploadTask = uploadBytesResumable(fileref,file);
+            const desertRef = ref(analytics, `newfiles/${nombre}`);
 
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                    setBarraprogreso(progress+'%');
-                    switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
-                    case 'running':
-                        console.log('Upload is running');
-                        break;
+            // Delete the file
+            deleteObject(desertRef).then(() => {
+                console.log("Archivo eliminado")
+            }).catch((error) => {
+                console.log("ocurrio un error: " +error);
+            });
+
+                //cargar archivo
+                            
+                const tiempoHoy = Date.now();
+                //const nombreArchivo = file.name.split('.').slice(0, -1).join('.');
+                const nombreCompletoArchivo = tiempoHoy + "_archivo";    
+
+                const fileref = ref(analytics, `newfiles/${nombreCompletoArchivo}`);
+                //si ocurre un error, descomentar el codigo siguiente
+                // uploadBytes(fileref, file).then((data)=>{
+                //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
+                // })
+
+                const uploadTask = uploadBytesResumable(fileref,file);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        setBarraprogreso(progress+'%');
+                        switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                        }
+                    }, 
+                    (error) => {
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
+                        switch (error.code) {
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+
+                        // ...
+
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect error.serverResponse
+                            break;
+                        }
+                    }, 
+                    () => {
+                        // Upload completed successfully, now we can get the download URL
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            setUrl(downloadURL);
+                        });
+                    
                     }
-                }, 
-                (error) => {
-                    // A full list of error codes is available at
-                    // https://firebase.google.com/docs/storage/web/handle-errors
-                    switch (error.code) {
-                    case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
-                        break;
-                    case 'storage/canceled':
-                        // User canceled the upload
-                        break;
-
-                    // ...
-
-                    case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
-                        break;
-                    }
-                }, 
-                () => {
-                    // Upload completed successfully, now we can get the download URL
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        console.log('File available at', downloadURL);
-                        setUrl(downloadURL);
-                      });
-                  
-                }
-                );
+                    );
+            
 
         }else{
             alert("seleccionar archivo");
