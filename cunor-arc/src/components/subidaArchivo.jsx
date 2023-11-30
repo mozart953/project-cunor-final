@@ -79,63 +79,105 @@ function SubaArchivoPage(){
 
 
     useEffect(()=>{
-        if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null){
+        const crearRegistro = async ()=>{
+            if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null){
 
-            fetch('/api/datos/reTrabajoGraduacion', {
-                method: 'POST',
-                body: JSON.stringify({
-                    titulo: data1.titulo,
-                    cantidadPaginas: Number(data1.cantidadPaginas),
-                    descripcion:data1.descripcion,
-                    tamanio:Number(file.size),
-                    direccionGuardado:url,
-                }),
-                headers:{
-                    'Content-Type':'application/json',
+                try{
+                    const respuesta1 = await fetch('/api/datos/reTrabajoGraduacion', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            titulo: data1.titulo,
+                            cantidadPaginas: Number(data1.cantidadPaginas),
+                            descripcion:data1.descripcion,
+                            tamanio:Number(file.size),
+                            direccionGuardado:url,
+                        }),
+                        headers:{
+                            'Content-Type':'application/json',
+                        }
+                    });
+                    
+                    const dato1 = await respuesta1.json();
+                    console.log(dato1);
+                    setIdtrabajo(dato1.ID_Trabajo);
+
+
+                    const respuesta2 = await fetch('/api/datos/reAutor',{
+                        method:'POST',
+                        body: JSON.stringify({
+                            primerNombre: data1.primerNombre,
+                            segundoNombre: secondname,
+                            tercerNombre: thirdname,
+                            primerApellido: data1.primerApellido,
+                            segundoApellido: secondlastname,
+                        }),
+                        headers:{
+                            'Content-Type':'application/json',
+                        }
+                    });
+                    
+                    const dato2= await respuesta2.json();
+                    console.log(dato2);
+                    setIdautor(dato2.ID_Autor);
+                    
+
+                }catch(error){
+                    console.log("Error al crear el nuevo registro: " + error);
+                    alert("Error inesperado al realizar registro, intentelo de nuevo...");
                 }
-            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdtrabajo(datos.ID_Trabajo)});
+
+                
     
-            fetch('/api/datos/reAutor',{
-                method:'POST',
-                body: JSON.stringify({
-                    primerNombre: data1.primerNombre,
-                    segundoNombre: secondname,
-                    tercerNombre: thirdname,
-                    primerApellido: data1.primerApellido,
-                    segundoApellido: secondlastname,
-                }),
-                headers:{
-                    'Content-Type':'application/json',
-                }
-            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdautor(datos.ID_Autor)});
+            }
 
 
-        }
+        };
+        crearRegistro();
+
     },[tamanio,barraprogreso, url, data1]);
 
 
     useEffect(()=>{
-        if(idtrabajo!==null && idautor!==null && idusuario!==null ){
-           
-            fetch('/api/datos/reDetalleTrabajo',{
-                    method:'POST',
-                    body:JSON.stringify({
-                        ID_trabajo: Number(idtrabajo),
-                        ID_categoria:Number(idcategoria),
-                        ID_archivo: 1,
-                        ID_carrera: Number(idcarrera),
-                        ID_autor: Number(idautor),
-                        ID_usuario: Number(idusuario),
-                        ID_estado:1
+        const actualizarDetalle= async()=>{
+            if(idtrabajo!==null && idautor!==null && idusuario!==null ){
+                setBarraprogreso('0%');
 
-                    }),
-                    headers:{
-                        'Content-Type':'application/json',
-                    }
-                }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl(true);});
-            
+                try{
+                        
+                    const respuesta3 = await fetch('/api/datos/reDetalleTrabajo',{
+                        method:'POST',
+                        body:JSON.stringify({
+                            ID_trabajo: Number(idtrabajo),
+                            ID_categoria:Number(idcategoria),
+                            ID_archivo: 1,
+                            ID_carrera: Number(idcarrera),
+                            ID_autor: Number(idautor),
+                            ID_usuario: Number(idusuario),
+                            ID_estado:1
 
-        }
+                        }),
+                        headers:{
+                            'Content-Type':'application/json',
+                        }
+                    });
+                    const dato3 = await respuesta3.json();
+                    console.log(dato3);
+                    setControl(true);
+
+
+                }catch(error){
+                    console.log("Ha ocurrido un error: " + error);
+                    alert("Ha ocurrido un error inesperado, intentelo de nuevo...");
+                }
+               
+                
+    
+            }
+
+
+        };
+        actualizarDetalle();
+        
 
     },[idtrabajo, idautor, idusuario]);
 
