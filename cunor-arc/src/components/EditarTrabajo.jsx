@@ -26,6 +26,9 @@ function CompoEditarTrabajos({idDetalle}){
     const [file, setFile] = useState(null);
     const [control, setControl] = useState(false);
 
+    const [control1, setControl1] = useState(false);
+    const [control2, setControl2] = useState(false);
+
     //autor
     const [idautor, setIdautor] = useState(null);
     const [primernombre, setPrimernombre] = useState(null);
@@ -44,6 +47,7 @@ function CompoEditarTrabajos({idDetalle}){
 
     const [ocultar, setOcultar] = useState(true);
     const [eliminado, setEliminado] = useState(false);
+    const [interruptor, setInterruptor] = useState(false);
             
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -148,52 +152,72 @@ function CompoEditarTrabajos({idDetalle}){
 
     
     useEffect(()=>{
-        if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null){
+        if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null && idautor!==null && idtrabajo!==null){
+            console.log("viendo datos" +JSON.stringify(data1));
+            console.log(tamanio + " " + " " +barraprogreso + " " + url+  " " + idautor + " "+ idtrabajo );
 
-            fetch(`/api/datos/reTrabajoGraduacion/${idtrabajo}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    titulo: data1.titulo,
-                    cantidadPaginas: Number(data1.cantidadPaginas),
-                    descripcion:data1.descripcion,
-                    tamanio:Number(tamanio),
-                    direccionGuardado:url,
-                }),
-                headers:{
-                    'Content-Type':'application/json',
-                }
-            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdtrabajo(datos.ID_Trabajo)});
+            try{
+
+                fetch(`/api/datos/reTrabajoGraduacion/${idtrabajo}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        titulo: data1.titulo,
+                        cantidadPaginas: Number(data1.cantidadPaginas),
+                        descripcion:data1.descripcion,
+                        tamanio:Number(tamanio),
+                        direccionGuardado:url,
+                    }),
+                    headers:{
+                        'Content-Type':'application/json',
+                    }
+                }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl1(true)});
+        
+                fetch(`/api/datos/reAutor/${idautor}`,{
+                    method:'PUT',
+                    body: JSON.stringify({
+                        primerNombre: data1.primerNombre,
+                        segundoNombre: data1.segundoNombre,
+                        tercerNombre: data1.tercerNombre,
+                        primerApellido: data1.primerApellido,
+                        segundoApellido: data1.segundoApellido,
+                    }),
+                    headers:{
+                        'Content-Type':'application/json',
+                    }
+                }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl2(true)});
     
-            fetch(`/api/datos/reAutor/${idautor}`,{
-                method:'PUT',
-                body: JSON.stringify({
-                    primerNombre: data1.primerNombre,
-                    segundoNombre: data1.segundoNombre,
-                    tercerNombre: data1.tercerNombre,
-                    primerApellido: data1.primerApellido,
-                    segundoApellido: data1.segundoApellido,
-                }),
-                headers:{
-                    'Content-Type':'application/json',
-                }
-            }).then(data=>data.json()).then((datos)=>{console.log(datos); setIdautor(datos.ID_Autor)});
 
+            }catch(error){
+                console.log("Error al actualizar trabajos o autor: " + error);
+            }         
             
-            fetch(`/api/datos/reDetalleTrabajo/${idDetalle}`,{
-                method:'PUT',
-                body:JSON.stringify({
-                    ID_categoria:Number(idcategoria),                        
-
-                }),
-                headers:{
-                    'Content-Type':'application/json',
-                }
-            }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl(true);});
-
-
 
         }
-    },[tamanio,barraprogreso, url, data1]);
+    },[tamanio,barraprogreso, url, data1, idautor, idtrabajo]);
+
+    useEffect(()=>{
+        if(control1 && control2){
+            setBarraprogreso('0%');
+            try{
+
+                fetch(`/api/datos/reDetalleTrabajo/${idDetalle}`,{
+                    method:'PUT',
+                    body:JSON.stringify({
+                        ID_categoria:Number(idcategoria),                        
+    
+                    }),
+                    headers:{
+                        'Content-Type':'application/json',
+                    }
+                }).then(data=>data.json()).then((datos)=>{console.log(datos); setControl(true);});
+    
+    
+
+            }catch(error){
+                console.log("Error al actualizar los datos" + error);
+            }
+        }
+    },[control1, control2])
 
     
     useEffect(()=>{
@@ -201,8 +225,11 @@ function CompoEditarTrabajos({idDetalle}){
             setTamanio(0);
             setBarraprogreso('0%');
             setUrl("");
+            setInterruptor(false);
             //setData1(null);
             setControl(false);
+            setControl1(false);
+            setControl2(false);
             setEliminado(false);
 
             setIdtrabajo(null);
@@ -243,6 +270,7 @@ function CompoEditarTrabajos({idDetalle}){
 
         if(file!==null){
             setTamanio(file.size);
+            setUrl("");
 
             let urldecodificada = decodeURIComponent(url);
             let inicioNombre = urldecodificada.lastIndexOf('/')+1;
@@ -321,6 +349,11 @@ function CompoEditarTrabajos({idDetalle}){
             alert("seleccionar archivo");
             const valor = confirm("¿Desea conservar el mismo archivo?");
             console.log(valor);
+            //setInterruptor(valor);
+            if(valor==true){
+                setBarraprogreso('100%');
+            }
+
         }
 
         // if(file!==null && barraprogreso=='100%'){
