@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import { analytics } from "@/app/firebase/firebase-config";
+import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
 
 function CompoListarArchivosPage(){
@@ -18,6 +20,9 @@ function CompoListarArchivosPage(){
     const [itemspagina, setItemspagina] = useState(5);
     const [totalPaginas, setTotalpaginas] = useState(null);
     const [paginasmaximas, setPaginasmaximas] = useState(5);
+
+    const [controlestado, setControlestado] = useState({});
+    const [render, setRender] = useState(null);
 
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -100,6 +105,108 @@ function CompoListarArchivosPage(){
             setCurrentpage(currentpage-1);
         }
     } 
+
+
+    const eliminarRegistro = (iddetalle, idautor, idtrabajo, url1)=>{
+        console.log("Eliminando archivo" + iddetalle + idautor + idtrabajo + url1 );
+        const valor = false;
+        const valor2 = confirm("¿Está seguro de eliminar el archivo del registro para ahorrar espacio?");
+        console.log(valor2);
+        if(valor2==true){
+            
+            let urldecodificada = decodeURIComponent(url1);
+            let inicioNombre = urldecodificada.lastIndexOf('/')+1;
+            let finNombre = urldecodificada.indexOf('?');
+            let nombre = urldecodificada.slice(inicioNombre, finNombre);
+            console.log(nombre);
+
+            const desertRef = ref(analytics, `newfiles/${nombre}`);
+
+            // Delete the file
+            deleteObject(desertRef).then(() => {
+                console.log("Archivo eliminado");
+                alert("¡Archivo eliminado satisfactoriamente!");
+                router.refresh();
+            }).catch((error) => {
+                console.log("ocurrio un error: " +error);
+                alert("¡Ha ocurrido un error, el archivo posiblemente no existe!");
+            });
+
+            // try{
+                    
+            //     const respuestaTrabajos = await fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}`);
+            //     const datosTrabajos = await respuestaTrabajos.json();
+            //     setTrabajos(datosTrabajos.items);
+            //     setTotalitems(datosTrabajos.total);
+
+            // }catch(error){
+            //     console.log("Error: " + error);
+            // }
+
+            
+
+        }
+
+    }
+
+    useEffect(()=>{
+
+        if(trabajos){
+            console.log("viendo trabajos: " + trabajos);
+            const estadoInicial = {};
+
+            Object.values(trabajos).forEach((data)=>{
+                if(data.ID_estado==1){
+                    estadoInicial[data.ID_Detalle]=true;
+                }else{
+                    estadoInicial[data.ID_Detalle]=false;
+                }
+            });
+    
+            setControlestado(estadoInicial);
+        
+        }
+            
+
+
+    },[trabajos]);
+
+    const cambiarEstado = async (idDetalle, idEstado)=>{
+        console.log(idEstado);
+        if(idEstado==1){
+            idEstado=2;
+        }else{
+            idEstado=1;
+        }
+
+        try{
+                
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajo/estadoTrabajo/${idDetalle}`,{
+                method: 'PUT',
+                body: JSON.stringify({
+                    ID_estado:Number(idEstado),
+                }),
+                headers:{
+                    'Content-Type':"application/json"
+                }
+            })
+
+            const datos = await respuesta.json();
+            console.log(datos);
+
+
+            const respuestaTrabajos = await fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}`);
+            const datosTrabajos = await respuestaTrabajos.json();
+            setTrabajos(datosTrabajos.items);
+            setTotalitems(datosTrabajos.total); 
+
+        }catch(error){
+            console.log("Ocurrio un error: " + error);
+        }
+
+
+
+    }
 
    
 
@@ -199,8 +306,18 @@ function CompoListarArchivosPage(){
                                             <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                                <button type="button" className="btn btn-danger">Eliminar</button>
-                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}>Editar</button>
+                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}>Eliminar archivo</button>
+                                                
+                                                {
+                                                    controlestado[data.ID_Detalle]?(
+                                                        <button type="button" className="btn btn-outline-danger" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:false});cambiarEstado(data.ID_Detalle, data.ID_estado)}}>Deshabilitar registro</button>
+                                                    ):(
+                                                        <button type="button" className="btn btn-outline-success" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:true});cambiarEstado(data.ID_Detalle, data.ID_estado)}}>Habilitar registro</button>
+                                                    )
+                                                }
+                                               
+
+                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}>Editar registro</button>
                                             </div> 
 
                                         </div>
