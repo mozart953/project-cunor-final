@@ -14,18 +14,21 @@ async function Navbar(){
     const sesion = await getServerSession(authOptions);
     console.log(sesion);  
     let rolUsuario;
+    let nombreDeUsuario;
+    
 
     if(sesion?.user){
         const datos = await obtenerRol(sesion?.user.name);
         console.log(datos.rol.nombreRol);
         rolUsuario = datos.rol.nombreRol;
+        nombreDeUsuario = sesion?.user.name;
     }
 
         console.log("valor del rol> " + rolUsuario);
 
     return(
         
-        <nav className="navbar navbar-expand navbar-light bg-light fixed-top">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container">
                 <h1 className="navbar-brand">
                     <Link href='/' className="nav-link">CUNOR</Link>
@@ -85,9 +88,28 @@ async function Navbar(){
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
-                                            <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
-                                        </Link> 
+                                        
+                                        <a className="nav-link dropdown-toggle ms-auto" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                                            <i className="bi bi-person-circle"></i> <span className="small">{nombreDeUsuario}</span>
+                                        </a>                                        
+                                             
+                                                    <ul className="text-white" style={{position:"absolute", zIndex:1, listStyle:"none", top:'30px'}}>
+                                                        <li>
+                                                            
+                                                            <Link className="nav-link d-flex align-items-center text-center" href='/dashboardGeneralUserC'>
+                                                                <span className="small me-2">Configuraciones </span> <i className="bi bi-person-gear"></i>
+                                                            </Link>
+
+                                                        </li>
+                                                        <li style={{marginTop:'-15px'}}>
+                                                            
+                                                            <Link className="nav-link d-flex align-items-center text-center" href='/api/auth/signout'>
+                                                                <span className="small me-2">Cerrar sesión </span> <i className="bi bi-power"></i>
+                                                            </Link>
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                                                                      
                                     </li>
                                 </>
                             ):(
@@ -110,9 +132,26 @@ async function Navbar(){
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="nav-link d-flex flex-column text-center" href='/api/auth/signout'>
-                                                <i className="bi bi-power"></i><span className="small">Cerrar sesion</span>
-                                            </Link> 
+                                            <a className="nav-link dropdown-toggle ms-auto" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginTop:"-10px"}}>
+                                                <i className="bi bi-person-circle"></i> <span className="small">{nombreDeUsuario}</span>
+                                            </a>                                        
+                                                
+                                                        <ul className="text-white" style={{position:"absolute", zIndex:1, listStyle:"none", top:'20px'}}>
+                                                            <li>
+                                                                
+                                                                <Link className="nav-link d-flex align-items-center text-center" href='/dashboardGeneralUserC'>
+                                                                    <span className="small me-2">Configuraciones </span> <i className="bi bi-person-gear"></i>
+                                                                </Link>
+
+                                                            </li>
+                                                            <li style={{marginTop:'-15px'}}>
+                                                                
+                                                                <Link className="nav-link d-flex align-items-center text-center" href='/api/auth/signout'>
+                                                                    <span className="small me-2">Cerrar sesión </span> <i className="bi bi-power"></i>
+                                                                </Link>
+                                                            </li>
+                                                            
+                                                        </ul>
                                         </li>   
 
                                     </>
