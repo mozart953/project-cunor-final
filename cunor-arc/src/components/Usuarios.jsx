@@ -59,7 +59,14 @@ function compoUsuariosPage({datos}){
 
     return(
         <>
-            <div>
+            
+            <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
+                    <div className="card-body">
+                        <legend className="text-center mb-4">Gestión de usuarios -CUNOR-</legend>                       
+                    </div>
+            </div>
+
+            <div className="mt-4">
                         <table className="table table-dark table-striped text-center">
                             <thead>
                                 <tr>

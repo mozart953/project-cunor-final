@@ -7,6 +7,13 @@ function compoRolesPage({datos}){
 
     return(
         <>
+            <div className="card text-bg-secondary mb-3" style={{width:'40%', margin:'0 auto', borderRadius:'15px'}}>
+                    <div className="card-body">
+                        <legend className="text-center mb-4">Roles del sistema</legend>                       
+                    </div>
+            </div>
+
+
          <div className="d-flex">
                 <div style={{paddingTop:'20px', paddingLeft:'10px', paddingBottom:'10px'}}>
                     <button type="button" className="btn btn-outline-success" 

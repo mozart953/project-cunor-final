@@ -177,11 +177,15 @@ function EditPage({params}){
 
     return(
         <>
+            <div className="card text-bg-secondary mb-3" style={{width:'40%', margin:'0 auto', borderRadius:'15px'}}>
+                    <div className="card-body">
+                        <legend className="text-center mb-4">Edición de usuarios -CUNOR-</legend>                       
+                    </div>
+            </div>
 
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4">Edición de usuarios -CUNOR-</legend>
 
                         <div className='row mb-3'>
                             <div className="col-1">
@@ -258,7 +262,7 @@ function EditPage({params}){
                             </div>
 
                             <div className='col'>
-                                <input type="username" placeholder="Nombre de usuario"  onChange={(e)=>{setValue('nombreUsuario', e.target.value, {shouldValidate:true} );setNombreusuario(e.target.value)}} {...register("nombreUsuario", {required: {value: true, message:'Es necesario escribir el nombre de usuario...'}})}  className="form-control bg-secondary text-white" />
+                                <input type="username" placeholder="Nombre de usuario"  onChange={(e)=>{setValue('nombreUsuario', e.target.value, {shouldValidate:true} );setNombreusuario(e.target.value)}} {...register("nombreUsuario", {required: {value: true, message:'Es necesario escribir el nombre de usuario...'}})}  className="form-control bg-secondary text-white" disabled={true}/>
                             </div>
 
                             {

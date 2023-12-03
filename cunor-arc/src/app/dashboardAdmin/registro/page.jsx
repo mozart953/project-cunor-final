@@ -108,12 +108,16 @@ function RegisterPage(){
 
     return(
         <>
+            <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
+                    <div className="card-body">
+                        <legend className="text-center mb-4">Registro de usuarios -CUNOR-</legend>                       
+                    </div>
+            </div>
 
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4">Registro de usuarios -CUNOR-</legend>
-
+                        
                         <div className='row mb-3'>
                             <div className="col-1">
                                 <label htmlFor="disabledTextInput" className="text-white">DPI</label>
