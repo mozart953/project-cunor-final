@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 function compoUsuariosPage({datos}){
     const router = useRouter();
     const [estado, setEstado] = useState({});
+    const [datoss, setDatoss] = useState([]);
     
 
     const datos2 = datos.map(data=>data.rol);
@@ -13,10 +14,21 @@ function compoUsuariosPage({datos}){
 
 
     useEffect(()=>{
+        setDatoss(datos);
+    },[datos])
+    
+
+    console.log("Datoss: " + datoss.map(data=>data.ID_Usuario));
+
+
+    useEffect(()=>{
+
+        if(datoss){
+
             console.log(estado)
 
             const estadoInicial = {};
-            datos.forEach((data)=>{
+            datoss.forEach((data)=>{
 
                 if(data.ID_estado==1){
                     estadoInicial[data.ID_Usuario]=true; 
@@ -29,8 +41,9 @@ function compoUsuariosPage({datos}){
             });
                    
             setEstado(estadoInicial);
+        }
         
-    },[datos])
+    },[datoss])
 
 
     const actualizarEstado = async (id,estado)=>{
@@ -40,19 +53,30 @@ function compoUsuariosPage({datos}){
         }else{
             estado=1;
         }
+        
+        try{
 
-        const estaDo= await fetch(`/api/datos/reEstadoU/${id}`,{
-            method:'PUT',
-            body:JSON.stringify({
-                ID_estado:Number(estado),
+            const estaDo= await fetch(`/api/datos/reEstadoU/${id}`,{
+                method:'PUT',
+                body:JSON.stringify({
+                    ID_estado:Number(estado),
+    
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            }).then(data=>data.json())
+            .then(datos=>console.log(datos));
+            console.log(estaDo);
 
-            }),
-            headers:{
-                'Content-Type':'application/json'
-            }
-        }).then(data=>data.json())
-        .then(datos=>console.log(datos));
-        console.log(estaDo);
+            const respuesta = await fetch('/api/datos/reUsuarios');
+            const dtos = await respuesta.json();
+            setDatoss(dtos);
+
+        }catch(error){
+            console.log("Ha ocurrido un error: " + error);
+        }
+
     }
 
     
@@ -82,7 +106,7 @@ function compoUsuariosPage({datos}){
                             </thead>
                             <tbody>
                                 {
-                                    datos.map((data, index)=>(
+                                    datoss.map((data, index)=>(
                                         <tr key={index}>
                                         <th scope="row">{data.ID_Usuario}</th>
                                         <td>{data.DPI}</td>
@@ -96,7 +120,7 @@ function compoUsuariosPage({datos}){
                                         
                                         {
                                           
-                                           estado[data.ID_Usuario]?(
+                                           data.ID_rol!==1 &&(estado[data.ID_Usuario]?(
                                             <button type="button" className="btn  btn-outline-danger mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Deshabilitar</button>
                                         
 
@@ -104,7 +128,7 @@ function compoUsuariosPage({datos}){
                                             <button type="button" className="btn  btn-outline-success"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Habilitar</button>
 
 
-                                           ) 
+                                           ) )
                                         }
                                         
                                         <button type="button" className="btn btn-light" onClick={()=>{router.push(`/dashboardAdmin/adminUsuarios/detallesUsuario/${data.ID_Usuario}`)}}>Detalles</button>
