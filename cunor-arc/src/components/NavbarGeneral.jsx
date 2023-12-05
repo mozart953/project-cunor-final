@@ -83,10 +83,16 @@ async function Navbar(){
                                         </Link>
                                     </li>
                                     <li className="nav-item">
+                                        <Link href='/dashboardAdmin/adminCategorias' className="nav-link d-flex flex-column text-center">
+                                            <i className="bi bi-bookmark"></i><span className="small">Gestión de categorias</span>
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
                                         <Link href='/dashboardAdmin/adminRoles' className="nav-link d-flex flex-column text-center">
                                             <i className="bi bi-person-lock"></i><span className="small">Roles</span>
                                         </Link>
                                     </li>
+                                    
                                     <li className="nav-item">
                                         
                                         <a className="nav-link dropdown-toggle ms-auto" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
