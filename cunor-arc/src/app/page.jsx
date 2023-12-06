@@ -1,13 +1,44 @@
 'use client'
-
+import CompoInicioTr from "@/components/usuarioFinal/InicioTr"
+import '@/hojas-de-estilo/usuario-final/InicioTr.css';
+import { useEffect, useState } from "react";
 
 export default function Home({ DashboardPage,pageProps}) {
+  const [indice, setIndice] = useState(0);
+  let texto = " ¡Gracias por visitar el repositorio CUNOR, ID Y ENSEÑAD A TODOS! "
+
+  useEffect(()=>{
+    const intervalId = setInterval(
+      ()=>{
+        setIndice(indice=>(indice+1)%texto.length)
+      },250
+    );
+
+    return ()=> clearInterval(intervalId);
+  },[])
+
+  const textoMover = texto.slice(indice) + texto.slice(0, indice);
+
+  
+  
+
   return (
 
     <>
-            <div className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
-                <div className="text-white">En construcción...</div>
+      <div className="contenedor-principal d-flex justify-content-center align-items-center">
+        <div className="card  text-white mb-3" style={{maxWidth: "80%", background:"#92a4a4"}}>
+          <div className="card-body">
+            <h5 className="titulo-tarjeta"><i className="bi bi-book-half"></i>USAC-CUNOR<i className="bi bi-book-half"></i></h5>
+            <div className="parrafo-tarjeta">
+              <p className="card-text">{textoMover}</p>
             </div>
+          </div>
+        </div>
+      </div>
+       
+
+
+            <CompoInicioTr />
       
 
     </>

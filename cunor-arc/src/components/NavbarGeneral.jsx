@@ -31,16 +31,17 @@ async function Navbar(){
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container">
                 <h1 className="navbar-brand">
-                    <Link href='/' className="nav-link">CUNOR</Link>
+                    <Link href='/' className="nav-link">
+                        <i className="bi bi-book-half"></i> USAC-CUNOR <i className="bi bi-book-half"></i>
+                    </Link>
                 </h1>
 
+                <div className="d-flex justify-content-center align-items-center">
+                    <h1 className="navbar-brand">
+                        Repositorio 
+                    </h1>
+                </div>               
 
-                <form className="input-group" style={{width: "400px"}}>
-                    <input type="search" className="form-control" placeholder="Buscar documento" aria-label="Search" />
-                    <button className="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
-                        Buscar
-                    </button>
-                </form> 
 
                 
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">

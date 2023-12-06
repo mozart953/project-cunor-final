@@ -1,0 +1,19 @@
+.contenedor-principal{
+    border-radius: "30px";
+}
+
+.titulo-tarjeta{
+  text-align: center;
+  font-size: 7em;
+  font-family: Arial, sans-serif;
+  color: #2f48ff;
+  font-weight: bold;
+}
+
+.parrafo-tarjeta{
+    text-align: center;
+    max-width: "80%";
+    background-color: black;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
