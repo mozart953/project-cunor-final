@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
+    const [trabajosfiltro, setTrabajosfiltro] = useState([]);
+    const [busqueda, setBusqueda] = useState("");
 
     const [currentpage, setCurrentpage] = useState(1);
     const [totalitems, setTotalitems] = useState(null);
@@ -13,7 +15,7 @@ function CompoInicioTr(){
     useEffect(()=>{
         if(currentpage){
             fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}`).
-            then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+            then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
         }
 
     },[currentpage]);
@@ -39,12 +41,39 @@ function CompoInicioTr(){
         }
     } 
 
+    const onSubmit = (e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+        if(busqueda!==""){
+            filtro(busqueda);
+        }
+    }
+
+    const filtro = (patron)=>{
+        console.log("patron: " + patron);
+        const resultadoBusqueda = trabajosfiltro.filter((data)=>{
+            if(data.trabajoGrad.titulo.toString().toLowerCase().includes(patron.toLowerCase())
+                || data.carrera.nombreCarrera.toString().toLowerCase().includes(patron.toLowerCase()) ||
+                data.autor.primerNombre.toString().toLowerCase().includes(patron.toLowerCase())
+            ){
+                return data;
+            }
+
+        })
+        console.log(resultadoBusqueda);
+        
+        if(resultadoBusqueda.length >0 ){
+            setTrabajos(resultadoBusqueda);
+        }
+    }
+
+
     return(
         <>
             <div className="mb-5 d-flex justify-content-center align-items-center">
-                <form className="input-group" style={{width: "400px"}}>
-                        <input type="search" className="form-control" placeholder="Buscar documento" aria-label="Search" />
-                        <button className="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
+                <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
+                        <input type="search" className="form-control" placeholder="Buscar en el repositorio" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                        <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
                         <i className="bi bi-search"></i> Buscar 
                         </button>
                 </form>
