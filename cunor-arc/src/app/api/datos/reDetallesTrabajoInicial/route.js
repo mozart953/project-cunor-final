@@ -5,15 +5,33 @@ export async function GET(request){
     const paramametros = new URLSearchParams(request.url.split('?')[1]);
     const page = Number(paramametros.get('page')) || 1;
     const itemsPerPage = Number(paramametros.get('itemsPagina')); 
-    const idEstado = Number(paramametros.get('idEstado'));    
+    const idEstado = Number(paramametros.get('idEstado'));
+    const searchTerm = paramametros.get('searchTerm')||'';    
 
     const totalItems = await db.registroTrabajoGraduacion.count(); 
 
+    let whereClause = {ID_estado:Number(idEstado)};
+
+    if(searchTerm){
+        whereClause={
+            ...whereClause,
+            OR:[
+                {trabajoGrad:{titulo:{contains:searchTerm}}},
+                {carrera:{nombreCarrera:{contains:searchTerm}}},
+                {autor:{primerNombre:{contains:searchTerm}}},
+                {autor:{segundoNombre:{contains:searchTerm}}},
+                {autor:{tercerNombre:{contains:searchTerm}}},
+                {autor:{primerApellido:{contains:searchTerm}}},
+                {autor:{segundoApellido:{contains:searchTerm}}},
+                {categoria:{nombreCategoria:{contains:searchTerm}}},                
+            ]
+        };
+
+    }
+
     const detalles = await db.registroTrabajoGraduacion.findMany(
         {
-            where:{
-                ID_estado:Number(idEstado),
-            },
+            where:whereClause,
             include:{
                 trabajoGrad:true,
                 categoria:true,

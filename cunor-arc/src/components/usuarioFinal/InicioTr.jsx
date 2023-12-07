@@ -1,5 +1,8 @@
 "use client"
 import { useState, useEffect } from "react";
+import PorTituloComponent from "@/components/usuarioFinal/busquedaA/PorTitulo";
+import FormGenericoComponent from "@/components/usuarioFinal/busquedaA/FormGenerico";
+
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
     const [trabajosfiltro, setTrabajosfiltro] = useState([]);
@@ -12,9 +15,16 @@ function CompoInicioTr(){
     const [paginasmaximas, setPaginasmaximas] = useState(5);
     const [estado, setEstado] = useState(1);
 
+    const [interruptor, setInterruptor] = useState(false);
+    const [interruptorT, setInterruptorT] = useState(false);
+    const [interruptorC, setInterruptorC] = useState(false);
+    const [interruptorA, setInterruptorA] = useState(false);
+    const [interruptorAn, setInterruptorAn] = useState(false);
+    const [interruptorCa, setInterruptorCa] = useState(false);
+
     useEffect(()=>{
         if(currentpage){
-            fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
             then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
         }
 
@@ -41,42 +51,133 @@ function CompoInicioTr(){
         }
     } 
 
-    const onSubmit = (e)=>{
+    const onSubmit = async (e)=>{
         e.preventDefault();
         console.log(busqueda);
-        if(busqueda!==""){
-            filtro(busqueda);
-        }
-    }
-
-    const filtro = (patron)=>{
-        console.log("patron: " + patron);
-        const resultadoBusqueda = trabajosfiltro.filter((data)=>{
-            if(data.trabajoGrad.titulo.toString().toLowerCase().includes(patron.toLowerCase())
-                || data.carrera.nombreCarrera.toString().toLowerCase().includes(patron.toLowerCase()) ||
-                data.autor.primerNombre.toString().toLowerCase().includes(patron.toLowerCase())
-            ){
-                return data;
-            }
-
-        })
-        console.log(resultadoBusqueda);
         
-        if(resultadoBusqueda.length >0 ){
-            setTrabajos(resultadoBusqueda);
-        }
+            //filtro(busqueda);
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            setTrabajos(datos.items); 
+            //setTrabajosfiltro(datos.items); 
+            setTotalitems(datos.total);
+        
     }
+
+    const onSubmitT = async(e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+    }
+
+    const onSubmitG = async(e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+    }
+
+    // const filtro = (patron)=>{
+    //     console.log("patron: " + patron);
+    //     const resultadoBusqueda = trabajosfiltro.filter((data)=>{
+    //         if(data.trabajoGrad.titulo.toString().toLowerCase().includes(patron.toLowerCase())
+    //             || data.carrera.nombreCarrera.toString().toLowerCase().includes(patron.toLowerCase()) ||
+    //             data.autor.primerNombre.toString().toLowerCase().includes(patron.toLowerCase()) ||
+    //             data.autor.segundoNombre.toString().toLowerCase().includes(patron.toLowerCase())||
+    //             data.autor.tercerNombre.toString().toLowerCase().includes(patron.toLowerCase())||
+    //             data.autor.primerApellido.toString().toLowerCase().includes(patron.toLowerCase())||
+    //             data.autor.segundoApellido.toString().toLowerCase().includes(patron.toLowerCase())|| 
+    //             data.categoria.nombreCategoria.toString().toLowerCase().includes(patron.toLowerCase())
+    //         ){
+    //             return data;
+    //         }
+
+    //     })
+    //     console.log(resultadoBusqueda);
+        
+    //     if(resultadoBusqueda.length >0 ){
+    //         setTrabajos(resultadoBusqueda);
+    //     }
+    // }
 
 
     return(
         <>
-            <div className="mb-5 d-flex justify-content-center align-items-center">
-                <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
-                        <input type="search" className="form-control" placeholder="Buscar en el repositorio" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
-                        <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
-                        <i className="bi bi-search"></i> Buscar 
-                        </button>
-                </form>
+            {
+                !interruptor &&(
+                    <div className="mb-3 d-flex justify-content-center align-items-center">
+                        <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
+                                <input type="search" className="form-control" placeholder="Buscar en el repositorio" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                                <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
+                                <i className="bi bi-search"></i> Buscar 
+                                </button>
+                        </form>
+                    </div>
+                )
+            }
+
+            <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
+                <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{setInterruptor(!interruptor)}}>
+                    {!interruptor?"Realizar búsqueda avanzada":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
+                </button>
+                {
+                    interruptor&&(
+
+                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3">
+                            <div className="mb-3 justify-content-center align-items-center">
+                                <h1>Buscar por:</h1>
+                            </div>
+                            <div className="mb-3 justify-content-center align-items-center">
+                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                    ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Titulo</button>
+                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Carrera</button>
+                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
+                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Año</button>
+                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
+                            </div>
+
+                            {
+                                interruptorT&&(
+                                    <PorTituloComponent onSubmitT={onSubmitT} busqueda={busqueda} setBusqueda={setBusqueda}/>
+                                )
+                                
+                            }
+                            
+                            {
+                                interruptorC&&(
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la carrera"}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorA&&(
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales del autor"}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorAn&&(
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por año"}/>
+                                )
+
+                            }
+                            {
+                                interruptorCa&&(
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoría"}/>
+                                )
+
+                            }
+
+                        </div>
+                    )
+                }
+
+
             </div>
 
             
@@ -100,7 +201,7 @@ function CompoInicioTr(){
                         </ul>
                     </nav>
                 </div>
-                
+
 
                 
 
