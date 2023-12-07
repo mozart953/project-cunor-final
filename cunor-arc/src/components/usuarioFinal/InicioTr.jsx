@@ -69,11 +69,37 @@ function CompoInicioTr(){
     const onSubmitT = async(e)=>{
         e.preventDefault();
         console.log(busqueda);
+        const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+        const datos = await respuesta.json();
+        console.log(datos);
+
+        setTrabajos(datos.items); 
+        //setTrabajosfiltro(datos.items); 
+        setTotalitems(datos.total);
     }
 
     const onSubmitG = async(e)=>{
         e.preventDefault();
         console.log(busqueda);
+
+        if(interruptorC){
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+    
+            setTrabajos(datos.items); 
+            //setTrabajosfiltro(datos.items); 
+            setTotalitems(datos.total);
+        }
+        else if(interruptorA){
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroAutor?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+    
+            setTrabajos(datos.items); 
+            //setTrabajosfiltro(datos.items); 
+            setTotalitems(datos.total);
+        }
     }
 
     // const filtro = (patron)=>{
@@ -127,15 +153,15 @@ function CompoInicioTr(){
                                 <h1>Buscar por:</h1>
                             </div>
                             <div className="mb-3 justify-content-center align-items-center">
-                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Titulo</button>
-                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                <button type="button" className={interruptorC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Carrera</button>
-                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
-                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Año</button>
-                                <button type="button" className="btn btn-secondary btn-lg me-3" onClick={
+                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
                             </div>
 
