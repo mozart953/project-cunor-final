@@ -7,40 +7,48 @@ export async function GET(request){
     const itemsPerPage = Number(paramametros.get('itemsPagina')); 
     const idEstado = Number(paramametros.get('idEstado'));
     const searchTerm = paramametros.get('searchTerm')||'';    
-
-    const totalItems = await db.registroTrabajoGraduacion.count(); 
+ 
 
     let whereClause = {ID_estado:Number(idEstado)};
 
-    if(searchTerm){
-        whereClause={
-            ...whereClause,
-            OR:[
-                {carrera:{nombreCarrera:{contains:searchTerm}}},                
-            ]
-        };
+    try{
 
-    }
+        if(searchTerm){
+            whereClause={
+                ...whereClause,
+                OR:[
+                    {carrera:{nombreCarrera:{contains:searchTerm}}},                
+                ]
+            };
 
-    const detalles = await db.registroTrabajoGraduacion.findMany(
-        {
-            where:whereClause,
-            include:{
-                trabajoGrad:true,
-                categoria:true,
-                archivo:true,
-                carrera:true,
-                autor: true,
-
-            },
-            skip: (page-1) * itemsPerPage,
-            take: itemsPerPage,
-            orderBy:{
-                fechaCarga:'desc',
-            }
         }
-    )
 
-    return NextResponse.json({items:detalles, total:totalItems});
+        const totalItems = await db.registroTrabajoGraduacion.count({
+            where:whereClause,
+        });
+
+        const detalles = await db.registroTrabajoGraduacion.findMany(
+            {
+                where:whereClause,
+                include:{
+                    trabajoGrad:true,
+                    categoria:true,
+                    archivo:true,
+                    carrera:true,
+                    autor: true,
+
+                },
+                skip: (page-1) * itemsPerPage,
+                take: itemsPerPage,
+                orderBy:{
+                    fechaCarga:'desc',
+                }
+            }
+        )
+
+        return NextResponse.json({items:detalles, total:totalItems});
+    }catch(error){
+        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
+    }
 
 }

@@ -112,9 +112,14 @@ function CompoInicioTr(){
             const datos = await respuesta.json();
             console.log(datos);
 
-            setTrabajos(datos.items); 
-            //setTrabajosfiltro(datos.items); 
-            setTotalitems(datos.total);
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
         
     }
 
@@ -125,9 +130,14 @@ function CompoInicioTr(){
         const datos = await respuesta.json();
         console.log(datos);
 
-        setTrabajos(datos.items); 
-        //setTrabajosfiltro(datos.items); 
-        setTotalitems(datos.total);
+        if(respuesta.ok){
+            setTrabajos(datos.items); 
+            //setTrabajosfiltro(datos.items); 
+            setTotalitems(datos.total);
+        }else{
+            alert("Algo salio mal, intentelo nuevamente...");
+        }
+
     }
 
     const onSubmitG = async(e)=>{
@@ -138,29 +148,47 @@ function CompoInicioTr(){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
             const datos = await respuesta.json();
             console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
     
-            setTrabajos(datos.items); 
-            //setTrabajosfiltro(datos.items); 
-            setTotalitems(datos.total);
+
         }
         else if(interruptorA){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroAutor?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
             const datos = await respuesta.json();
             console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
     
-            setTrabajos(datos.items); 
-            //setTrabajosfiltro(datos.items); 
-            setTotalitems(datos.total);
+
         }
 
         else if(interruptorCa){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
             const datos = await respuesta.json();
             console.log(datos);
+
+            if(respuesta.ok){
+                
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
     
-            setTrabajos(datos.items); 
-            //setTrabajosfiltro(datos.items); 
-            setTotalitems(datos.total);
         }
 
         else if(interruptorAn){
@@ -233,7 +261,7 @@ function CompoInicioTr(){
                         setInterruptor(!interruptor);
                         setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);
                     } }}>
-                    {!interruptor?"Realizar búsqueda avanzada":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
+                    {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
                 </button>
                 {
                     interruptor&&(
@@ -294,6 +322,10 @@ function CompoInicioTr(){
                 }
 
 
+            </div>
+
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
+                <h3>Resultados: {totalitems} </h3>
             </div>
 
             

@@ -15,7 +15,6 @@ export async function GET(request){
     const fechaInicioDate = new Date (fechaInicio);
     const fechaFinDate = new Date(fechaFin);
 
-    const totalItems = await db.registroTrabajoGraduacion.count(); 
 
 
     let whereClause = {ID_estado:Number(idEstado)};
@@ -34,6 +33,10 @@ export async function GET(request){
             };
 
         }
+
+        const totalItems = await db.registroTrabajoGraduacion.count({
+            where:whereClause,
+        });
 
         
         // if (page > 1) {
@@ -68,7 +71,7 @@ export async function GET(request){
 
 
     }catch(error){
-        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500})
+        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
     }
 
 }
