@@ -246,11 +246,11 @@ function CompoListarArchivosPage(){
 
             {
                 
-                        trabajos.map((data)=>(
+                        trabajos && trabajos.length!==0?( trabajos.map((data)=>(
 
                                 
                                     
-                                    <div className="card mb-4" style={{width:'80%', margin:'0 auto'}} key={data.ID_Detalle}>
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                         <div className="card-header">
                                              Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                         </div>
@@ -306,18 +306,18 @@ function CompoListarArchivosPage(){
                                             <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}>Eliminar archivo</button>
+                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i>Eliminar archivo</button>
                                                 
                                                 {
                                                     controlestado[data.ID_Detalle]?(
-                                                        <button type="button" className="btn btn-outline-danger" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:false});cambiarEstado(data.ID_Detalle, data.ID_estado)}}>Deshabilitar registro</button>
+                                                        <button type="button" className="btn btn-outline-danger" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:false});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-down-circle-fill"></i>Deshabilitar registro</button>
                                                     ):(
-                                                        <button type="button" className="btn btn-outline-success" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:true});cambiarEstado(data.ID_Detalle, data.ID_estado)}}>Habilitar registro</button>
+                                                        <button type="button" className="btn btn-outline-success" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:true});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-up-circle-fill"></i>Habilitar registro</button>
                                                     )
                                                 }
                                                
 
-                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}>Editar registro</button>
+                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}><i className="bi bi-pencil-square"></i>Editar registro</button>
                                             </div> 
 
                                         </div>
@@ -329,6 +329,24 @@ function CompoListarArchivosPage(){
                         
                             
                         )
+
+                    ):(
+                        
+                        trabajos && trabajos.length === 0 ?(<div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
+                                <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} >
+                                    <div className="card-body">
+                                        <div className="card text-bg-secondary mb-3" >
+                                            <div className="card-body">
+                                                <h5 className="card-title">Estado:</h5>
+                                                <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento...</p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>):null
+                    )
             }
 
                 <div className="content-center d-flex justify-content-center align-items-center">
