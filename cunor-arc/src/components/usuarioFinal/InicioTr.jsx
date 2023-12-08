@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import PorTituloComponent from "@/components/usuarioFinal/busquedaA/PorTitulo";
 import FormGenericoComponent from "@/components/usuarioFinal/busquedaA/FormGenerico";
+import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
@@ -15,6 +16,9 @@ function CompoInicioTr(){
     const [paginasmaximas, setPaginasmaximas] = useState(5);
     const [estado, setEstado] = useState(1);
 
+    const [fechainicio, SetFechainicio] = useState(null);
+    const [fechafin, SetFechafin] = useState(null);
+
     const [interruptor, setInterruptor] = useState(false);
     const [interruptorT, setInterruptorT] = useState(false);
     const [interruptorC, setInterruptorC] = useState(false);
@@ -23,12 +27,60 @@ function CompoInicioTr(){
     const [interruptorCa, setInterruptorCa] = useState(false);
 
     useEffect(()=>{
-        if(currentpage){
+        if(currentpage && !interruptor){
             fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
-            then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
         }
 
-    },[currentpage]);
+    },[currentpage, interruptor]);
+
+    useEffect(()=>{
+
+        if(currentpage && interruptorT){
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});      
+
+        }
+        else if(currentpage && interruptorC){
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
+        }
+        else if(currentpage && interruptorA){
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroAutor?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
+        }
+        else if(currentpage && interruptorCa){
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
+
+        }
+
+    }, [currentpage, interruptorT, interruptorC, interruptorA, interruptorCa ]);
+
+    useEffect(()=>{
+        const actFecha = async ()=>{
+            if(currentpage && interruptorAn && fechainicio!==null && fechafin!==null ){
+                const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroFecha?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+                const datos = await respuesta.json();
+                console.log(datos);
+
+                if(respuesta.ok){
+                    
+                    setTrabajos(datos.items); 
+                    //setTrabajosfiltro(datos.items); 
+                    setTotalitems(datos.total);
+
+                }else{
+                    alert("Algo salio mal, intentelo nuevamente...");
+                }
+
+            }
+        }
+
+        actFecha();
+    },[currentpage, interruptorAn, fechainicio, fechafin]);
+
+
 
     useEffect(()=>{
         if(totalitems!==null){
@@ -100,6 +152,37 @@ function CompoInicioTr(){
             //setTrabajosfiltro(datos.items); 
             setTotalitems(datos.total);
         }
+
+        else if(interruptorCa){
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+    
+            setTrabajos(datos.items); 
+            //setTrabajosfiltro(datos.items); 
+            setTotalitems(datos.total);
+        }
+
+        else if(interruptorAn){
+            console.log(fechainicio);
+            console.log(fechafin);
+
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroFecha?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+    
+
+        }
     }
 
     // const filtro = (patron)=>{
@@ -142,7 +225,14 @@ function CompoInicioTr(){
             }
 
             <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
-                <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{setInterruptor(!interruptor)}}>
+                <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
+                    if(interruptor){
+                        setInterruptor(!interruptor);
+                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);
+                    }else{
+                        setInterruptor(!interruptor);
+                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);
+                    } }}>
                     {!interruptor?"Realizar búsqueda avanzada":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
                 </button>
                 {
@@ -160,7 +250,7 @@ function CompoInicioTr(){
                                 <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
                                 <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Año</button>
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Fecha</button>
                                 <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
                             </div>
@@ -188,7 +278,7 @@ function CompoInicioTr(){
 
                             {
                                 interruptorAn&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por año"}/>
+                                   <FormFechaComponent onSubmit={onSubmitG} SetFechaInicio={SetFechainicio} SetFechaFin={SetFechafin} fechaini={fechainicio} fechafin={fechafin}/>
                                 )
 
                             }
@@ -234,7 +324,7 @@ function CompoInicioTr(){
 
             {
                 
-                        trabajos?(trabajos.map((data)=>(
+                         trabajos && trabajos.length!==0?(trabajos.map((data)=>(
                             data.ID_estado===1&&(
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                 <div className="card-header">
@@ -302,20 +392,27 @@ function CompoInicioTr(){
                             
                         )
                     ):(
-                        <div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
-                            <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
-                                <div className="card-body">
-                                    <div className="card text-bg-secondary mb-3" >
-                                        <div className="card-body">
-                                            <h5 className="card-title">Estado:</h5>
-                                            <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento...</p>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
 
-                        </div>
+                        
+                        trabajos && trabajos.length === 0 ?(<div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
+                                <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} >
+                                    <div className="card-body">
+                                        <div className="card text-bg-secondary mb-3" >
+                                            <div className="card-body">
+                                                <h5 className="card-title">Estado:</h5>
+                                                <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento...</p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>):null
+
+                        
+                        
+                                
+                            
                     )
             }
 
