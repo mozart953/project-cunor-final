@@ -1,27 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "@/libs/db";
 
-export async function POST(request){
-    const datos = await request.json();
-
-    const detalle = await db.registroTrabajoGraduacion.create(
-        {
-            data:{
-                ID_trabajo:Number(datos.ID_trabajo),
-                ID_categoria: Number(datos.ID_categoria),
-                ID_archivo: Number(datos.ID_archivo),
-                ID_carrera: Number(datos.ID_carrera),
-                ID_autor: Number(datos.ID_autor),
-                ID_usuario: Number(datos.ID_usuario),
-                ID_estado: Number(datos.ID_estado),
-
-            }
-        }
-    )
-
-    return NextResponse.json(detalle);
-}
-
 export async function GET(request){
     const paramametros = new URLSearchParams(request.url.split('?')[1]);
     const idUsuario = paramametros.get('idUsuario');
@@ -38,13 +17,11 @@ export async function GET(request){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {trabajoGrad:{titulo:{contains:searchTerm}}},
                     {autor:{primerNombre:{contains:searchTerm}}},
                     {autor:{segundoNombre:{contains:searchTerm}}},
                     {autor:{tercerNombre:{contains:searchTerm}}},
                     {autor:{primerApellido:{contains:searchTerm}}},
-                    {autor:{segundoApellido:{contains:searchTerm}}},
-                    {categoria:{nombreCategoria:{contains:searchTerm}}},                
+                    {autor:{segundoApellido:{contains:searchTerm}}},                
                 ]
             };
 

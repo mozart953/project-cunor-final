@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import FormFecha2Component from "@/components/usuarioFinal/busquedaA2/FormFecha2";
+import FormGenerico2Component from "@/components/usuarioFinal/busquedaA2/FormGenerico2";
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
@@ -23,6 +25,18 @@ function CompoListarArchivosPage(){
 
     const [controlestado, setControlestado] = useState({});
     const [render, setRender] = useState(null);
+
+    const [interruptor, setInterruptor] = useState(false);
+    const [interruptorT, setInterruptorT] = useState(false);
+    const [interruptorC, setInterruptorC] = useState(false);
+    const [interruptorA, setInterruptorA] = useState(false);
+    const [interruptorAn, setInterruptorAn] = useState(false);
+    const [interruptorCa, setInterruptorCa] = useState(false);
+    const [busqueda, setBusqueda] = useState("");
+    const [fechainicio, SetFechainicio] = useState(null);
+    const [fechafin, SetFechafin] = useState(null);
+
+
 
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -74,12 +88,58 @@ function CompoListarArchivosPage(){
     },[idcarrera, idusuario])
 
     useEffect(()=>{
-        if(idcarrera1 && iduser1){
-            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}`)
+        if(idcarrera1 && iduser1 && !interruptor && currentpage){
+            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
             .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
         }
 
-    },[idcarrera1, iduser1,currentpage]); 
+    },[idcarrera1, iduser1,currentpage, interruptor]); 
+
+    useEffect(()=>{
+        if(idcarrera1 && iduser1 && currentpage){
+            if(interruptorA){
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+            }
+            else if(interruptorCa){
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+
+            }
+            else if(interruptorT){
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+            }
+    
+        }
+    },[idcarrera1, iduser1, currentpage, interruptorT, interruptorCa, interruptorA]);
+
+    useEffect(()=>{
+        if(idcarrera1 && iduser1 && currentpage){
+            const actFecha = async ()=>{
+                if(currentpage && interruptorAn && fechainicio!==null && fechafin!==null ){
+                    const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+                    const datos = await respuesta.json();
+                    console.log(datos);
+    
+                    if(respuesta.ok){
+                        
+                        setTrabajos(datos.items); 
+                        //setTrabajosfiltro(datos.items); 
+                        setTotalitems(datos.total);
+    
+                    }else{
+                        alert("Algo salio mal, intentelo nuevamente...");
+                    }
+    
+                }
+            }
+    
+            actFecha();
+
+        }
+
+    },[idcarrera1, iduser1, currentpage, interruptorAn, fechainicio, fechafin])
 
     // function paginate(data){
     //     return data.slice((currentpage-1) * itemsperpage, currentpage * itemsperpage);
@@ -208,19 +268,197 @@ function CompoListarArchivosPage(){
 
     }
 
+    const onSubmit = async (e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+        
+        const respuesta = await fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+            
+        
+    }
+
+    const onSubmitG = async(e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+
+       
+        if(interruptorA){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+    
+
+        }
+
+        else if(interruptorCa){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+
+        }
+
+        else if(interruptorAn){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+
+        }
+
+        else if(interruptorT){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+        }
+
+    }
+
    
 
 
     return(
         <>
-            <div className="text-white mb-5" style={{width:'80%', margin:'0 auto'}}>
 
-                <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
+                <div className="card text-bg-secondary mb-3" style={{width:'70%', margin:'0 auto'}}>
                     <div className="card-header">Usuario operativo: {nombreusuario}</div>
                     <div className="card-body">
                         <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>                       
                     </div>
                 </div>
+
+            
+            {
+                !interruptor &&(
+                    <div className="mb-3 d-flex justify-content-center align-items-center">
+                        <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
+                                <input type="search" className="form-control" placeholder="Buscar trabajos publicados en este espacio" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                                <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
+                                <i className="bi bi-search"></i> Buscar 
+                                </button>
+                        </form>
+                    </div>
+                )
+            }
+
+
+            
+            <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
+                <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
+                    if(interruptor){
+                        setInterruptor(!interruptor);
+                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);
+                    }else{
+                        setInterruptor(!interruptor);
+                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);
+                    } }}>
+                    {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
+                </button>
+                {
+                    interruptor&&(
+
+                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3">
+                            <div className="mb-3 justify-content-center align-items-center">
+                                <h1>Buscar por:</h1>
+                            </div>
+                            <div className="mb-3 justify-content-center align-items-center">
+                                <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(!interruptorT); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Titulo</button>  
+                                <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
+                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Fecha</button>
+                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
+                            </div>
+
+                            {
+                                interruptorT&&(
+                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la titulo"}/>
+                                )
+                                
+                            }
+                            
+                            {
+                                interruptorCa&&(
+                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoria"}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorA&&(
+                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales del autor"}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorAn&&(
+                                   <FormFecha2Component onSubmit={onSubmitG} SetFechaInicio={SetFechainicio} SetFechaFin={SetFechafin} fechaini={fechainicio} fechafin={fechafin}/>
+                                )
+
+                            }
+
+
+                        </div>
+                    )
+                }
+
+
+            </div>
+
+            
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
+                <h3>Resultados: {totalitems} </h3>
+            </div>
+
+
+
+            <div className="text-white mb-5" style={{width:'80%', margin:'0 auto'}}>
+
+                
 
                 <div className="content-center d-flex justify-content-center align-items-center">
                     <nav aria-label="..." style={{cursor:"pointer"}}>
