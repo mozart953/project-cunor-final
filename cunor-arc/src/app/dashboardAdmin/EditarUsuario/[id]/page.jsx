@@ -179,7 +179,7 @@ function EditPage({params}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'40%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Edición de usuarios -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-lines-fill"></i>Edición de usuarios -CUNOR-</legend>                       
                     </div>
             </div>
 

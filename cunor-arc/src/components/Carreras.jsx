@@ -10,19 +10,19 @@ function compoCarrerasPage({datos}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Gestión de carreras -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i>Gestión de carreras -CUNOR-</legend>                       
                     </div>
             </div>
 
-            <div style={{paddingTop:'20px', paddingLeft:'10px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-outline-success" 
+            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
-                >Agregar carrera</button>
+                ><i className="bi bi-plus-lg"></i>Agregar carrera</button>
             </div>
             
 
-            <div>
-                        <table className="table table-dark table-striped text-center">
+            <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
+                        <table className="table table-dark table-striped text-center" style={{borderRadius: '15px', overflow: 'hidden', border:'1px solid gray'}}>
                             <thead>
                                 <tr>
                                 <th scope="col">No.</th>
@@ -37,7 +37,7 @@ function compoCarrerasPage({datos}){
                                         <th scope="row">{data.ID_Carrera}</th>
                                         <td>{data.nombreCarrera}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}>Editar</button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         

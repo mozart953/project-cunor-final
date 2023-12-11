@@ -24,13 +24,18 @@ function compoDetallesUsuarioPage({id}){
 
     return(
         <>
+            <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
+                    <div className="card-body">
+                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i>Detalles del usuario</legend>                       
+                    </div>
+            </div>
            
-            <div>
+            <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
 
                 {
                             datos0.length > 0?
                             
-                                <table className="table table-dark table-striped text-center">
+                                <table className="table table-dark table-striped text-center" style={{borderRadius: '15px', overflow: 'hidden', border:'1px solid gray'}}>
                                             <thead>
                                                 <tr>
                                                 <th scope="col">No.</th>
@@ -58,8 +63,8 @@ function compoDetallesUsuarioPage({id}){
                             
                             :
 
-                            <div className="d-flex justify-content-center align-items-center" style={{height: "100vh", color: "white"}}>
-                                No existen datos disponibles
+                            <div className="d-flex justify-content-center align-items-center" style={{height: "50vh", color: "white"}}>
+                                No existen datos disponibles para este usuario
                             </div>                
 
                     

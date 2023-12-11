@@ -86,12 +86,12 @@ function compoUsuariosPage({datos}){
             
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Gestión de usuarios -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i>Gestión de usuarios -CUNOR-</legend>                       
                     </div>
             </div>
 
-            <div className="mt-4">
-                        <table className="table table-dark table-striped text-center">
+            <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
+                        <table className="table table-dark table-striped text-center" style={{borderRadius: '15px', overflow: 'hidden', border:'1px solid gray'}}>
                             <thead>
                                 <tr>
                                 <th scope="col">No.</th>
@@ -116,22 +116,22 @@ function compoUsuariosPage({datos}){
                                         <td>{data.rol.nombreRol}</td>
                                         <td>{data.carrera.nombreCarrera}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/EditarUsuario/${data.ID_Usuario}`)}}>Editar</button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/EditarUsuario/${data.ID_Usuario}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         {
                                           
                                            data.ID_rol!==1 &&(estado[data.ID_Usuario]?(
-                                            <button type="button" className="btn  btn-outline-danger mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Deshabilitar</button>
+                                            <button type="button" className="btn  btn-outline-success mr-8" style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado, [data.ID_Usuario]:false}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}><i className="bi bi-toggle-on"></i></button>
                                         
 
                                            ):(
-                                            <button type="button" className="btn  btn-outline-success"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}>Habilitar</button>
+                                            <button type="button" className="btn  btn-outline-danger"  style={{ marginRight: '10px' }} onClick={()=>{setEstado({...estado,[data.ID_Usuario]:true}); actualizarEstado(data.ID_Usuario, data.ID_estado);}}><i className="bi bi-toggle2-off"></i></button>
 
 
                                            ) )
                                         }
                                         
-                                        <button type="button" className="btn btn-light" onClick={()=>{router.push(`/dashboardAdmin/adminUsuarios/detallesUsuario/${data.ID_Usuario}`)}}>Detalles</button>
+                                        <button type="button" className="btn btn-light" onClick={()=>{router.push(`/dashboardAdmin/adminUsuarios/detallesUsuario/${data.ID_Usuario}`)}}><i className="bi bi-file-earmark-person"></i></button>
 
                                         </td>
                                         </tr>        

@@ -19,15 +19,16 @@ function CompoCategorias(){
         <>
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Categorias</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-bookmark-fill"></i>Gestión de categorias</legend>                       
                     </div>
             </div>
 
-            <button type="button" className="btn btn-outline-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}>Crear categoria</button>
+            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i>Crear categoria</button>
+            </div>
 
-
-            <div className="mt-4 d-flex content-center">
-                <table className="table table-dark table-striped text-center">
+            <div className="mt-4 d-flex content-center" style={{width:'85%', margin:'0 auto'}}>
+                <table className="table table-dark table-striped text-center" style={{borderRadius: '15px', overflow: 'hidden', border:'1px solid gray'}}>
                     <thead>
                         <tr>
                             <th scope="col">No.</th>
@@ -43,7 +44,7 @@ function CompoCategorias(){
                                     <td>{data.nombreCategoria}</td>
                                     <td>
                                         <button type="button" className="btn btn-secondary" 
-                                        onClick={()=>{router.push(`/dashboardAdmin/adminCategorias/editarCategoria/${data.ID_Categoria}`)}}>Editar</button>
+                                        onClick={()=>{router.push(`/dashboardAdmin/adminCategorias/editarCategoria/${data.ID_Categoria}`)}}><i className="bi bi-pencil-square"></i></button>
                                     </td>
                                 </tr>
                             )

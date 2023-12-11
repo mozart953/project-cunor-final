@@ -110,7 +110,7 @@ function RegisterPage(){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Registro de usuarios -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-badge"></i>Registro de usuarios -CUNOR-</legend>                       
                     </div>
             </div>
 
