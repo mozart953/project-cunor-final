@@ -6,14 +6,16 @@ import Usuarios from '@/components/Usuarios';
 
  function AdminUsuariosPage(){
     const [usuarios,setUsuarios] = useState([]); 
+    const [total, setTotal] = useState(null);
 
 
 
     useEffect(()=>{
-        fetch('/api/datos/reUsuarios').then(datos=>datos.json()).then(
+        fetch('/api/datos/reUsuariosPaginado').then(datos=>datos.json()).then(
             data=>{ 
                 //console.log(data);
-                setUsuarios([...data,...usuarios]);
+                setUsuarios(data.items);
+                setTotal(data.total);
                 //console.log(JSON.stringify(data));
             }
         )
@@ -29,7 +31,7 @@ import Usuarios from '@/components/Usuarios';
             <div>
                 {
                     
-                   <Usuarios datos={usuarios} />
+                   <Usuarios datos={usuarios} totalItems={total}/>
                 }
                 
             </div>
