@@ -2,8 +2,71 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function compoCarrerasPage({datos}){
+function compoCarrerasPage({datos, totalItems}){
     const router = useRouter();
+
+    const [datoscarrera, setDatoscarrera] = useState([]);
+    
+
+    const [currentpage, setCurrentpage] = useState(1);
+    const [totalitems, setTotalitems] = useState(null);
+    const [itemspagina, setItemspagina] = useState(10);
+    const [totalPaginas, setTotalpaginas] = useState(null);
+    const [paginasmaximas, setPaginasmaximas] = useState(5);
+    const [busqueda, setBusqueda] = useState("");
+
+    useEffect(()=>{
+        console.log(datos);
+        setDatoscarrera(datos);
+        setTotalitems(totalItems);
+    }, [datos, totalItems]);
+
+    useEffect(
+        ()=>{
+            if(currentpage){
+                fetch(`/api/datos/reCarrerasPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                .then(data=>data.json()).then(datos=>{setDatoscarrera(datos.items); setTotalitems(datos.total);})
+            }
+        },[currentpage]
+    )
+
+    useEffect(()=>{
+        if(totalitems!==null){
+            const totalPaginas = Math.ceil(totalitems/itemspagina);
+            setTotalpaginas(totalPaginas);
+        }
+    },[totalitems])
+
+    function nextPage(){
+        const totalPaginas = Math.ceil(totalitems/itemspagina);
+        if(currentpage<totalPaginas){
+            setCurrentpage(currentpage+1);
+        }
+        
+    }
+
+    function beforePage(){
+        if(currentpage>1){
+            setCurrentpage(currentpage-1);
+        }
+    }
+
+
+    const onSubmit = async (e)=>{
+        e.preventDefault();
+        console.log(busqueda);
+
+        const respuesta = await fetch(`/api/datos/reCarrerasPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+        const datos = await respuesta.json();
+        console.log(datos);
+
+        if(respuesta.ok){
+            setDatoscarrera(datos.items); 
+            setTotalitems(datos.total);
+        }else{
+            alert("Algo salio mal, intententelo nuevamente...")
+        }
+    }
 
 
     return(
@@ -14,6 +77,22 @@ function compoCarrerasPage({datos}){
                     </div>
             </div>
 
+            <div className="mb-3 d-flex justify-content-center align-items-center">
+                        <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
+                                <input type="search" className="form-control" placeholder="Buscar carrera" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                                <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
+                                <i className="bi bi-search"></i> Buscar 
+                                </button>
+                        </form>
+            </div>
+
+            
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
+                <h3>Resultados: {totalitems} </h3>
+            </div>
+
+    
+
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
@@ -22,6 +101,24 @@ function compoCarrerasPage({datos}){
             
 
             <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
+                    <div className="content-center d-flex justify-content-center align-items-center">
+                            <nav aria-label="..." style={{cursor:"pointer"}}>
+                                <ul className="pagination">
+                                <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+                                    <a className="page-link" onClick={beforePage}>Anterior</a>
+                                </li>
+                                {[...Array(Math.min(totalPaginas,paginasmaximas))].map((_, i) => (
+                                    <li className={`page-item ${i + 1 === currentpage ? 'active' : ''}`} key={i}>
+                                    <a className="page-link" onClick={() => setCurrentpage(i + 1+ (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas))}>{i + 1 + (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas)}</a>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentpage === totalPaginas ? 'disabled' : ''}`}>
+                                    <a className="page-link" onClick={nextPage}>Siguiente</a>
+                                </li>
+                                </ul>
+                            </nav>
+                    </div>
+
                         <table className="table table-dark table-striped text-center" style={{borderRadius: '15px', overflow: 'hidden', border:'1px solid gray'}}>
                             <thead>
                                 <tr>
@@ -32,7 +129,7 @@ function compoCarrerasPage({datos}){
                             </thead>
                             <tbody>
                                 {
-                                    datos.map((data, index)=>(
+                                    datoscarrera.map((data, index)=>(
                                         <tr key={index}>
                                         <th scope="row">{data.ID_Carrera}</th>
                                         <td>{data.nombreCarrera}</td>
@@ -50,6 +147,25 @@ function compoCarrerasPage({datos}){
                                
                             </tbody>
                         </table>
+
+
+                    <div className="content-center d-flex justify-content-center align-items-center">
+                            <nav aria-label="..." style={{cursor:"pointer"}}>
+                                <ul className="pagination">
+                                <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+                                    <a className="page-link" onClick={beforePage}>Anterior</a>
+                                </li>
+                                {[...Array(Math.min(totalPaginas,paginasmaximas))].map((_, i) => (
+                                    <li className={`page-item ${i + 1 === currentpage ? 'active' : ''}`} key={i}>
+                                    <a className="page-link" onClick={() => setCurrentpage(i + 1+ (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas))}>{i + 1 + (Math.floor((currentpage-1)/ paginasmaximas)*paginasmaximas)}</a>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentpage === totalPaginas ? 'disabled' : ''}`}>
+                                    <a className="page-link" onClick={nextPage}>Siguiente</a>
+                                </li>
+                                </ul>
+                            </nav>
+                    </div>
 
 
             </div>
