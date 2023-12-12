@@ -129,8 +129,8 @@ function compoCarrerasPage({datos, totalItems}){
                             </thead>
                             <tbody>
                                 {
-                                    datoscarrera.map((data, index)=>(
-                                        <tr key={index}>
+                                    datoscarrera.map((data)=>(
+                                        <tr key={data.ID_Carrera}>
                                         <th scope="row">{data.ID_Carrera}</th>
                                         <td>{data.nombreCarrera}</td>
                                         <td>
