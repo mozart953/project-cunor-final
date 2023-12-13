@@ -26,13 +26,33 @@ function CompoInicioTr(){
     const [interruptorAn, setInterruptorAn] = useState(false);
     const [interruptorCa, setInterruptorCa] = useState(false);
 
+    const [valorseleccionado, setValorseleccionado] = useState('');
+    const [valorseleccionado2, setValorseleccionado2] = useState('');
+
+    const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
+    const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
+                         {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
+                         {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
+                         {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
+                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+
     useEffect(()=>{
-        if(currentpage && !interruptor){
-            fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`).
+        
+            console.log(ordenQuery[0].ordBase);
+            setValorseleccionado(ordenQuery[0].ordBase);
+            console.log(ordenQuery2[0].ordBase);
+            setValorseleccionado2(ordenQuery2[0].ordBase);
+            
+        
+    },[]);
+
+    useEffect(()=>{
+        if(currentpage && !interruptor && valorseleccionado){
+            fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
         }
 
-    },[currentpage, interruptor]);
+    },[currentpage, interruptor, valorseleccionado, valorseleccionado2]);
 
     useEffect(()=>{
 
@@ -108,7 +128,7 @@ function CompoInicioTr(){
         console.log(busqueda);
         
             //filtro(busqueda);
-            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}`);
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -239,6 +259,32 @@ function CompoInicioTr(){
 
     return(
         <>
+            
+            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{width:'47%', margin:'0 auto', border:'1px solid gray'}}>
+                <div className="col-md-4" style={{marginRight:'20px'}}>
+                    <div>
+                        <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
+                    </div>
+                    <div className="w-100">
+                        <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
+                            {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                    <div>
+                        <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
+                    </div>
+                    <div className="w-100">
+                        <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
+                            {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
             {
                 !interruptor &&(
                     <div className="mb-3 d-flex justify-content-center align-items-center">
