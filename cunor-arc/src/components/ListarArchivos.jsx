@@ -36,6 +36,17 @@ function CompoListarArchivosPage(){
     const [fechainicio, SetFechainicio] = useState(null);
     const [fechafin, SetFechafin] = useState(null);
 
+    
+    const [valorseleccionado, setValorseleccionado] = useState('');
+    const [valorseleccionado2, setValorseleccionado2] = useState('');
+
+    const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
+    const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
+                         {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
+                         {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
+                         {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
+                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+
 
 
     const [idcarrera1, setIdcarrera1]= useState(null);
@@ -43,6 +54,17 @@ function CompoListarArchivosPage(){
     const { data: session, status } = useSession();
     
     const router = useRouter();
+
+    
+    useEffect(()=>{
+        
+        console.log(ordenQuery[0].ordBase);
+        setValorseleccionado(ordenQuery[0].ordBase);
+        console.log(ordenQuery2[0].ordBase);
+        setValorseleccionado2(ordenQuery2[0].ordBase);
+        
+    
+    },[]);
 
     useEffect(()=>{
 
@@ -88,37 +110,37 @@ function CompoListarArchivosPage(){
     },[idcarrera, idusuario])
 
     useEffect(()=>{
-        if(idcarrera1 && iduser1 && !interruptor && currentpage){
-            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+        if(idcarrera1 && iduser1 && !interruptor && currentpage && valorseleccionado){
+            fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
             .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
         }
 
-    },[idcarrera1, iduser1,currentpage, interruptor]); 
+    },[idcarrera1, iduser1,currentpage, interruptor, valorseleccionado, valorseleccionado2]); 
 
     useEffect(()=>{
-        if(idcarrera1 && iduser1 && currentpage){
+        if(idcarrera1 && iduser1 && currentpage && valorseleccionado){
             if(interruptorA){
-                fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
             }
             else if(interruptorCa){
-                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
 
             }
             else if(interruptorT){
-                fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
             }
     
         }
-    },[idcarrera1, iduser1, currentpage, interruptorT, interruptorCa, interruptorA]);
+    },[idcarrera1, iduser1, currentpage, interruptorT, interruptorCa, interruptorA, valorseleccionado, valorseleccionado2]);
 
     useEffect(()=>{
         if(idcarrera1 && iduser1 && currentpage){
             const actFecha = async ()=>{
-                if(currentpage && interruptorAn && fechainicio!==null && fechafin!==null ){
-                    const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+                if(currentpage && interruptorAn && fechainicio!==null && fechafin!==null && valorseleccionado){
+                    const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
                     const datos = await respuesta.json();
                     console.log(datos);
     
@@ -139,7 +161,7 @@ function CompoListarArchivosPage(){
 
         }
 
-    },[idcarrera1, iduser1, currentpage, interruptorAn, fechainicio, fechafin])
+    },[idcarrera1, iduser1, currentpage, interruptorAn, fechainicio, fechafin, valorseleccionado, valorseleccionado2])
 
     // function paginate(data){
     //     return data.slice((currentpage-1) * itemsperpage, currentpage * itemsperpage);
@@ -272,7 +294,7 @@ function CompoListarArchivosPage(){
         e.preventDefault();
         console.log(busqueda);
         
-        const respuesta = await fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+        const respuesta = await fetch(`/api/datos/reDetalleTrabajo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -294,7 +316,7 @@ function CompoListarArchivosPage(){
 
        
         if(interruptorA){
-            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutor?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -310,7 +332,7 @@ function CompoListarArchivosPage(){
         }
 
         else if(interruptorCa){
-            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -325,7 +347,7 @@ function CompoListarArchivosPage(){
         }
 
         else if(interruptorAn){
-            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}`);
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroFecha?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&fechaInicio=${fechainicio}&fechaFin=${fechafin}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -340,7 +362,7 @@ function CompoListarArchivosPage(){
         }
 
         else if(interruptorT){
-            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
             console.log(datos);
 
@@ -366,6 +388,32 @@ function CompoListarArchivosPage(){
                     <div className="card-body">
                         <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>                       
                     </div>
+                </div>
+
+
+                <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{width:'47%', margin:'0 auto', border:'1px solid gray'}}>
+                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                        <div>
+                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
+                        </div>
+                        <div className="w-100">
+                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
+                                {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="col-md-4">
+                        <div>
+                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
+                        </div>
+                        <div className="w-100">
+                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
+                                {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
 
             
