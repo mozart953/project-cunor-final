@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import useLog2 from "@/hooks/log2";
 import GraficoUsuarioTrabajosComponent from "@/components/graficosDashboards/graficosOperativo/GraficoUsuarioTrabajos";
 import GraficoTrabajosCarrerasComponent from "@/components/graficosDashboards/graficosOperativo/GraficoTrabajosCarreras";
+import GraficoTrabajosTotalesComponent from "@/components/graficosDashboards/graficosOperativo/GraficoTrabajosTotales";
+import GraficoTrabajosCategoriasComponent from "@/components/graficosDashboards/graficosOperativo/GraficoTrabajosCategorias";
 
 function InicioOperativoComponent(){
     const [datosg, setUsuario1] = useLog2(null);
@@ -73,7 +75,7 @@ function InicioOperativoComponent(){
             </div>
 
             
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-center align-items-center mb-3">
                 <div className="bg-dark mb-3 me-3">
                     <div>
                         <p className="text-center mb-2 text-white" style={{fontWeight:'bold'}}>Trabajos de graduación registrados por {nombreusuario}</p>
@@ -94,6 +96,36 @@ function InicioOperativoComponent(){
                     
                     <div className="bg-light mx-auto px-2 border border-2 border-primary" style={{width:"600px", height:"300px"}}>
                         <GraficoTrabajosCarrerasComponent />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            
+            <div className="d-flex justify-content-center align-items-center mb-3">
+                <div className="bg-dark mb-3 me-3">
+                    <div>
+                        <p className="text-center mb-2 text-white" style={{fontWeight:'bold'}}>Registro totales de trabajos de graduación</p>
+                    </div>
+                    
+                    <div className="bg-light mx-auto px-2 border border-2 border-primary" style={{width:"450px", height:"230px"}}>
+                        <GraficoTrabajosTotalesComponent />                      
+
+                    </div>
+
+                </div>
+
+                
+                <div className="bg-dark">
+                    <div>
+                        <p className="text-center mb-2 text-white" style={{fontWeight:'bold'}}>Cantidad de trabajos de graduación por categoria</p>
+                    </div>
+                    
+                    <div className="bg-light mx-auto px-2 border border-2 border-primary" style={{width:"600px", height:"300px"}}>
+                        <GraficoTrabajosCategoriasComponent />    
 
                     </div>
 
