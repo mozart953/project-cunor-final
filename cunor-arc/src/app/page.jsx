@@ -26,7 +26,7 @@ export default function Home({ DashboardPage,pageProps}) {
 
     <>
       <div className="contenedor-principal d-flex justify-content-center align-items-center">
-        <div className="card  text-white mb-3" style={{maxWidth: "80%", background:"#92a4a4"}}>
+        <div className="card  text-white mb-3" style={{maxWidth: "80%", background:"#ffffff"}}>
           <div className="card-body">
             <h5 className="titulo-tarjeta"><i className="bi bi-book-half"></i>USAC-CUNOR<i className="bi bi-book-half"></i></h5>
             <div className="parrafo-tarjeta">

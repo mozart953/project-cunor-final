@@ -55,6 +55,11 @@ async function Navbar(){
                             </Link>
                             </li>
                             <li className="nav-item">
+                            <Link href='/dAbout' className="nav-link active d-flex flex-column text-center" aria-current="page">
+                                <i className="bi bi-info-square-fill"></i><span className="small">Acerca de</span>
+                            </Link>
+                            </li>
+                            <li className="nav-item">
                             <Link href='/auth/login' className="nav-link d-flex flex-column text-center">
                                 <i className="bi bi-lock"></i><span className="small">Iniciar sesión</span>
                             </Link>
