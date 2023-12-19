@@ -26,9 +26,10 @@ export default function Home({ DashboardPage,pageProps}) {
 
     <>
       <div className="contenedor-principal d-flex justify-content-center align-items-center">
-        <div className="card  text-white mb-3" style={{maxWidth: "80%", background:"#ffffff"}}>
+        <div className="card  text-white mb-3" style={{maxWidth: "90%", background:"#ffffff"}}>
           <div className="card-body">
-            <h5 className="titulo-tarjeta"><i className="bi bi-book-half"></i>USAC-CUNOR<i className="bi bi-book-half"></i></h5>
+            {/* <h5 className="titulo-tarjeta"><i className="bi bi-book-half"></i>USAC-CUNOR<i className="bi bi-book-half"></i></h5> */}
+            <img className="mb-3" src={'/images/cunorl-logo3.jpg'}  style={{width:'800px', height:'300px'}}/>
             <div className="parrafo-tarjeta">
               <p className="card-text">{textoMover}</p>
             </div>

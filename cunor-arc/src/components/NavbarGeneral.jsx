@@ -30,16 +30,18 @@ async function Navbar(){
         
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container">
-                <h1 className="navbar-brand">
-                    <Link href='/' className="nav-link">
-                        <i className="bi bi-book-half"></i> USAC-CUNOR <i className="bi bi-book-half"></i>
-                    </Link>
-                </h1>
-
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="text-white d-flex align-items-center" style={{borderRadius:"20px", background:"#00156d"}}>
                     <h1 className="navbar-brand">
-                        Repositorio 
+                        <Link href='/' className="nav-link">
+                            <img  src={'/images/cunor-logo2.png'}  style={{width:'200px', height:'40px', borderRadius:"20px"}}/>
+                        </Link>
                     </h1>
+
+                    <div className="justify-content-center align-items-center" >
+                        <h1 className="navbar-brand text-white" >
+                            <strong>Repositorio </strong>
+                        </h1>
+                    </div>
                 </div>               
 
 
