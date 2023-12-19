@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import PorTituloComponent from "@/components/usuarioFinal/busquedaA/PorTitulo";
 import FormGenericoComponent from "@/components/usuarioFinal/busquedaA/FormGenerico";
 import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
+import MyButton from "@/components/Modal/BotonModal";
+import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
 
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
@@ -35,6 +37,9 @@ function CompoInicioTr(){
                          {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
                          {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
                          {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+    
+    const [modalShow, setModalShow] = useState(null);
+
 
     useEffect(()=>{
         
@@ -231,6 +236,25 @@ function CompoInicioTr(){
     
 
         }
+    }
+
+    function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
+        let nombres = primernombre.charAt(0) + ".";
+            if(segundonombre !== ""){
+                nombres += segundonombre.charAt(0) + ".";
+            }
+            if(tercernombre !== ""){
+                nombres += tercernombre.charAt(0) + ".";
+            }
+
+            let apellidos = primerapellido;
+            if(segundoapellido !== ""){
+                apellidos += " " + segundoapellido;
+            }
+
+            return apellidos + ", " + nombres + " (" + new Date(anio).getFullYear() + "). " + titulo;       
+                
+
     }
 
     // const filtro = (patron)=>{
@@ -458,8 +482,17 @@ function CompoInicioTr(){
                                     </div>
 
                                     <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
-                                     
 
+                                    <MyButton onOpenModal={()=>setModalShow(data.ID_Detalle)} />
+                                    {
+                                        modalShow===data.ID_Detalle &&(<MyVerticallyCenteredModal show={true} onHide={()=>setModalShow(null)} 
+                                        title={"Referencia"} formato={"APA"} 
+                                        general={formatoApa(data.autor.primerNombre, data.autor.segundoNombre, data.autor.tercerNombre, data.autor.primerApellido, data.autor.segundoApellido, data.fechaCarga, data.trabajoGrad.titulo)}
+                                        mensaje={"Esta es una referencia autogenerada con la información disponible en el registro, puede estar incompleta o contener datos erroneos. La identación o formato se puede perder al copiar y pegar."}/>)
+
+
+                                    } 
+                                    
                                 </div>
                             </div>
 
