@@ -114,6 +114,7 @@ model Autor{
   tercerNombre String?
   primerApellido String
   segundoApellido String?
+  carnet String?
   registroTrabajograd registroTrabajoGraduacion[]
 }
 

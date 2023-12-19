@@ -15,6 +15,7 @@ export async function PUT(request, {params}){
                 tercerNombre: datos.tercerNombre,
                 primerApellido: datos.primerApellido,
                 segundoApellido: datos.segundoApellido,
+                carnet: datos.carnet,
 
             }
         }

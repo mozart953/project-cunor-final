@@ -12,6 +12,7 @@ export async function POST(request){
                 tercerNombre: datos.tercerNombre,
                 primerApellido: datos.primerApellido,
                 segundoApellido: datos.segundoApellido,
+                carnet:datos.carnet,
 
             }
         }

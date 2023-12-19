@@ -110,6 +110,7 @@ function SubaArchivoPage(){
                             tercerNombre: thirdname,
                             primerApellido: data1.primerApellido,
                             segundoApellido: secondlastname,
+                            carnet:data1.Carnet,
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -408,6 +409,23 @@ function SubaArchivoPage(){
                         
                         <div className="col">
                             <legend className="text-center mb-4">Datos generales del autor</legend>
+                            <div className="mb-3">
+                                    <label className="col-form-label">Carnet</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control text-white bg-dark" {...register("Carnet", {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
+                                    </div>
+
+                                    {
+                                        errors.Carnet && (                                  
+                                            
+                                            <span className="badge rounded-pill text-bg-danger">{errors.Carnet.message}</span>
+
+
+                                        )
+                                    }
+                            </div>
+
+
                             <div className="mb-3">
                                     <label className="col-form-label">Primer nombre</label>
                                     <div className="col-sm-10">

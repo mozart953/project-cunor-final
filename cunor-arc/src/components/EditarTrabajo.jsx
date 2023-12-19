@@ -36,6 +36,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [tercernombre, setTercerNombre] = useState(null);
     const [primerapellido, setPrimerapellido] = useState(null);
     const [segundoapellido, setSegundoapellido] = useState(null);
+    const [carnet, setCarnet] = useState(null);
 
     //trabajoGrad
 
@@ -110,6 +111,7 @@ function CompoEditarTrabajos({idDetalle}){
             setValue('tercerNombre', tercernombre);
             setValue('primerApellido', primerapellido);
             setValue('segundoApellido', segundoapellido);
+            setValue('Carnet', carnet);
         }
     },[datostrabajo]);
 
@@ -125,6 +127,7 @@ function CompoEditarTrabajos({idDetalle}){
                 setTercerNombre(datos.autor.tercerNombre);
                 setPrimerapellido(datos.autor.primerApellido);
                 setSegundoapellido(datos.autor.segundoApellido);
+                setCarnet(datos.autor.carnet);
 
                 setIdtrabajo(datos.trabajoGrad.ID_Trabajo);
                 setTitulo(datos.trabajoGrad.titulo);
@@ -186,6 +189,7 @@ function CompoEditarTrabajos({idDetalle}){
                             tercerNombre: data1.tercerNombre,
                             primerApellido: data1.primerApellido,
                             segundoApellido: data1.segundoApellido,
+                            carnet:data1.Carnet,
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -505,6 +509,21 @@ function CompoEditarTrabajos({idDetalle}){
                                             
                                             <div className="col">
                                                 <legend className="text-center mb-4">Datos generales del autor</legend>
+                                                <div className="mb-3">
+                                                        <label className="col-form-label">Carnet</label>
+                                                        <div className="col-sm-10">
+                                                            <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue('Carnet', e.target.value, {shouldValidate: true}); setCarnet(e.target.value)}} {...register("Carnet", {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
+                                                        </div>
+
+                                                        {
+                                                            errors.Carnet && (                                  
+                                                                
+                                                                <span className="badge rounded-pill text-bg-danger">{errors.Carnet.message}</span>
+
+
+                                                            )
+                                                        }
+                                                </div>                                                
                                                 <div className="mb-3">
                                                         <label className="col-form-label">Primer nombre</label>
                                                         <div className="col-sm-10">

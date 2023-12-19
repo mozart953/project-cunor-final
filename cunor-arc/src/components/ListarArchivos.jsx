@@ -538,7 +538,8 @@ function CompoListarArchivosPage(){
                                     
                                     <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                         <div className="card-header">
-                                             Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
+                                             <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
+                                            - <strong>No. de carnet:</strong>{data.autor.carnet}
                                         </div>
 
                                         
