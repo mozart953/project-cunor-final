@@ -27,6 +27,7 @@ function CompoInicioTr(){
     const [interruptorA, setInterruptorA] = useState(false);
     const [interruptorAn, setInterruptorAn] = useState(false);
     const [interruptorCa, setInterruptorCa] = useState(false);
+    const [interruptorPC, setInterruptorPc] = useState(false);
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
@@ -79,8 +80,12 @@ function CompoInicioTr(){
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
 
         }
+        else if(currentpage && interruptorPC && valorseleccionado){
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroPalClave?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
+        }
 
-    }, [currentpage, interruptorT, interruptorC, interruptorA, interruptorCa, valorseleccionado, valorseleccionado2 ]);
+    }, [currentpage, interruptorT, interruptorC, interruptorA, interruptorCa, interruptorPC, valorseleccionado, valorseleccionado2 ]);
 
     useEffect(()=>{
         const actFecha = async ()=>{
@@ -236,6 +241,21 @@ function CompoInicioTr(){
     
 
         }
+
+        else if(interruptorPC){
+            const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroPalClave?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+        }
     }
 
     function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
@@ -326,10 +346,10 @@ function CompoInicioTr(){
                 <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
                     if(interruptor){
                         setInterruptor(!interruptor);
-                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);
+                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false); setInterruptorPc(false);
                     }else{
                         setInterruptor(!interruptor);
-                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);
+                        setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false); setInterruptorPc(false);
                     } }}>
                     {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
                 </button>
@@ -342,15 +362,17 @@ function CompoInicioTr(){
                             </div>
                             <div className="mb-3 justify-content-center align-items-center">
                                 <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Titulo</button>
+                                    ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Titulo</button>
                                 <button type="button" className={interruptorC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Carrera</button>
+                                    ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Carrera</button>
                                 <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Autor</button>
                                 <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Fecha</button>
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);setInterruptorPc(false);}}>Fecha</button>
                                 <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);setInterruptorPc(false);}}>Categoría</button>
+                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(!interruptorPC);}}>Palabra clave</button>                                
                             </div>
 
                             {
@@ -383,6 +405,12 @@ function CompoInicioTr(){
                             {
                                 interruptorCa&&(
                                     <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoría"}/>
+                                )
+
+                            }
+                            {
+                                interruptorPC&&(
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por palabra clave"}/>
                                 )
 
                             }
@@ -456,6 +484,10 @@ function CompoInicioTr(){
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Categoría: </h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
+                                        </div>
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Palabras clave: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.paClave} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>

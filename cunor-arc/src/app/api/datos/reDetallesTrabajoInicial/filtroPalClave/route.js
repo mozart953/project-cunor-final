@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "@/libs/db";
 
-
 function buildOrderBy(ordenCampo, orderDirection) {
     let orderBy = {};
     if (ordenCampo.includes('.')) {
@@ -28,20 +27,11 @@ export async function GET(request){
     let whereClause = {ID_estado:Number(idEstado)};
 
     try{
-
         if(searchTerm){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {trabajoGrad:{titulo:{contains:searchTerm}}},
-                    {trabajoGrad:{paClave:{contains:searchTerm}}},
-                    {carrera:{nombreCarrera:{contains:searchTerm}}},
-                    {autor:{primerNombre:{contains:searchTerm}}},
-                    {autor:{segundoNombre:{contains:searchTerm}}},
-                    {autor:{tercerNombre:{contains:searchTerm}}},
-                    {autor:{primerApellido:{contains:searchTerm}}},
-                    {autor:{segundoApellido:{contains:searchTerm}}},
-                    {categoria:{nombreCategoria:{contains:searchTerm}}},                
+                    {trabajoGrad:{paClave:{contains:searchTerm}}},                
                 ]
             };
 
