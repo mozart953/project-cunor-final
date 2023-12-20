@@ -32,6 +32,9 @@ function CompoListarArchivosPage(){
     const [interruptorA, setInterruptorA] = useState(false);
     const [interruptorAn, setInterruptorAn] = useState(false);
     const [interruptorCa, setInterruptorCa] = useState(false);
+    const [interruptorPC, setInterruptorPc] = useState(false);
+    const [interruptorcarnet, setInterruptorcarnet] = useState(false);
+
     const [busqueda, setBusqueda] = useState("");
     const [fechainicio, SetFechainicio] = useState(null);
     const [fechafin, SetFechafin] = useState(null);
@@ -45,7 +48,8 @@ function CompoListarArchivosPage(){
                          {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
                          {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
                          {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
-                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'},
+                         {id:6, ord:'Carnet', ordBase:'autor.carnet'},];
 
 
 
@@ -132,9 +136,17 @@ function CompoListarArchivosPage(){
                 fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulo?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
             }
+            else if(interruptorPC){
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroPalClave?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+                .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+            }
+            else if(interruptorcarnet){
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCarnet?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+                .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
+            }
     
         }
-    },[idcarrera1, iduser1, currentpage, interruptorT, interruptorCa, interruptorA, valorseleccionado, valorseleccionado2]);
+    },[idcarrera1, iduser1, currentpage, interruptorT, interruptorCa, interruptorA, interruptorPC, interruptorcarnet, valorseleccionado, valorseleccionado2]);
 
     useEffect(()=>{
         if(idcarrera1 && iduser1 && currentpage){
@@ -375,6 +387,33 @@ function CompoListarArchivosPage(){
             }
         }
 
+        else if(interruptorPC){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroPalClave?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+        }
+        else if(interruptorcarnet){
+            const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroCarnet?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+            const datos = await respuesta.json();
+            console.log(datos);
+
+            if(respuesta.ok){
+                setTrabajos(datos.items); 
+                //setTrabajosfiltro(datos.items); 
+                setTotalitems(datos.total);
+            }else{
+                alert("Algo salio mal, intentelo nuevamente...");
+            }
+        }
+
     }
 
    
@@ -436,10 +475,10 @@ function CompoListarArchivosPage(){
                 <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
                     if(interruptor){
                         setInterruptor(!interruptor);
-                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);
+                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorPc(false); setInterruptorcarnet(false);
                     }else{
                         setInterruptor(!interruptor);
-                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);
+                        setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorPc(false); setInterruptorcarnet(false);
                     } }}>
                     {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
                 </button>
@@ -452,13 +491,17 @@ function CompoListarArchivosPage(){
                             </div>
                             <div className="mb-3 justify-content-center align-items-center">
                                 <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(!interruptorT); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);}}>Titulo</button>  
+                                    ()=>{setInterruptorT(!interruptorT); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Titulo</button>  
                                 <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);}}>Autor</button>
+                                    ()=>{setInterruptorT(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Autor</button>
                                 <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);}}>Fecha</button>
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Fecha</button>
                                 <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
-                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);}}>Categoría</button>                                
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);setInterruptorPc(false); setInterruptorcarnet(false);}}>Categoría</button>
+                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(!interruptorPC); setInterruptorcarnet(false);}}>Palabra clave</button>
+                                <button type="button" className={interruptorcarnet?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                    ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(!interruptorcarnet);}}>No. Carnet</button>                                
                             </div>
 
                             {
@@ -485,6 +528,20 @@ function CompoListarArchivosPage(){
                             {
                                 interruptorAn&&(
                                    <FormFecha2Component onSubmit={onSubmitG} SetFechaInicio={SetFechainicio} SetFechaFin={SetFechafin} fechaini={fechainicio} fechafin={fechafin}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorPC&&(
+                                   <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por palabra clave"}/>
+                                )
+
+                            }
+
+                            {
+                                interruptorcarnet&&(
+                                   <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por No. de carnet"}/>
                                 )
 
                             }
