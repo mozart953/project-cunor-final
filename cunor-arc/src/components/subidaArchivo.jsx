@@ -91,6 +91,7 @@ function SubaArchivoPage(){
                             descripcion:data1.descripcion,
                             tamanio:Number(file.size),
                             direccionGuardado:url,
+                            paClave:data1.palabrasCla,
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -398,6 +399,24 @@ function SubaArchivoPage(){
                                         errors.descripcion && (                                  
                                             
                                             <span className="badge rounded-pill text-bg-danger">{errors.descripcion.message}</span>
+
+
+                                        )
+                                }
+                                
+                            </div>
+
+                            <div className="mb-3 ">
+                                <label className="form-label">Palabras clave (separadas por ,)</label>
+
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" {...register("palabrasCla", {required: {value: true, message:'Es necesario escribir las palabras clave'}})} />
+                                </div>
+
+                                {
+                                        errors.palabrasCla && (                                  
+                                            
+                                            <span className="badge rounded-pill text-bg-danger">{errors.palabrasCla.message}</span>
 
 
                                         )

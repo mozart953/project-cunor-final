@@ -567,6 +567,10 @@ function CompoListarArchivosPage(){
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Palabras clave: </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.paClave} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.cantidadPaginas} </p>
                                                 </div>

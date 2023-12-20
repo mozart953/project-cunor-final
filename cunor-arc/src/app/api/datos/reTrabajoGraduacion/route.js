@@ -11,7 +11,8 @@ export async function POST(request){
                 cantidadPaginas: Number(datos.cantidadPaginas),
                 descripcion: datos.descripcion,
                 tamanio: Number(datos.tamanio),
-                direccionGuardado: datos.direccionGuardado
+                direccionGuardado: datos.direccionGuardado,
+                paClave: datos.paClave,
 
             }
         }

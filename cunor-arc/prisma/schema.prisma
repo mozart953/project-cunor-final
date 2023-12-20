@@ -92,6 +92,7 @@ model TrabajoGraduacion{
   descripcion String ?
   tamanio Int?
   direccionGuardado String
+  paClave String?
   registroTrabajograd registroTrabajoGraduacion[]
 }
 

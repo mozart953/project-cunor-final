@@ -45,6 +45,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [cantidadpaginas, setCantidadpaginas]= useState(null);
     const [descripcion, setDescripcion]=useState(null);
     const [url, setUrl] = useState("");
+    const [palcl, setPalcl] = useState("");
 
     const [ocultar, setOcultar] = useState(true);
     const [eliminado, setEliminado] = useState(false);
@@ -112,6 +113,7 @@ function CompoEditarTrabajos({idDetalle}){
             setValue('primerApellido', primerapellido);
             setValue('segundoApellido', segundoapellido);
             setValue('Carnet', carnet);
+            setValue('palabrasCla', palcl);
         }
     },[datostrabajo]);
 
@@ -135,6 +137,7 @@ function CompoEditarTrabajos({idDetalle}){
                 setDescripcion(datos.trabajoGrad.descripcion);
                 setTamanio(datos.trabajoGrad.tamanio);
                 setUrl(datos.trabajoGrad.direccionGuardado);
+                setPalcl(datos.trabajoGrad.paClave);
 
                 setIdcategoria(datos.categoria.ID_Categoria); 
             });
@@ -171,6 +174,7 @@ function CompoEditarTrabajos({idDetalle}){
                             descripcion:data1.descripcion,
                             tamanio:Number(tamanio),
                             direccionGuardado:url,
+                            paClave:data1.palabrasCla,
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -498,6 +502,24 @@ function CompoEditarTrabajos({idDetalle}){
                                                             errors.descripcion && (                                  
                                                                 
                                                                 <span className="badge rounded-pill text-bg-danger">{errors.descripcion.message}</span>
+
+
+                                                            )
+                                                    }
+                                                    
+                                                </div>
+
+                                                <div className="mb-3 ">
+                                                    <label className="form-label">Palabras clave (separadas por ,)</label>
+
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue('palabrasCla', e.target.value, {shouldValidate: true});setPalcl(e.target.value)}} {...register("palabrasCla", {required: {value: true, message:'Es necesario escribir las palabras clave'}})} />
+                                                    </div>
+
+                                                    {
+                                                            errors.palabrasCla && (                                  
+                                                                
+                                                                <span className="badge rounded-pill text-bg-danger">{errors.palabrasCla.message}</span>
 
 
                                                             )
