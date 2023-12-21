@@ -3,13 +3,52 @@ import {useForm} from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import useLog from '@/hooks/log';
-import { useEffect } from 'react';
+import useLog3 from '@/hooks/log3';
+import { useState,useEffect } from 'react';
 
 function LoginPage() {
 
     const {register, handleSubmit, formState:{errors}} = useForm();
     const router = useRouter();
     const [rol, setUsuario1] = useLog (null);
+    const [mensaje, setMensaje] = useState(null);
+    const [mensaje1, setMensaje1] = useState(null);
+    const [datosx, setDatosx] = useState(null);
+    const [usuarioactual, setUsuarioactual] = useState(null);
+    const [datosg, setUsuario3] = useLog3(null);
+
+    useEffect(()=>{
+        let timer = null;
+
+            if (mensaje !== null) {
+                timer = setTimeout(() => {
+                    setMensaje(null);
+                    //setMensaje1(null);
+                }, 2000);
+            }
+            return () => {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+            };
+    },[mensaje]);
+
+    useEffect(()=>{
+        let timer = null;
+
+            if (mensaje1!==null) {
+                timer = setTimeout(() => {
+                    //setMensaje(null);
+                    setMensaje1(null);
+                    
+                }, 2000);
+            }
+            return () => {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+            };
+    },[mensaje1]);
 
 
     useEffect(()=>{
@@ -31,28 +70,57 @@ function LoginPage() {
 
     },[rol]);
 
-    const onSubmit = handleSubmit(async data=>{
-        console.log(data);
-        const res = await signIn('credentials', {
-            username: data.nombreUsuario,
-            password: data.contrasenia,
-            redirect:false
+    useEffect(()=>{
+        const FuncV =async ()=>{
+            if (datosg !== null && datosg.nombreUsuario === usuarioactual && datosx!==null) {
+                if(datosg.ID_estado===1){
+                    const res = await signIn('credentials', {
+                        username: datosx.nombreUsuario,
+                        password: datosx.contrasenia,
+                        redirect:false
+            
+                    });
+                    
+                    if(res.error){
+                        //alert(res.error);
+                        setMensaje(res.error);
+            
+                    }else{
+                        console.log("Enviando..." );
+                        console.log(datosx.nombreUsuario);
+                        setUsuario1(datosx.nombreUsuario);
+                        //setUsuario3(data.nombreUsuario);
+                        //useLog({usuario:data.nombreUsuario})
+                        // console.log("valor del rol "+rol);
+                        // router.push('/dashboardAdmin');
+                        // router.refresh();
+                    }
+                    //console.log(res);
 
-        });
-        
-        if(res.error){
-            alert(res.error);
+                }else if(datosg.ID_estado===2){
+                    setMensaje1("Usuario desactivado");
+                }
+                
 
-        }else{
-            console.log("Enviando..." );
-            console.log(data.nombreUsuario);
-            setUsuario1(data.nombreUsuario);
-            //useLog({usuario:data.nombreUsuario})
-            // console.log("valor del rol "+rol);
-            // router.push('/dashboardAdmin');
-            // router.refresh();
+            }else if(datosg===null){
+                setMensaje("Usuario no encontrado");
+            }
         }
-        console.log(res);
+        FuncV();
+
+    },[datosg, datosx]);
+
+
+    const onSubmit = handleSubmit(async data=>{
+        //console.log(data);
+        setDatosx(data);
+        setUsuarioactual(data.nombreUsuario);
+        setUsuario3(data.nombreUsuario);
+
+
+
+    
+
 
     });
 
@@ -86,7 +154,7 @@ function LoginPage() {
                         id="form3Example3"
                         className="form-control form-control-lg"
                         placeholder="Nombre de usuario"
-                        {...register("nombreUsuario", {required: {value: true, message:'El usuario requerido...'}})}
+                        {...register("nombreUsuario", {required: {value: true, message:'El usuario es requerido...'}})}
                         />
                         {/* <label className="form-label" htmlFor="form3Example3">
                         Ingresar usuario
@@ -133,6 +201,18 @@ function LoginPage() {
                     </button>
                     </form>
                 </div>
+                    {mensaje!==null&&(
+                            <div className="alert alert-danger" role="alert">
+                                    ¡Datos incorrectos, intentelo nuevamente!
+                            </div>
+
+                    )}
+                    {mensaje1!==null&&(
+                            <div className="alert alert-primary" role="alert">
+                                    {mensaje1}
+                            </div>
+
+                    )}
                 </div>
             </div>
             </div>
