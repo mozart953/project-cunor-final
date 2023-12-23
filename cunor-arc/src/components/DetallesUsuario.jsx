@@ -51,7 +51,10 @@ function compoDetallesUsuarioPage({id}){
                 
                                                         <tr key={data.ID_Registro}>
                                                         <th scope="row">{data.ID_Registro}</th>
-                                                        <td>{data.fechaRegistro}</td>
+                                                        <td>
+                                                        {new Date(data.fechaRegistro).getDate()}/{new Date(data.fechaRegistro).getMonth()+1}/{new Date(data.fechaRegistro).getFullYear()}
+                                                        - {new Date(data.fechaRegistro).getHours()}:{new Date(data.fechaRegistro).getMinutes()<10?'0'+new Date(data.fechaRegistro).getMinutes():new Date(data.fechaRegistro).getMinutes()}:{new Date(data.fechaRegistro).getSeconds()}
+                                                        </td>
                                                         <td>{data.usuario.nombreUsuario}</td>
                                                         <td>{data.descripcion}</td>
                                                         </tr>        
