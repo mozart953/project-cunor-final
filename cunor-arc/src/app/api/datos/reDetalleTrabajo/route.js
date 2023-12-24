@@ -53,15 +53,15 @@ export async function GET(request){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {trabajoGrad:{titulo:{contains:searchTerm}}},
-                    {trabajoGrad:{paClave:{contains:searchTerm}}},
-                    {autor:{primerNombre:{contains:searchTerm}}},
-                    {autor:{segundoNombre:{contains:searchTerm}}},
-                    {autor:{tercerNombre:{contains:searchTerm}}},
-                    {autor:{primerApellido:{contains:searchTerm}}},
-                    {autor:{segundoApellido:{contains:searchTerm}}},
-                    {autor:{carnet:{contains:searchTerm}}},
-                    {categoria:{nombreCategoria:{contains:searchTerm}}},                
+                    {trabajoGrad:{titulo:{contains:searchTerm, mode: 'insensitive'}}},
+                    {trabajoGrad:{paClave:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{carnet:{contains:searchTerm, mode: 'insensitive'}}},
+                    {categoria:{nombreCategoria:{contains:searchTerm, mode: 'insensitive'}}},                
                 ]
             };
 

@@ -32,11 +32,11 @@ export async function GET(request){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {autor:{primerNombre:{contains:searchTerm}}},
-                    {autor:{segundoNombre:{contains:searchTerm}}},
-                    {autor:{tercerNombre:{contains:searchTerm}}},
-                    {autor:{primerApellido:{contains:searchTerm}}},
-                    {autor:{segundoApellido:{contains:searchTerm}}},                
+                    {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
+                    {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},                
                 ]
             };
 

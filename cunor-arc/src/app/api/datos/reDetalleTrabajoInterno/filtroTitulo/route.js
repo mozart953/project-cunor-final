@@ -32,7 +32,7 @@ export async function GET(request){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {trabajoGrad:{titulo:{contains:searchTerm}}},                
+                    {trabajoGrad:{titulo:{contains:searchTerm, mode: 'insensitive'}}},                
                 ]
             };
 
