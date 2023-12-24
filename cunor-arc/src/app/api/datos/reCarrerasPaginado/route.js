@@ -14,7 +14,7 @@ export async function GET(request){
         if(searchTerm){
             whereClause={
                 OR:[
-                    {nombreCarrera:{contains:searchTerm}},                
+                    {nombreCarrera:{contains:searchTerm, mode: 'insensitive'}},                
                 ]
             };
 

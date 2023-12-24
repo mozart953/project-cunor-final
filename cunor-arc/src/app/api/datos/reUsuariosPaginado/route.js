@@ -14,12 +14,12 @@ export async function GET(request){
         if(searchTerm){
             whereClause={
                 OR:[
-                    {DPI:{contains:searchTerm}},
-                    {primerNombre:{contains:searchTerm}},
-                    {primerApellido:{contains:searchTerm}},
-                    {nombreUsuario:{contains:searchTerm}},
-                    {rol:{nombreRol:{contains:searchTerm}}},
-                    {carrera:{nombreCarrera:{contains:searchTerm}}},                
+                    {DPI:{contains:searchTerm, mode: 'insensitive'}},
+                    {primerNombre:{contains:searchTerm, mode: 'insensitive'}},
+                    {primerApellido:{contains:searchTerm, mode: 'insensitive'}},
+                    {nombreUsuario:{contains:searchTerm, mode: 'insensitive'}},
+                    {rol:{nombreRol:{contains:searchTerm, mode: 'insensitive'}}},
+                    {carrera:{nombreCarrera:{contains:searchTerm, mode: 'insensitive'}}},                
                 ]
             };
 
