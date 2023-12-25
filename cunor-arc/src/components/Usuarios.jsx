@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function compoUsuariosPage({datos, totalItems}){
+function CompoUsuariosPage({datos, totalItems}){
     const router = useRouter();
     const [estado, setEstado] = useState({});
     const [datoss, setDatoss] = useState([]);
@@ -256,4 +256,4 @@ function compoUsuariosPage({datos, totalItems}){
 
 }
 
-export default compoUsuariosPage;
+export default CompoUsuariosPage;
