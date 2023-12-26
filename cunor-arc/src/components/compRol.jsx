@@ -17,13 +17,14 @@ function CompRolPage(){
     
     // const role = session?.user?.role;
     // console.log("viendo rol " + JSON.stringify(session, null, 2));
+    console.log("Entranda a dashboard admin");
 
     useEffect(()=>{
 
          
         if(session){
             const usuario = session?.user.name;
-            console.log("viendo usuario " + JSON.stringify(session, null, 2));
+            //console.log("viendo usuario " + JSON.stringify(session, null, 2));
             console.log("nombre del usuario desde lista de trabajos: " + usuario);
             setNombreusuario(usuario);
            
@@ -32,9 +33,9 @@ function CompRolPage(){
 
     },[session]);
 
-    if (loading) {
-        return <div>Cargando...</div>;
-    }
+    // if (loading) {
+    //     return <div>Cargando...</div>;
+    // }
 
 
   return (

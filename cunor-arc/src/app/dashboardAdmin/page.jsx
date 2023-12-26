@@ -1,5 +1,4 @@
 "use client"
-import { signOut} from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
 import CompRolPage from "@/components/compRol";
 
