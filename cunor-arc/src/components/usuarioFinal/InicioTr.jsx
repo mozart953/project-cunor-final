@@ -304,7 +304,7 @@ function CompoInicioTr(){
     return(
         <>
             
-            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{width:'47%', margin:'0 auto', border:'1px solid gray'}}>
+            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{maxWidth:'47%', margin:'0 auto', border:'1px solid gray'}}>
                 <div className="col-md-4" style={{marginRight:'20px'}}>
                     <div>
                         <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
@@ -342,7 +342,7 @@ function CompoInicioTr(){
                 )
             }
 
-            <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
+            <div className="mb-3 d-flex flex-column justify-content-center align-items-center" style={{width: '95vw', margin: '0 auto'}}>
                 <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
                     if(interruptor){
                         setInterruptor(!interruptor);
@@ -360,18 +360,18 @@ function CompoInicioTr(){
                             <div className="mb-3 justify-content-center align-items-center">
                                 <h1>Buscar por:</h1>
                             </div>
-                            <div className="mb-3 justify-content-center align-items-center">
-                                <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                            <div className="mb-3  d-flex flex-column flex-md-row justify-content-center align-items-center">
+                                <button type="button" className={interruptorT?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Titulo</button>
-                                <button type="button" className={interruptorC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorC?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Carrera</button>
-                                <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorA?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Autor</button>
-                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);setInterruptorPc(false);}}>Fecha</button>
-                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);setInterruptorPc(false);}}>Categoría</button>
-                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(!interruptorPC);}}>Palabra clave</button>                                
                             </div>
 
@@ -384,14 +384,14 @@ function CompoInicioTr(){
                             
                             {
                                 interruptorC&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la carrera"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
                                 )
 
                             }
 
                             {
                                 interruptorA&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales del autor"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
                                 )
 
                             }
@@ -404,7 +404,7 @@ function CompoInicioTr(){
                             }
                             {
                                 interruptorCa&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoría"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
                                 )
 
                             }
@@ -422,7 +422,7 @@ function CompoInicioTr(){
 
             </div>
 
-            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{maxWidth:'20%', margin:'0 auto'}}>
                 <h3>Resultados: {totalitems} </h3>
             </div>
 
