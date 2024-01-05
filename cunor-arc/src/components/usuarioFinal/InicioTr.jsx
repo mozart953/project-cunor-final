@@ -304,30 +304,6 @@ function CompoInicioTr(){
     return(
         <>
             
-            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{width:'47%', margin:'0 auto', border:'1px solid gray'}}>
-                <div className="col-md-4" style={{marginRight:'20px'}}>
-                    <div>
-                        <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
-                    </div>
-                    <div className="w-100">
-                        <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
-                            {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
-                        </select>
-                    </div>
-                </div>
-
-                <div className="col-md-4">
-                    <div>
-                        <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
-                    </div>
-                    <div className="w-100">
-                        <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
-                            {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
-                        </select>
-                    </div>
-                </div>
-
-            </div>
 
             {
                 !interruptor &&(
@@ -342,7 +318,7 @@ function CompoInicioTr(){
                 )
             }
 
-            <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
+            <div className="mb-3 d-flex flex-column justify-content-center align-items-center col-sm-12 mx-auto" >
                 <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
                     if(interruptor){
                         setInterruptor(!interruptor);
@@ -351,27 +327,27 @@ function CompoInicioTr(){
                         setInterruptor(!interruptor);
                         setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false); setInterruptorPc(false);
                     } }}>
-                    {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
+                    <i className="bi bi-sliders"></i>{!interruptor?" Realizar búsqueda específica":" Realizar búsqueda simple"}
                 </button>
                 {
                     interruptor&&(
 
-                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3">
+                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3 col-sm-9 mx-auto" >
                             <div className="mb-3 justify-content-center align-items-center">
                                 <h1>Buscar por:</h1>
                             </div>
-                            <div className="mb-3 justify-content-center align-items-center">
-                                <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                            <div className="mb-3  d-flex flex-column flex-md-row justify-content-center align-items-center">
+                                <button type="button" className={interruptorT?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(!interruptorT); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Titulo</button>
-                                <button type="button" className={interruptorC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorC?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(!interruptorC); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Carrera</button>
-                                <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorA?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false);}}>Autor</button>
-                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);setInterruptorPc(false);}}>Fecha</button>
-                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);setInterruptorPc(false);}}>Categoría</button>
-                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorC(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(!interruptorPC);}}>Palabra clave</button>                                
                             </div>
 
@@ -384,14 +360,14 @@ function CompoInicioTr(){
                             
                             {
                                 interruptorC&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la carrera"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
                                 )
 
                             }
 
                             {
                                 interruptorA&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales del autor"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
                                 )
 
                             }
@@ -404,7 +380,7 @@ function CompoInicioTr(){
                             }
                             {
                                 interruptorCa&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoría"}/>
+                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
                                 )
 
                             }
@@ -422,12 +398,42 @@ function CompoInicioTr(){
 
             </div>
 
-            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
-                <h3>Resultados: {totalitems} </h3>
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center col-sm" style={{maxWidth:'75%', margin:'0 auto'}}>
+                <h3 className="fs-3">Resultados: {totalitems} </h3>
             </div>
 
+
+            {/* <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{maxWidth:'20%', margin:'0 auto'}}>
+                <h3>Resultados: {totalitems} </h3>
+            </div> */}
             
-            <div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
+
+            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{maxWidth:'75%', margin:'0 auto', border:'1px solid gray'}}>
+                <div className="col-md-4" style={{marginRight:'20px'}}>
+                    <div>
+                        <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
+                    </div>
+                    <div className="w-100">
+                        <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
+                            {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                        <div>
+                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
+                        </div>
+                        <div className="w-100">
+                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
+                                {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                            </select>
+                        </div>
+                </div>
+
+            </div>
+            
+            <div className="text-white mb-5" style={{width:'100%', margin:'0 auto'}}>
 
 
                 <div className="content-center d-flex justify-content-center align-items-center">
@@ -456,7 +462,7 @@ function CompoInicioTr(){
                 
                          trabajos && trabajos.length!==0?(trabajos.map((data)=>(
                             data.ID_estado===1&&(
-                                <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
+                                <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                 <div className="card-header">
                                      Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                 </div>
@@ -543,7 +549,7 @@ function CompoInicioTr(){
                                         <div className="card text-bg-secondary mb-3" >
                                             <div className="card-body">
                                                 <h5 className="card-title">Estado:</h5>
-                                                <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento...</p>
+                                                <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
                                             </div>
                                         </div>
                                         
