@@ -5,7 +5,7 @@ function FormFechaComponent({onSubmit, SetFechaInicio, SetFechaFin, fechaini, fe
     return(
         <>
                 <div className="mb-3 d-flex justify-content-center align-items-center">
-                        <form className="input-group d-flex align-items-center" style={{width: "600px"}} onSubmit={onSubmit}>
+                        <form className="input-group d-flex align-items-center" style={{maxWidth: "100%"}} onSubmit={onSubmit}>
                                 <div className="d-flex align-items-center" style={{marginRight: "50px"}}>
                                     <div className="d-flex flex-column text-center">
                                         <label className="font-weight-bold" style={{fontWeight: "bold"}}>Fecha inicio</label>
