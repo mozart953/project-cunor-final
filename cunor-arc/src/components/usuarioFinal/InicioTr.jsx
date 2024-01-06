@@ -18,8 +18,8 @@ function CompoInicioTr(){
     const [paginasmaximas, setPaginasmaximas] = useState(5);
     const [estado, setEstado] = useState(1);
 
-    const [fechainicio, SetFechainicio] = useState(null);
-    const [fechafin, SetFechafin] = useState(null);
+    const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
+    const [fechafin, SetFechafin] = useState(new Date().toISOString().split('T')[0]);
 
     const [interruptor, setInterruptor] = useState(false);
     const [interruptorT, setInterruptorT] = useState(false);
@@ -31,6 +31,8 @@ function CompoInicioTr(){
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
+    const [carrera, setCarrera]= useState(null);
+    const [categoria, setCategoria]=useState(null);
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -51,6 +53,36 @@ function CompoInicioTr(){
             
         
     },[]);
+
+    useEffect(()=>{
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`)
+        .then(data=> data.json()).then(datos=>{setCarrera(datos)});
+    },[]);
+
+    useEffect(()=>{
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`)
+        .then(data=> data.json()).then(datos=>{setCategoria(datos)});
+    },[]);
+
+    useEffect(()=>{
+        if(carrera !==null && interruptorC){
+            setBusqueda(carrera[0].nombreCarrera);
+        }
+        else if(categoria!==null && interruptorCa){
+            setBusqueda(categoria[0].nombreCategoria);
+        }
+        else if(interruptorT){
+            setBusqueda("");
+        }
+        else if(interruptorA){
+            setBusqueda("");
+        }
+        else if(interruptorPC){
+            setBusqueda("");
+        }
+
+    },[carrera,categoria,interruptorC,interruptorCa, interruptorT, interruptorA, interruptorPC]);
+
 
     useEffect(()=>{
         if(currentpage && !interruptor && valorseleccionado){
@@ -360,7 +392,21 @@ function CompoInicioTr(){
                             
                             {
                                 interruptorC&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
+                                    
+                                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                                        <div>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                        </div>
+                                        <div className="w-100 mb-3">
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>setBusqueda(e.target.value)}>
+                                                {carrera.map((data)=>(<option value={data.nombreCarrera} key={data.ID_Carrera}>{data.nombreCarrera}</option>))}
+                                            </select>
+                                        </div>
+
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
+                                    </div>
+                                    
+                                    
                                 )
 
                             }
@@ -380,7 +426,20 @@ function CompoInicioTr(){
                             }
                             {
                                 interruptorCa&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
+                                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                                        <div>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                        </div>
+                                        <div className="w-100 mb-3">
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>setBusqueda(e.target.value)}>
+                                                {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
+                                            </select>
+                                        </div>
+
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
+                                    </div>
+
+                                   
                                 )
 
                             }

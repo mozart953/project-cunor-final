@@ -29,18 +29,37 @@ export async function GET(request){
     try{
 
 
-        if(searchTerm){
-            whereClause={
-                ...whereClause,
-                OR:[
-                    {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},                
-                ]
-            };
+        // if(searchTerm){
+        //     whereClause={
+        //         ...whereClause,
+        //         OR:[
+        //             {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},                
+        //         ]
+        //     };
 
+        // }
+
+        if(searchTerm){
+            const searchTerms = searchTerm.split(' ');
+        
+            const searchConditions = searchTerms.map(term => ({
+                OR: [
+                    {autor:{primerNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{segundoNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{tercerNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{primerApellido:{contains:term, mode: 'insensitive'}}},
+                    {autor:{segundoApellido:{contains:term, mode: 'insensitive'}}},
+                ]
+            }));
+        
+            whereClause = {
+                ...whereClause,
+                AND: searchConditions
+            };
         }
 
         const totalItems = await db.registroTrabajoGraduacion.count({
