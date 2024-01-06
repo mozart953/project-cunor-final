@@ -33,6 +33,8 @@ function CompoInicioTr(){
     const [valorseleccionado2, setValorseleccionado2] = useState('');
     const [carrera, setCarrera]= useState(null);
     const [categoria, setCategoria]=useState(null);
+    const [busquedaC, setBusquedaC]=useState("");
+    const [busquedaCa, setBusquedaCa]=useState("");
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -67,9 +69,11 @@ function CompoInicioTr(){
     useEffect(()=>{
         if(carrera !==null && interruptorC){
             setBusqueda(carrera[0].nombreCarrera);
+            setBusquedaC(carrera[0].nombreCarrera);
         }
         else if(categoria!==null && interruptorCa){
             setBusqueda(categoria[0].nombreCategoria);
+            setBusquedaCa(categoria[0].nombreCategoria);
         }
         else if(interruptorT){
             setBusqueda("");
@@ -100,7 +104,7 @@ function CompoInicioTr(){
 
         }
         else if(currentpage && interruptorC && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaC}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorA && valorseleccionado){
@@ -108,7 +112,7 @@ function CompoInicioTr(){
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorCa && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaCa}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
 
         }
@@ -398,7 +402,7 @@ function CompoInicioTr(){
                                             <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
                                         </div>
                                         <div className="w-100 mb-3">
-                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>setBusqueda(e.target.value)}>
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaC(e.target.value)}}>
                                                 {carrera.map((data)=>(<option value={data.nombreCarrera} key={data.ID_Carrera}>{data.nombreCarrera}</option>))}
                                             </select>
                                         </div>
@@ -431,7 +435,7 @@ function CompoInicioTr(){
                                             <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
                                         </div>
                                         <div className="w-100 mb-3">
-                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>setBusqueda(e.target.value)}>
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
                                                 {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
                                             </select>
                                         </div>
@@ -523,14 +527,14 @@ function CompoInicioTr(){
                             data.ID_estado===1&&(
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                 <div className="card-header">
-                                     Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
+                                     <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                 </div>
 
                                 
 
                                 <div className="card-body">
                                     
-                                    <h5 className="card-title">Título: {data.trabajoGrad.titulo}</h5>
+                                    <h5 className="card-title"  style={{fontStyle: 'italic'}}><strong>Título:</strong> {data.trabajoGrad.titulo}</h5>
 
                                     <div className="card text-bg-secondary mb-3" >
                                         <div className="card-body">
