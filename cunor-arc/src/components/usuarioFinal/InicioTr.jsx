@@ -538,7 +538,7 @@ function CompoInicioTr(){
 
                                     <div className="card text-bg-secondary mb-3" >
                                         <div className="card-body">
-                                            <h5 className="card-title">Resumen:</h5>
+                                            <h5 className="card-title"><strong>Resumen:</strong></h5>
                                             <p className="card-text"  style={{ fontSize: '0.8em' }}>{data.trabajoGrad.descripcion}</p>
                                         </div>
                                     </div>
@@ -547,34 +547,34 @@ function CompoInicioTr(){
                                     <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                         
                                         <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Carrera: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Carrera:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Categoría: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Categoría:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Palabras clave: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Palabras clave:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.paClave} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>No. páginas:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.cantidadPaginas} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Formato: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Fecha de carga: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                 {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
                                                  - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
                                             </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>URL: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>URL:</strong></h6>
                                             <h6 className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                <a href={data.trabajoGrad.direccionGuardado}>{data.trabajoGrad.titulo}</a>  
                                             </h6>

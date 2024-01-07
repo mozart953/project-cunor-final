@@ -36,12 +36,14 @@ function CompoListarArchivosPage(){
     const [interruptorcarnet, setInterruptorcarnet] = useState(false);
 
     const [busqueda, setBusqueda] = useState("");
-    const [fechainicio, SetFechainicio] = useState(null);
-    const [fechafin, SetFechafin] = useState(null);
+    const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
+    const [fechafin, SetFechafin] = useState(new Date().toISOString().split('T')[0]);
 
     
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
+    const [categoria, setCategoria]=useState(null);
+    const [busquedaCa, setBusquedaCa]=useState("");
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -69,6 +71,32 @@ function CompoListarArchivosPage(){
         
     
     },[]);
+
+    useEffect(()=>{
+        fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`)
+        .then(data=> data.json()).then(datos=>{setCategoria(datos)});
+    },[]);
+
+    useEffect(()=>{
+        
+        if(categoria!==null && interruptorCa){
+            setBusqueda(categoria[0].nombreCategoria);
+            setBusquedaCa(categoria[0].nombreCategoria);
+        }
+        else if(interruptorT){
+            setBusqueda("");
+        }
+        else if(interruptorA){
+            setBusqueda("");
+        }
+        else if(interruptorPC){
+            setBusqueda("");
+        }
+        else if(interruptorcarnet){
+            setBusqueda("");
+        }
+
+    },[carrera,categoria,interruptorCa, interruptorT, interruptorA, interruptorPC, interruptorcarnet]);
 
     useEffect(()=>{
 
@@ -128,7 +156,7 @@ function CompoListarArchivosPage(){
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
             }
             else if(interruptorCa){
-                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busquedaCa}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
 
             }
@@ -422,38 +450,14 @@ function CompoListarArchivosPage(){
     return(
         <>
 
-                <div className="card text-bg-secondary mb-3" style={{width:'70%', margin:'0 auto'}}>
-                    <div className="card-header">Usuario operativo: {nombreusuario}</div>
+                <div className="card text-bg-secondary mb-3" style={{width:'75%', margin:'0 auto'}}>
+                    <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Trabajos de graduación: {carrera}</legend>                       
+                        <legend className="text-center mb-4"><strong>Trabajos de graduación:</strong> {carrera}</legend>                       
                     </div>
                 </div>
 
 
-                <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{width:'47%', margin:'0 auto', border:'1px solid gray'}}>
-                    <div className="col-md-4" style={{marginRight:'20px'}}>
-                        <div>
-                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
-                        </div>
-                        <div className="w-100">
-                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
-                                {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="col-md-4">
-                        <div>
-                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
-                        </div>
-                        <div className="w-100">
-                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
-                                {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
 
             
             {
@@ -471,7 +475,7 @@ function CompoListarArchivosPage(){
 
 
             
-            <div className="mb-3 d-flex flex-column justify-content-center align-items-center">
+            <div className="mb-3 d-flex flex-column justify-content-center align-items-center col-sm-12 mx-auto">
                 <button type="button" className={!interruptor?"btn btn-outline-primary mb-3":"btn btn-outline-secondary mb-3"} onClick={()=>{
                     if(interruptor){
                         setInterruptor(!interruptor);
@@ -480,47 +484,61 @@ function CompoListarArchivosPage(){
                         setInterruptor(!interruptor);
                         setInterruptorT(false); setInterruptorCa(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorPc(false); setInterruptorcarnet(false);
                     } }}>
-                    {!interruptor?"Realizar búsqueda específica":"Realizar búsqueda simple"}<i className="bi bi-node-plus-fill"></i>
+                    <i className="bi bi-sliders"></i>{!interruptor?" Realizar búsqueda específica":" Realizar búsqueda simple"}
                 </button>
                 {
                     interruptor&&(
 
-                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3">
+                        <div className="mb-3 d-flex flex-column justify-content-center align-items-center bg-dark text-white border border-secondary p-3 col-sm-9 mx-auto">
                             <div className="mb-3 justify-content-center align-items-center">
                                 <h1>Buscar por:</h1>
                             </div>
-                            <div className="mb-3 justify-content-center align-items-center">
-                                <button type="button" className={interruptorT?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                            <div className="mb-3 d-flex flex-column flex-md-row justify-content-center align-items-center">
+                                <button type="button" className={interruptorT?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(!interruptorT); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Titulo</button>  
-                                <button type="button" className={interruptorA?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorA?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorA(!interruptorA); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Autor</button>
-                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorAn?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(!interruptorAn);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(false);}}>Fecha</button>
-                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorCa?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(!interruptorCa);setInterruptorPc(false); setInterruptorcarnet(false);}}>Categoría</button>
-                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorPC?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(!interruptorPC); setInterruptorcarnet(false);}}>Palabra clave</button>
-                                <button type="button" className={interruptorcarnet?"btn btn-primary btn-lg me-3":"btn btn-secondary btn-lg me-3"} onClick={
+                                <button type="button" className={interruptorcarnet?"btn btn-primary btn-lg mb-2 me-3":"btn btn-secondary btn-lg mb-2 me-3"} onClick={
                                     ()=>{setInterruptorT(false); setInterruptorA(false); setInterruptorAn(false);setInterruptorCa(false);setInterruptorPc(false); setInterruptorcarnet(!interruptorcarnet);}}>No. Carnet</button>                                
                             </div>
 
                             {
                                 interruptorT&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la titulo"}/>
+                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por titulo"}/>
                                 )
                                 
                             }
                             
                             {
                                 interruptorCa&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales de la categoria"}/>
+                                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                                        <div>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                        </div>
+                                        <div className="w-100 mb-3">
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
+                                                {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
+                                            </select>
+                                        </div>
+
+                                        <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoria"}/>    
+                                    </div>
+
+
+                                    
                                 )
 
                             }
 
                             {
                                 interruptorA&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por iniciales del autor"}/>
+                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
                                 )
 
                             }
@@ -555,13 +573,39 @@ function CompoListarArchivosPage(){
             </div>
 
             
-            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center" style={{width:'20%', margin:'0 auto'}}>
+            <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center col-sm" style={{maxWidth:'75%', margin:'0 auto'}}>
                 <h3>Resultados: {totalitems} </h3>
             </div>
 
+            
+            <div className="mb-3 d-flex justify-content-center align-items-center bg-dark p-3" style={{maxWidth:'75%', margin:'0 auto', border:'1px solid gray'}}>
+                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                        <div>
+                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Campo de orden:</label>
+                        </div>
+                        <div className="w-100">
+                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado2} onChange={(e)=>{setValorseleccionado2(e.target.value)}}>
+                                {ordenQuery2.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="col-md-4">
+                        <div>
+                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Orden de búsqueda: </label>
+                        </div>
+                        <div className="w-100">
+                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}} value={valorseleccionado} onChange={(e)=>{setValorseleccionado(e.target.value)}}>
+                                {ordenQuery.map((data)=>(<option value={data.ordBase} key={data.id}>{data.ord}</option>))}
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
 
 
-            <div className="text-white mb-5" style={{width:'80%', margin:'0 auto'}}>
+
+            <div className="text-white mb-5" style={{width:'100%', margin:'0 auto'}}>
 
                 
 
@@ -593,7 +637,7 @@ function CompoListarArchivosPage(){
 
                                 
                                     
-                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                         <div className="card-header">
                                              <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                             - <strong>No. de carnet:</strong>{data.autor.carnet}
@@ -603,11 +647,11 @@ function CompoListarArchivosPage(){
 
                                         <div className="card-body">
                                             
-                                            <h5 className="card-title">Título: {data.trabajoGrad.titulo}</h5>
+                                            <h5 className="card-title" style={{fontStyle: 'italic'}}><strong>Título:</strong> {data.trabajoGrad.titulo}</h5>
 
                                             <div className="card text-bg-secondary mb-3" >
                                                 <div className="card-body">
-                                                    <h5 className="card-title">Resumen:</h5>
+                                                    <h5 className="card-title"><strong>Resumen:</strong></h5>
                                                     <p className="card-text"  style={{ fontSize: '0.8em' }}>{data.trabajoGrad.descripcion}</p>
                                                 </div>
                                             </div>
@@ -616,34 +660,34 @@ function CompoListarArchivosPage(){
                                             <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                                 
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Carrera: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Carrera:</strong> </h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Categoría: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Categoría:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Palabras clave: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Palabras clave:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.paClave} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>No. páginas:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.cantidadPaginas} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Formato: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Fecha de carga: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                         {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
                                                          - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
                                                     </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>URL: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>URL:</strong></h6>
                                                     <h6 className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                        <a href={data.trabajoGrad.direccionGuardado}>{data.trabajoGrad.titulo}</a>  
                                                     </h6>
