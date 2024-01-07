@@ -179,7 +179,7 @@ function EditPage({params}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'40%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-person-lines-fill"></i>Edición de usuarios -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-lines-fill"></i><strong>Edición de usuarios -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -189,7 +189,7 @@ function EditPage({params}){
 
                         <div className='row mb-3'>
                             <div className="col-1">
-                                <label htmlFor="disabledTextInput" className="text-white">DPI</label>
+                                <label htmlFor="disabledTextInput" className="text-white"><strong>DPI</strong></label>
                             </div>
 
                             <div className="col"> 
@@ -214,7 +214,7 @@ function EditPage({params}){
                         
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Ingresar el primer nombre</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Ingresar el primer nombre</strong></label>
                             </div>
 
                             <div className='col'>
@@ -236,7 +236,7 @@ function EditPage({params}){
 
                         <div className='row mb-3'>
                             <div className='col-4'> 
-                                <label htmlFor="disabledTextInput" className="col-form-label">Ingresar el primer apellido</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Ingresar el primer apellido</strong></label>
                             </div>
 
                             <div className='col'>
@@ -258,7 +258,7 @@ function EditPage({params}){
 
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Ingresar el nombre de usuario</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Ingresar el nombre de usuario</strong></label>
                             </div>
 
                             <div className='col'>
@@ -321,7 +321,7 @@ function EditPage({params}){
 
                         <div className='row mb-2'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Asignar rol</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar rol</strong></label>
                             </div>
 
                    
@@ -335,7 +335,7 @@ function EditPage({params}){
 
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Asignar Carrera</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar Carrera</strong></label>
                             </div>  
 
                    

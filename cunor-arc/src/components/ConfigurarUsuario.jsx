@@ -206,9 +206,9 @@ function CompoConfigurarUsuario(){
 
 
             <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
-                    <div className="card-header">Usuario: {nombreusuario}</div>
+                    <div className="card-header"><strong>Usuario:</strong> {nombreusuario}</div>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Carrera asociada: {nombreCarrera}</legend>                       
+                        <legend className="text-center mb-4"><strong>Carrera asociada:</strong> {nombreCarrera}</legend>                       
                     </div>
             </div>
             
@@ -217,11 +217,11 @@ function CompoConfigurarUsuario(){
 
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4">Configuraciones generales de usuario</legend>
+                        <legend className="text-center mb-4"><strong>Configuraciones generales de usuario</strong></legend>
 
                         <div className='row mb-3'>
                             <div className="col-1">
-                                <label htmlFor="disabledTextInput" className="text-white">DPI</label>
+                                <label htmlFor="disabledTextInput" className="text-white"><strong>DPI</strong></label>
                             </div>
 
                             <div className="col"> 
@@ -246,7 +246,7 @@ function CompoConfigurarUsuario(){
                         
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Ingresar el primer nombre</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Ingresar el primer nombre</strong></label>
                             </div>
 
                             <div className='col'>
@@ -268,7 +268,7 @@ function CompoConfigurarUsuario(){
 
                         <div className='row mb-3'>
                             <div className='col-4'> 
-                                <label htmlFor="disabledTextInput" className="col-form-label">Ingresar el primer apellido</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Ingresar el primer apellido</strong></label>
                             </div>
 
                             <div className='col'>
@@ -334,12 +334,12 @@ function CompoConfigurarUsuario(){
                             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                             <form  onSubmit={onSubmit2} className="w-50">
                                 
-                                    <legend className="text-center mb-4">Edición de contraseña para: {nombreusuario}</legend>
+                                    <legend className="text-center mb-4"><strong>Edición de contraseña para:</strong> {nombreusuario}</legend>
 
 
                                     <div className='row mb-3'>
                                         <div className='col-4'>
-                                            <label htmlFor="disabledTextInput" className="col-form-label">Contraseña nueva</label>
+                                            <label htmlFor="disabledTextInput" className="col-form-label"><strong>Contraseña nueva</strong></label>
                                         
                                         </div>
                                             
@@ -362,7 +362,7 @@ function CompoConfigurarUsuario(){
 
                                     <div className='row mb-3'>
                                         <div className='col-4'>
-                                            <label htmlFor="disabledTextInput" className="col-form-label">Confirmar la contraseña</label>
+                                            <label htmlFor="disabledTextInput" className="col-form-label"><strong>Confirmar la contraseña</strong></label>
                                         </div>
 
                                         <div className='col'>

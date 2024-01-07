@@ -9,7 +9,7 @@ function compoRolesPage({datos}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'40%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"> <i className="bi bi-person-fill-lock"></i> Roles del sistema</legend>                       
+                        <legend className="text-center mb-4"> <i className="bi bi-person-fill-lock"></i> <strong>Roles del sistema</strong></legend>                       
                     </div>
             </div>
 

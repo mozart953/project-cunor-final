@@ -68,7 +68,7 @@ function CompoCategorias(){
         <>
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-bookmark-fill"></i>Gestión de categorias</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-bookmark-fill"></i><strong>Gestión de categorias</strong></legend>                       
                     </div>
             </div>
 
@@ -88,7 +88,7 @@ function CompoCategorias(){
 
 
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i>Crear categoria</button>
+                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i><strong>Crear categoria</strong></button>
             </div>
 
             <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
@@ -122,7 +122,7 @@ function CompoCategorias(){
                     </thead>
                     <tbody>
                         {
-                            datos.map((data)=>(
+                            datos && datos.length!==0?(datos.map((data)=>(
                                 <tr key={data.ID_Categoria}>
                                     <th scope="row">{data.ID_Categoria}</th>
                                     <td>{data.nombreCategoria}</td>
@@ -133,11 +133,30 @@ function CompoCategorias(){
                                 </tr>
                             )
 
-                            )
+                            )):null
                         }
                     </tbody>
 
                 </table>
+
+                        {
+                            datos && datos.length===0?(
+                                <div className="text-white mt-1 d-flex justify-content-center align-items-center" >
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
+                                        <div className="card-body">
+                                            <div className="card text-bg-secondary mb-3" >
+                                                <div className="card-body">
+                                                    <h5 className="card-title">Estado:</h5>
+                                                    <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ):null
+                        }
 
                 <div className="content-center d-flex justify-content-center align-items-center">
                             <nav aria-label="..." style={{cursor:"pointer"}}>

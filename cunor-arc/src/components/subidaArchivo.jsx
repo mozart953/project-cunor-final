@@ -308,9 +308,9 @@ function SubaArchivoPage(){
     return(
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
-                    <div className="card-header">Usuario operativo: {nombreusuario}</div>
+                    <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Publicación de trabajos de graduación: {carrera}</legend>                       
+                        <legend className="text-center mb-4"><strong>Publicación de trabajos de graduación:</strong> {carrera}</legend>                       
                     </div>
             </div>
 
@@ -334,9 +334,9 @@ function SubaArchivoPage(){
 
                     <div className="row bg-secondary rounded" style={{width: '80%', margin: '0 auto'}}>
                         <div className="col">
-                            <legend className="text-center mb-4">Datos generales del trabajo de graduación</legend>
+                            <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
                             <div className="mb-3">
-                                <label className="col-sm-2 col-form-label">Título</label>
+                                <label className="col-sm-2 col-form-label"><strong>Título</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" {...register("titulo", {required: {value: true, message:'Es necesario escribir el titulo...'}})}/>
                                 </div>
@@ -353,13 +353,13 @@ function SubaArchivoPage(){
 
                             </div>
                             <div className="mb-3">
-                                <label className="col-sm-2 col-form-label">Carrera</label>
+                                <label className="col-sm-2 col-form-label"><strong>Carrera</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" value={carrera} onChange={(e)=>{e.target.value}} disabled/>
                                 </div>
                             </div>
                             <div className="mb-3">
-                                <label className="col-form-label">Cantidad de páginas</label>
+                                <label className="col-form-label"><strong>Cantidad de páginas</strong></label>
                                 <div className="col-sm-10">
                                     <input type="number" className="form-control text-white bg-dark" {...register("cantidadPaginas", {required: {value: true, message:'Es necesario escribir la cantidad de paginas...'}})} pattern="/\d+/"/>
                                 </div>
@@ -375,7 +375,7 @@ function SubaArchivoPage(){
                             </div>
 
                             <div className="mb-3">
-                                <label className="col-form-label">Categoria</label>
+                                <label className="col-form-label"><strong>Categoria</strong></label>
                                 <div className="col-sm-10">
                                     <select className='form-select text-white bg-dark' onChange={obtenerIdCategoria}>
                                         {
@@ -389,7 +389,7 @@ function SubaArchivoPage(){
                             </div>
 
                             <div className="mb-3 ">
-                                <label className="form-label">Descripción (Resumen)</label>
+                                <label className="form-label"><strong>Descripción (Resumen)</strong></label>
 
                                 <div className="col-sm-10">
                                     <textarea className="form-control text-white bg-dark"  rows="3" {...register("descripcion", {required: {value: true, message:'Es necesario escribir una descripción...'}})} ></textarea>
@@ -407,7 +407,7 @@ function SubaArchivoPage(){
                             </div>
 
                             <div className="mb-3 ">
-                                <label className="form-label">Palabras clave (separadas por ,)</label>
+                                <label className="form-label"><strong>Palabras clave (separadas por ,)</strong></label>
 
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" {...register("palabrasCla", {required: {value: true, message:'Es necesario escribir las palabras clave'}})} />
@@ -427,9 +427,9 @@ function SubaArchivoPage(){
                         </div>
                         
                         <div className="col">
-                            <legend className="text-center mb-4">Datos generales del autor</legend>
+                            <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
                             <div className="mb-3">
-                                    <label className="col-form-label">Carnet</label>
+                                    <label className="col-form-label"><strong>Carnet</strong></label>
                                     <div className="col-sm-10">
                                         <input type="text" className="form-control text-white bg-dark" {...register("Carnet", {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
                                     </div>
@@ -446,7 +446,7 @@ function SubaArchivoPage(){
 
 
                             <div className="mb-3">
-                                    <label className="col-form-label">Primer nombre</label>
+                                    <label className="col-form-label"><strong>Primer nombre</strong></label>
                                     <div className="col-sm-10">
                                         <input type="text" className="form-control text-white bg-dark" {...register("primerNombre", {required: {value: true, message:'Es necesario escribir el primer nombre...'}})} />
                                     </div>
@@ -461,19 +461,19 @@ function SubaArchivoPage(){
                                     }
                             </div>
                             <div className="mb-3">
-                                <label className="col-form-label">Segundo nombre</label>
+                                <label className="col-form-label"><strong>Segundo nombre</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{console.log(e.target.value); setSecondname(e.target.value)}}/>
                                 </div>
                             </div>
                             <div className="mb-3">
-                                <label className="col-form-label">Tercer nombre</label>
+                                <label className="col-form-label"><strong>Tercer nombre</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setThirdname(e.target.value)}} />
                                 </div>
                             </div>
                             <div className="mb-3">
-                                <label className="col-form-label">Primer apellido</label>
+                                <label className="col-form-label"><strong>Primer apellido</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" {...register("primerApellido", {required: {value: true, message:'Es necesario escribir el primer apellido...'}})}/>
                                 </div>
@@ -488,7 +488,7 @@ function SubaArchivoPage(){
                                 }
                             </div>
                             <div className="mb-3">
-                                <label className="col-form-label">Segundo apellido</label>
+                                <label className="col-form-label"><strong>Segundo apellido</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setSecondlastname(e.target.value)}}/>
                                 </div>
@@ -496,7 +496,7 @@ function SubaArchivoPage(){
                         </div>
 
                         <div className="col">
-                            <legend className="text-center mb-4">Subir archivo</legend>
+                            <legend className="text-center mb-4"><strong>Subir archivo</strong></legend>
                             {/* <input type="file" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/> */}
                             <div className="input-group mb-3">
                                 <input type="file" className="form-control text-white bg-dark" id="inputGroupFile02" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/>

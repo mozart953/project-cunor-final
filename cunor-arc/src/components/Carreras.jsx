@@ -73,7 +73,7 @@ function compoCarrerasPage({datos, totalItems}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i>Gestión de carreras -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de carreras -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -96,7 +96,7 @@ function compoCarrerasPage({datos, totalItems}){
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
-                ><i className="bi bi-plus-lg"></i>Agregar carrera</button>
+                ><i className="bi bi-plus-lg"></i><strong>Agregar carrera</strong></button>
             </div>
             
 
@@ -129,7 +129,7 @@ function compoCarrerasPage({datos, totalItems}){
                             </thead>
                             <tbody>
                                 {
-                                    datoscarrera.map((data)=>(
+                                    datoscarrera && datoscarrera.length!==0?(datoscarrera.map((data)=>(
                                         <tr key={data.ID_Carrera}>
                                         <th scope="row">{data.ID_Carrera}</th>
                                         <td>{data.nombreCarrera}</td>
@@ -142,11 +142,30 @@ function compoCarrerasPage({datos, totalItems}){
                                         </td>
                                         </tr>        
 
-                                    ))
+                                    ))):null
                                 }
                                
                             </tbody>
                         </table>
+
+                        {
+                            datoscarrera && datoscarrera.length===0?(
+                                <div className="text-white mt-1 d-flex justify-content-center align-items-center" >
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
+                                        <div className="card-body">
+                                            <div className="card text-bg-secondary mb-3" >
+                                                <div className="card-body">
+                                                    <h5 className="card-title">Estado:</h5>
+                                                    <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ):null
+                        }
 
 
                     <div className="content-center d-flex justify-content-center align-items-center">

@@ -68,9 +68,9 @@ function InicioOperativoComponent(){
         <>
             
             <div className="card text-bg-secondary mb-3" style={{width:'70%', margin:'0 auto'}}>
-                    <div className="card-header">Dashboard Operativo/{carrera}</div>
+                    <div className="card-header"><strong>Dashboard Operativo/{carrera}</strong></div>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Bienvenido usuario operativo: {nombreusuario}</legend>                       
+                        <legend className="text-center mb-4"><strong>Bienvenido usuario operativo:</strong> {nombreusuario}</legend>                       
                     </div>
             </div>
 

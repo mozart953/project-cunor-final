@@ -26,7 +26,7 @@ function compoDetallesUsuarioPage({id}){
         <>
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i>Detalles del usuario</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i><strong>Detalles del usuario</strong></legend>                       
                     </div>
             </div>
            
