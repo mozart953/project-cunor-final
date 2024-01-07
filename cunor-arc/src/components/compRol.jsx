@@ -43,9 +43,9 @@ function CompRolPage(){
       <>
 
                 <div className="card text-bg-secondary mb-3" style={{width:'70%', margin:'0 auto'}}>
-                    <div className="card-header">Dashboard Administrativo</div>
+                    <div className="card-header"><strong>Dashboard Administrativo</strong></div>
                     <div className="card-body">
-                        <legend className="text-center mb-4">Bienvenido usuario administrativo: {nombreusuario}</legend>                       
+                        <legend className="text-center mb-4"><strong>Bienvenido usuario administrativo:</strong> {nombreusuario}</legend>                       
                     </div>
                 </div>
 

@@ -29,23 +29,47 @@ export async function GET(request){
 
     try{
 
-        if(searchTerm){
-            whereClause={
-                ...whereClause,
-                OR:[
-                    {trabajoGrad:{titulo:{contains:searchTerm, mode: 'insensitive'}}},
-                    {trabajoGrad:{paClave:{contains:searchTerm, mode: 'insensitive'}}},
-                    {carrera:{nombreCarrera:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
-                    {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},
-                    {categoria:{nombreCategoria:{contains:searchTerm, mode: 'insensitive'}}},                
-                ]
-            };
+        // if(searchTerm){
+        //     whereClause={
+        //         ...whereClause,
+        //         OR:[
+        //             {trabajoGrad:{titulo:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {trabajoGrad:{paClave:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {carrera:{nombreCarrera:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{primerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{segundoNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{tercerNombre:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{primerApellido:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {autor:{segundoApellido:{contains:searchTerm, mode: 'insensitive'}}},
+        //             {categoria:{nombreCategoria:{contains:searchTerm, mode: 'insensitive'}}},                
+        //         ]
+        //     };
 
+        // }
+
+        if(searchTerm){
+            const searchTerms = searchTerm.split(' ');
+        
+            const searchConditions = searchTerms.map(term => ({
+                OR: [
+                    {trabajoGrad:{titulo:{contains:term, mode: 'insensitive'}}},
+                    {trabajoGrad:{paClave:{contains:term, mode: 'insensitive'}}},
+                    {carrera:{nombreCarrera:{contains:term, mode: 'insensitive'}}},
+                    {autor:{primerNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{segundoNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{tercerNombre:{contains:term, mode: 'insensitive'}}},
+                    {autor:{primerApellido:{contains:term, mode: 'insensitive'}}},
+                    {autor:{segundoApellido:{contains:term, mode: 'insensitive'}}},
+                    {categoria:{nombreCategoria:{contains:term, mode: 'insensitive'}}},
+                ]
+            }));
+        
+            whereClause = {
+                ...whereClause,
+                AND: searchConditions
+            };
         }
+        
 
         const totalItems = await db.registroTrabajoGraduacion.count({
             where:whereClause,

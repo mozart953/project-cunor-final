@@ -140,7 +140,7 @@ function CompoUsuariosPage({datos, totalItems}){
             
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i>Gestión de usuarios -CUNOR-</legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-person-fill"></i><strong>Gestión de usuarios -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -158,7 +158,7 @@ function CompoUsuariosPage({datos, totalItems}){
                 <h3>Resultados: {totalitems} </h3>
             </div>
 
-            <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
+            <div className="mt-4" style={{width:'90%', margin:'0 auto'}}>
                     <div className="content-center d-flex justify-content-center align-items-center">
                             <nav aria-label="..." style={{cursor:"pointer"}}>
                                 <ul className="pagination">
@@ -188,13 +188,13 @@ function CompoUsuariosPage({datos, totalItems}){
                                 <th scope="col">Primer apellido</th>
                                 <th scope="col">Nombre de usuario</th>
                                 <th scope="col">Rol</th>
-                                <th scope="col">Carrera que opera</th>
+                                <th scope="col">Carrera asociada</th>
                                 <th scope="col">Operaciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    datoss.map((data, index)=>(
+                                    datoss && datoss.length!==0?(datoss.map((data, index)=>(
                                         <tr key={index}>
                                         <th scope="row">{data.ID_Usuario}</th>
                                         <td>{data.DPI}</td>
@@ -224,11 +224,30 @@ function CompoUsuariosPage({datos, totalItems}){
                                         </td>
                                         </tr>        
 
-                                    ))
+                                    ))):null
                                 }
                                
                             </tbody>
                         </table>
+
+                        {
+                            datoss && datoss.length===0?(
+                                <div className="text-white mt-1 d-flex justify-content-center align-items-center" >
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
+                                        <div className="card-body">
+                                            <div className="card text-bg-secondary mb-3" >
+                                                <div className="card-body">
+                                                    <h5 className="card-title">Estado:</h5>
+                                                    <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            ):null
+                        }
 
                     <div className="content-center d-flex justify-content-center align-items-center">
                             <nav aria-label="..." style={{cursor:"pointer"}}>

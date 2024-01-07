@@ -63,11 +63,11 @@ function CrearCategoriaPage(){
                          <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                             <form  onSubmit={onSubmit} className="w-50">
                                 
-                                    <legend className="text-center mb-4">Creación de categorias</legend>
+                                    <legend className="text-center mb-4"><strong>Creación de categorias</strong></legend>
 
                                     <div className='row mb-3'>
                                         <div className="col-2">
-                                            <label htmlFor="disabledTextInput" className="text-white">Categoria</label>
+                                            <label htmlFor="disabledTextInput" className="text-white"><strong>Categoria</strong></label>
                                         </div>
 
                                         <div className="col"> 

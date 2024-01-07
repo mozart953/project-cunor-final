@@ -66,12 +66,12 @@ function EditarContrasenia ({params}){
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4">Edición de contraseña para: {nombreusuario}</legend>
+                        <legend className="text-center mb-4"><strong>Edición de contraseña para:</strong> {nombreusuario}</legend>
 
 
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Contraseña nueva</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Contraseña nueva</strong></label>
                             
                             </div>
                                 
@@ -94,7 +94,7 @@ function EditarContrasenia ({params}){
 
                         <div className='row mb-3'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label">Confirmar la contraseña</label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Confirmar la contraseña</strong></label>
                             </div>
 
                             <div className='col'>

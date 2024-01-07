@@ -18,8 +18,8 @@ function CompoInicioTr(){
     const [paginasmaximas, setPaginasmaximas] = useState(5);
     const [estado, setEstado] = useState(1);
 
-    const [fechainicio, SetFechainicio] = useState(null);
-    const [fechafin, SetFechafin] = useState(null);
+    const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
+    const [fechafin, SetFechafin] = useState(new Date().toISOString().split('T')[0]);
 
     const [interruptor, setInterruptor] = useState(false);
     const [interruptorT, setInterruptorT] = useState(false);
@@ -31,6 +31,10 @@ function CompoInicioTr(){
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
+    const [carrera, setCarrera]= useState(null);
+    const [categoria, setCategoria]=useState(null);
+    const [busquedaC, setBusquedaC]=useState("");
+    const [busquedaCa, setBusquedaCa]=useState("");
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -53,6 +57,38 @@ function CompoInicioTr(){
     },[]);
 
     useEffect(()=>{
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`)
+        .then(data=> data.json()).then(datos=>{setCarrera(datos)});
+    },[]);
+
+    useEffect(()=>{
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`)
+        .then(data=> data.json()).then(datos=>{setCategoria(datos)});
+    },[]);
+
+    useEffect(()=>{
+        if(carrera !==null && interruptorC){
+            setBusqueda(carrera[0].nombreCarrera);
+            setBusquedaC(carrera[0].nombreCarrera);
+        }
+        else if(categoria!==null && interruptorCa){
+            setBusqueda(categoria[0].nombreCategoria);
+            setBusquedaCa(categoria[0].nombreCategoria);
+        }
+        else if(interruptorT){
+            setBusqueda("");
+        }
+        else if(interruptorA){
+            setBusqueda("");
+        }
+        else if(interruptorPC){
+            setBusqueda("");
+        }
+
+    },[carrera,categoria,interruptorC,interruptorCa, interruptorT, interruptorA, interruptorPC]);
+
+
+    useEffect(()=>{
         if(currentpage && !interruptor && valorseleccionado){
             fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTrabajosfiltro(datos.items); setTotalitems(datos.total)});
@@ -68,7 +104,7 @@ function CompoInicioTr(){
 
         }
         else if(currentpage && interruptorC && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaC}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorA && valorseleccionado){
@@ -76,7 +112,7 @@ function CompoInicioTr(){
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorCa && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaCa}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
 
         }
@@ -360,7 +396,21 @@ function CompoInicioTr(){
                             
                             {
                                 interruptorC&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
+                                    
+                                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                                        <div>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                        </div>
+                                        <div className="w-100 mb-3">
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaC(e.target.value)}}>
+                                                {carrera.map((data)=>(<option value={data.nombreCarrera} key={data.ID_Carrera}>{data.nombreCarrera}</option>))}
+                                            </select>
+                                        </div>
+
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
+                                    </div>
+                                    
+                                    
                                 )
 
                             }
@@ -380,7 +430,20 @@ function CompoInicioTr(){
                             }
                             {
                                 interruptorCa&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
+                                    <div className="col-md-4" style={{marginRight:'20px'}}>
+                                        <div>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                        </div>
+                                        <div className="w-100 mb-3">
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
+                                                {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
+                                            </select>
+                                        </div>
+
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
+                                    </div>
+
+                                   
                                 )
 
                             }
@@ -464,18 +527,18 @@ function CompoInicioTr(){
                             data.ID_estado===1&&(
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
                                 <div className="card-header">
-                                     Autor: {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
+                                     <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                 </div>
 
                                 
 
                                 <div className="card-body">
                                     
-                                    <h5 className="card-title">Título: {data.trabajoGrad.titulo}</h5>
+                                    <h5 className="card-title"  style={{fontStyle: 'italic'}}><strong>Título:</strong> {data.trabajoGrad.titulo}</h5>
 
                                     <div className="card text-bg-secondary mb-3" >
                                         <div className="card-body">
-                                            <h5 className="card-title">Resumen:</h5>
+                                            <h5 className="card-title"><strong>Resumen:</strong></h5>
                                             <p className="card-text"  style={{ fontSize: '0.8em' }}>{data.trabajoGrad.descripcion}</p>
                                         </div>
                                     </div>
@@ -484,34 +547,34 @@ function CompoInicioTr(){
                                     <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                         
                                         <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Carrera: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Carrera:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Categoría: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Categoría:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Palabras clave: </h6>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Palabras clave:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.paClave} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>No. páginas: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>No. páginas:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.cantidadPaginas} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Formato: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>Fecha de carga: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                 {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
                                                  - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
                                             </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}>URL: </h6>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>URL:</strong></h6>
                                             <h6 className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                <a href={data.trabajoGrad.direccionGuardado}>{data.trabajoGrad.titulo}</a>  
                                             </h6>
