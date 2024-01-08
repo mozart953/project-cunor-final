@@ -35,6 +35,7 @@ function CompoInicioTr(){
     const [categoria, setCategoria]=useState(null);
     const [busquedaC, setBusquedaC]=useState("");
     const [busquedaCa, setBusquedaCa]=useState("");
+    const [busquedainte, setBusquedainte]=useState("");
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -70,22 +71,34 @@ function CompoInicioTr(){
         if(carrera !==null && interruptorC){
             setBusqueda(carrera[0].nombreCarrera);
             setBusquedaC(carrera[0].nombreCarrera);
+            setBusquedainte("");
         }
         else if(categoria!==null && interruptorCa){
             setBusqueda(categoria[0].nombreCategoria);
             setBusquedaCa(categoria[0].nombreCategoria);
+            setBusquedainte("");
         }
         else if(interruptorT){
             setBusqueda("");
+            setBusquedainte("");
         }
         else if(interruptorA){
             setBusqueda("");
+            setBusquedainte("");
         }
         else if(interruptorPC){
             setBusqueda("");
+            setBusquedainte("");
+        }
+        else if(interruptorAn){
+            setBusqueda("");
+            setBusquedainte("");
+        }
+        else if(!interruptor){
+            setBusquedainte("");
         }
 
-    },[carrera,categoria,interruptorC,interruptorCa, interruptorT, interruptorA, interruptorPC]);
+    },[carrera,categoria,interruptorC,interruptorCa, interruptorT, interruptorA, interruptorPC, interruptorAn, interruptor]);
 
 
     useEffect(()=>{
@@ -172,7 +185,7 @@ function CompoInicioTr(){
     const onSubmit = async (e)=>{
         e.preventDefault();
         console.log(busqueda);
-        
+        setBusquedainte(busqueda);
             //filtro(busqueda);
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
@@ -192,6 +205,7 @@ function CompoInicioTr(){
     const onSubmitT = async(e)=>{
         e.preventDefault();
         console.log(busqueda);
+        setBusquedainte(busqueda);
         const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
         const datos = await respuesta.json();
         console.log(datos);
@@ -209,6 +223,7 @@ function CompoInicioTr(){
     const onSubmitG = async(e)=>{
         e.preventDefault();
         console.log(busqueda);
+        setBusquedainte(busqueda);
 
         if(interruptorC){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
@@ -606,20 +621,42 @@ function CompoInicioTr(){
                     ):(
 
                         
-                        trabajos && trabajos.length === 0 ?(<div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
+                        trabajos && trabajos.length === 0 ?(
+                            busquedainte!==""?(
+                                <div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} >
                                     <div className="card-body">
                                         <div className="card text-bg-secondary mb-3" >
                                             <div className="card-body">
-                                                <h5 className="card-title">Estado:</h5>
-                                                <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
+                                                <h5 className="card-title"><strong>Estado:</strong></h5>
+                                                <p className="card-text"  style={{ fontSize: '1em' }}><i className="bi bi-bug-fill"></i> No hay nada para mostrar en este momento para: <strong>{busquedainte}...</strong></p>
+                                                <p className="card-text">Fecha de búsqueda: <strong>{new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}</strong></p>
                                             </div>
                                         </div>
                                         
                                     </div>
                                 </div>
 
-                            </div>):null
+                            </div>
+
+                            ):(
+                                <div className="text-white mb-5" style={{width:'85%', margin:'0 auto'}}>
+                                <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'80%', margin:'0 auto', borderWidth: '3px'}} >
+                                    <div className="card-body">
+                                        <div className="card text-bg-secondary mb-3" >
+                                            <div className="card-body">
+                                                <h5 className="card-title"><strong>Estado:</strong></h5>
+                                                <p className="card-text"  style={{ fontSize: '1.5em' }}>No hay nada para mostrar en este momento...<i className="bi bi-hourglass-split"></i></p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                            )
+                        
+                        ):null
 
                         
                         
