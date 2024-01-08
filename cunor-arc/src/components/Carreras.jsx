@@ -14,6 +14,7 @@ function CompoCarrerasPage({datos, totalItems}){
     const [totalPaginas, setTotalpaginas] = useState(null);
     const [paginasmaximas, setPaginasmaximas] = useState(5);
     const [busqueda, setBusqueda] = useState("");
+    const [busquedainte, setBusquedainte] = useState("");
 
     useEffect(()=>{
         console.log(datos);
@@ -55,6 +56,7 @@ function CompoCarrerasPage({datos, totalItems}){
     const onSubmit = async (e)=>{
         e.preventDefault();
         console.log(busqueda);
+        setBusquedainte(busqueda);
 
         const respuesta = await fetch(`/api/datos/reCarrerasPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
         const datos = await respuesta.json();
@@ -150,20 +152,39 @@ function CompoCarrerasPage({datos, totalItems}){
 
                         {
                             datoscarrera && datoscarrera.length===0?(
-                                <div className="text-white mt-1 d-flex justify-content-center align-items-center" >
+                                busquedainte!==""?(
+                                    <div className="text-white mt-1" style={{width:'100%', margin:'0 auto'}}>
                                     <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
                                         <div className="card-body">
                                             <div className="card text-bg-secondary mb-3" >
                                                 <div className="card-body">
-                                                    <h5 className="card-title">Estado:</h5>
-                                                    <p className="card-text"  style={{ fontSize: '0.8em' }}>No hay nada para mostrar en este momento para: {busqueda}...</p>
+                                                    <h5 className="card-title"><strong>Estado:</strong></h5>
+                                                    <p className="card-text"  style={{ fontSize: '1em' }}><i className="bi bi-bug-fill"></i> No hay nada para mostrar en este momento para: <strong>{busquedainte}...</strong></p>
+                                                    <p className="card-text">Fecha de búsqueda: <strong>{new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })}</strong></p>
                                                 </div>
                                             </div>
                                             
                                         </div>
                                     </div>
-
+    
                                 </div>
+    
+                                ):(
+                                    <div className="text-white mb-5" style={{width:'100%', margin:'0 auto'}}>
+                                    <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
+                                        <div className="card-body">
+                                            <div className="card text-bg-secondary mb-3" >
+                                                <div className="card-body">
+                                                    <h5 className="card-title"><strong>Estado:</strong></h5>
+                                                    <p className="card-text"  style={{ fontSize: '1.5em' }}>No hay nada para mostrar en este momento...<i className="bi bi-hourglass-split"></i></p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                )
                             ):null
                         }
 
