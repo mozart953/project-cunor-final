@@ -29,7 +29,7 @@ function MyVerticallyCenteredModal(props) {
             <button  type="button" className="btn btn-primary" onClick={copyToClipboard}><i className="bi bi-copy"></i></button>
         </div>
         <div className="alert alert-primary" role="alert">
-            <p>{props.mensaje}</p>
+            <p><i className="bi bi-exclamation-triangle"></i> {props.mensaje}</p>
         </div>
         
       </Modal.Body>
