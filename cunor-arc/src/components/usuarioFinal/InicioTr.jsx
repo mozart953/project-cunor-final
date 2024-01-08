@@ -49,9 +49,9 @@ function CompoInicioTr(){
 
     useEffect(()=>{
         
-            console.log(ordenQuery[0].ordBase);
+            //console.log(ordenQuery[0].ordBase);
             setValorseleccionado(ordenQuery[0].ordBase);
-            console.log(ordenQuery2[0].ordBase);
+            //console.log(ordenQuery2[0].ordBase);
             setValorseleccionado2(ordenQuery2[0].ordBase);
             
         
@@ -141,7 +141,7 @@ function CompoInicioTr(){
             if(currentpage && interruptorAn && fechainicio!==null && fechafin!==null && valorseleccionado){
                 const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroFecha?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&fechaInicio=${fechainicio}&fechaFin=${fechafin}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
 
                 if(respuesta.ok){
                     
@@ -184,12 +184,12 @@ function CompoInicioTr(){
 
     const onSubmit = async (e)=>{
         e.preventDefault();
-        console.log(busqueda);
+        //console.log(busqueda);
         setBusquedainte(busqueda);
             //filtro(busqueda);
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 setTrabajos(datos.items); 
@@ -204,11 +204,11 @@ function CompoInicioTr(){
 
     const onSubmitT = async(e)=>{
         e.preventDefault();
-        console.log(busqueda);
+        //console.log(busqueda);
         setBusquedainte(busqueda);
         const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
         const datos = await respuesta.json();
-        console.log(datos);
+        //console.log(datos);
 
         if(respuesta.ok){
             setTrabajos(datos.items); 
@@ -222,13 +222,13 @@ function CompoInicioTr(){
 
     const onSubmitG = async(e)=>{
         e.preventDefault();
-        console.log(busqueda);
+        //console.log(busqueda);
         setBusquedainte(busqueda);
 
         if(interruptorC){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 setTrabajos(datos.items); 
@@ -243,7 +243,7 @@ function CompoInicioTr(){
         else if(interruptorA){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroAutor?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 setTrabajos(datos.items); 
@@ -259,7 +259,7 @@ function CompoInicioTr(){
         else if(interruptorCa){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 
@@ -273,12 +273,12 @@ function CompoInicioTr(){
         }
 
         else if(interruptorAn){
-            console.log(fechainicio);
-            console.log(fechafin);
+            //console.log(fechainicio);
+            //console.log(fechafin);
 
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroFecha?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&fechaInicio=${fechainicio}&fechaFin=${fechafin}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 
@@ -296,7 +296,7 @@ function CompoInicioTr(){
         else if(interruptorPC){
             const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroPalClave?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
             const datos = await respuesta.json();
-            console.log(datos);
+            //console.log(datos);
 
             if(respuesta.ok){
                 

@@ -63,7 +63,7 @@ function NavbarGComponent(){
         },[rol]   
     );
 
-    console.log("rol desde navbar" + rol);
+    //console.log("rol desde navbar" + rol);
 
 
     // useEffect(() => {
