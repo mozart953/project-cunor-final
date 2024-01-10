@@ -395,6 +395,7 @@ function CompoListarArchivosPage(){
                 setTrabajos(datos.items); 
                 //setTrabajosfiltro(datos.items); 
                 setTotalitems(datos.total);
+                setBusquedaCa(busqueda);
             }else{
                 alert("Algo salio mal, intentelo nuevamente...");
             }
@@ -534,10 +535,10 @@ function CompoListarArchivosPage(){
                                 interruptorCa&&(
                                     <div className="col-md-4" style={{marginRight:'20px'}}>
                                         <div>
-                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
+                                            <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por categoria:</label>
                                         </div>
                                         <div className="w-100 mb-3">
-                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onChange={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
+                                            <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onClick={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
                                                 {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
                                             </select>
                                         </div>
