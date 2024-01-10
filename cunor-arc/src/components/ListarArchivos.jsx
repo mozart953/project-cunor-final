@@ -42,7 +42,7 @@ function CompoListarArchivosPage(){
     
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
-    const [categoria, setCategoria]=useState(null);
+    const [categoria, setCategoria]=useState([]);
     const [busquedaCa, setBusquedaCa]=useState("");
     const [busquedainte, setBusquedainte]=useState("");
 
@@ -75,12 +75,12 @@ function CompoListarArchivosPage(){
 
     useEffect(()=>{
         fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`)
-        .then(data=> data.json()).then(datos=>{setCategoria(datos)});
+        .then(data=> data.json()).then(datos=>{setCategoria([...datos, ...categoria])});
     },[]);
 
     useEffect(()=>{
         
-        if(categoria!==null && interruptorCa){
+        if(categoria.length>0 && interruptorCa){
             setBusqueda(categoria[0].nombreCategoria);
             setBusquedaCa(categoria[0].nombreCategoria);
             setBusquedainte("");
