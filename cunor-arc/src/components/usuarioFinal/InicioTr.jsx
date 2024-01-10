@@ -31,8 +31,8 @@ function CompoInicioTr(){
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
-    const [carrera, setCarrera]= useState(null);
-    const [categoria, setCategoria]=useState(null);
+    const [carrera, setCarrera]= useState([]);
+    const [categoria, setCategoria]=useState([]);
     const [busquedaC, setBusquedaC]=useState("");
     const [busquedaCa, setBusquedaCa]=useState("");
     const [busquedainte, setBusquedainte]=useState("");
@@ -59,21 +59,21 @@ function CompoInicioTr(){
 
     useEffect(()=>{
         fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`)
-        .then(data=> data.json()).then(datos=>{setCarrera(datos)});
+        .then(data=> data.json()).then(datos=>{setCarrera([...datos, ...carrera])});
     },[]);
 
     useEffect(()=>{
         fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`)
-        .then(data=> data.json()).then(datos=>{setCategoria(datos)});
+        .then(data=> data.json()).then(datos=>{setCategoria([...datos,...categoria])});
     },[]);
 
     useEffect(()=>{
-        if(carrera !==null && interruptorC){
+        if(carrera.length>0 && interruptorC){
             setBusqueda(carrera[0].nombreCarrera);
             setBusquedaC(carrera[0].nombreCarrera);
             setBusquedainte("");
         }
-        else if(categoria!==null && interruptorCa){
+        else if(categoria.length>0 && interruptorCa){
             setBusqueda(categoria[0].nombreCategoria);
             setBusquedaCa(categoria[0].nombreCategoria);
             setBusquedainte("");
