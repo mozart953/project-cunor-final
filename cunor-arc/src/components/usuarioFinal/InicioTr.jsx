@@ -58,12 +58,12 @@ function CompoInicioTr(){
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`)
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`,  { cache: "force-cache", next: { revalidate: 10 } })
         .then(data=> data.json()).then(datos=>{setCarrera([...datos, ...carrera])});
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`)
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`,  { cache: "force-cache", next: { revalidate: 10 } })
         .then(data=> data.json()).then(datos=>{setCategoria([...datos,...categoria])});
     },[]);
 
