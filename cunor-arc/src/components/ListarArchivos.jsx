@@ -74,7 +74,7 @@ function CompoListarArchivosPage(){
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, { cache: "force-cache", next: { revalidate: 10 } })
+        fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, {next: { revalidate: 10 } })
         .then(data=> data.json()).then(datos=>{setCategoria([...datos, ...categoria])});
     },[]);
 
