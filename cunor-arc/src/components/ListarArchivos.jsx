@@ -8,6 +8,8 @@ import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 function CompoListarArchivosPage(){
     const [datosg, setUsuario1] = useLog2(null);
     const [nombreusuario, setNombreusuario] = useState("");

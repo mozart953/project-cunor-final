@@ -6,6 +6,8 @@ import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 import MyButton from "@/components/Modal/BotonModal";
 import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
 
+export const dynamic = 'force-dynamic';
+
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
     const [trabajosfiltro, setTrabajosfiltro] = useState([]);
