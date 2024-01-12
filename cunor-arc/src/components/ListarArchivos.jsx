@@ -8,7 +8,7 @@ import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+//export const dynamic = 'force-dynamic';
 
 function CompoListarArchivosPage(){
     const [datosg, setUsuario1] = useLog2(null);
@@ -47,6 +47,7 @@ function CompoListarArchivosPage(){
     const [categoria, setCategoria]=useState([]);
     const [busquedaCa, setBusquedaCa]=useState("");
     const [busquedainte, setBusquedainte]=useState("");
+    const [showPDF, setShowPDF] = useState(null);
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -76,8 +77,13 @@ function CompoListarArchivosPage(){
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, {next: { revalidate: 10 } })
-        .then(data=> data.json()).then(datos=>{setCategoria([...datos, ...categoria])});
+        const datosCategorias = async()=>{
+            const Dcategorias = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, {next: { revalidate: 10 } })
+            .then(data=> data.json());
+            setCategoria([...Dcategorias, ...categoria]);
+        }
+        datosCategorias();
+
     },[]);
 
     useEffect(()=>{
@@ -713,21 +719,28 @@ function CompoListarArchivosPage(){
 
                                             </div>
 
-                                            <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
+                                            <div className="card-body mt-0 mb-3" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                                <button type="button" className={showPDF===data.ID_Detalle?"btn btn-danger mb-3 btn-lg":"btn btn-success btn-lg me-3 mb-3"} onClick={()=>setShowPDF(showPDF === data.ID_Detalle ? null : data.ID_Detalle)}>
+                                                    <strong>{showPDF===data.ID_Detalle ? <span><i className="bi bi-box-arrow-down"></i> Ocultar documento</span> :<span><i className="bi bi-arrows-fullscreen"></i> Mostrar documento</span> }</strong>
+                                                </button>
+                                                {showPDF===data.ID_Detalle && <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
+                                            </div>
+
+                                            {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i>Eliminar archivo</button>
+                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i><strong>Eliminar archivo</strong></button>
                                                 
                                                 {
                                                     controlestado[data.ID_Detalle]?(
-                                                        <button type="button" className="btn btn-outline-danger" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:false});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-down-circle-fill"></i>Deshabilitar registro</button>
+                                                        <button type="button" className="btn btn-outline-danger" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:false});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-down-circle-fill"></i><strong> Deshabilitar registro</strong></button>
                                                     ):(
-                                                        <button type="button" className="btn btn-outline-success" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:true});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-up-circle-fill"></i>Habilitar registro</button>
+                                                        <button type="button" className="btn btn-outline-success" onClick={()=>{setControlestado({...controlestado,[data.ID_Detalle]:true});cambiarEstado(data.ID_Detalle, data.ID_estado)}}><i className="bi bi-arrow-up-circle-fill"></i><strong> Habilitar registro</strong></button>
                                                     )
                                                 }
                                                
 
-                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}><i className="bi bi-pencil-square"></i>Editar registro</button>
+                                                <button type="button" className="btn btn-primary" onClick={()=>{router.push(`/dashboardOperador/editarTrabajos/${data.ID_Detalle}`)}}><i className="bi bi-pencil-square"></i><strong>Editar registro</strong></button>
                                             </div> 
 
                                         </div>

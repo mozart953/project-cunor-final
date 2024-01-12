@@ -6,7 +6,7 @@ import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 import MyButton from "@/components/Modal/BotonModal";
 import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
 
-export const dynamic = 'force-dynamic';
+//export const dynamic = 'force-dynamic';
 
 function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
@@ -47,6 +47,7 @@ function CompoInicioTr(){
                          {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
     
     const [modalShow, setModalShow] = useState(null);
+    const [showPDF, setShowPDF] = useState(null);
 
 
     useEffect(()=>{
@@ -60,13 +61,25 @@ function CompoInicioTr(){
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`,  { next: { revalidate: 10 } })
-        .then(data=> data.json()).then(datos=>{setCarrera([...datos, ...carrera])});
+        const datosCarreras = async ()=>{
+            const Dcarreras = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`,  { next: { revalidate: 10 } })
+            .then(data=> data.json());
+            setCarrera([...Dcarreras, ...carrera]);
+            
+        }
+
+        datosCarreras();
+
     },[]);
 
     useEffect(()=>{
-        fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`,  { next: { revalidate: 10 } })
-        .then(data=> data.json()).then(datos=>{setCategoria([...datos,...categoria])});
+        const datosCategorias = async ()=>{
+            const Dcategorias = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`,  { next: { revalidate: 10 } })
+            .then(data=> data.json());
+            setCategoria([...Dcategorias,...categoria]);
+        }
+
+        datosCategorias();
     },[]);
 
     useEffect(()=>{
@@ -601,7 +614,15 @@ function CompoInicioTr(){
 
                                     </div>
 
-                                    <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
+                                    <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                        <button type="button" className={showPDF===data.ID_Detalle?"btn btn-danger mb-3 btn-lg":"btn btn-success btn-lg me-3 mb-3"} onClick={()=>setShowPDF(showPDF === data.ID_Detalle ? null : data.ID_Detalle)}>
+                                            <strong>{showPDF===data.ID_Detalle ? <span><i className="bi bi-box-arrow-down"></i> Ocultar documento</span> :<span><i className="bi bi-arrows-fullscreen"></i> Mostrar documento</span> }</strong>
+                                        </button>
+                                        {showPDF===data.ID_Detalle && <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
+                                    </div>
+
+
+                                    {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
 
                                     <MyButton onOpenModal={()=>setModalShow(data.ID_Detalle)} />
                                     {
