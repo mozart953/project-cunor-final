@@ -9,7 +9,7 @@ import {useRouter} from "next/navigation";
 
 
 function SubaArchivoPage(){
-    const {register, handleSubmit, formState:{errors}} = useForm(); 
+    const {register, handleSubmit, setValue, formState:{errors}} = useForm(); 
     const [datosg, setUsuario1] = useLog2(null);
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState("");
@@ -28,6 +28,7 @@ function SubaArchivoPage(){
     const [tamanio, setTamanio] = useState(0);
     const [data1, setData1] = useState(null);
     const [control, setControl] = useState(false);
+    const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const { data: session, status } = useSession();
 
     const router = useRouter();
@@ -305,6 +306,23 @@ function SubaArchivoPage(){
 
     });
 
+    const handleInputChange= (index, event)=> {
+        const values = [...autores];
+        values[index][event.target.name] = event.target.value;
+        setAutores(values);
+        console.log(values);
+    }
+
+    function handleAddClick() {
+        setAutores([...autores, { Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
+    }
+      
+    function handleRemoveClick(index) {
+        const values = [...autores];
+        values.splice(index, 1);
+        setAutores(values);
+    }
+
     return(
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
@@ -426,75 +444,87 @@ function SubaArchivoPage(){
 
                         </div>
                         
-                        <div className="col">
-                            <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
-                            <div className="mb-3">
-                                    <label className="col-form-label"><strong>Carnet</strong></label>
-                                    <div className="col-sm-10">
-                                        <input type="text" className="form-control text-white bg-dark" {...register("Carnet", {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
-                                    </div>
+                        {
+                            autores.map((autor, index)=> ( 
+                                    <div className="col" key={index}>
+                                        <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
+                                        <div className="mb-3">
+                                                <label className="col-form-label"><strong>Carnet</strong></label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" className="form-control text-white bg-dark" {...register(`autores[${index}].Carnet`, {required: {value: true, message:'Es necesario escribir el número de carnet...'}})}  onChange={event => handleInputChange(index, event)}/>
+                                                </div>
 
-                                    {
-                                        errors.Carnet && (                                  
-                                            
-                                            <span className="badge rounded-pill text-bg-danger">{errors.Carnet.message}</span>
-
-
-                                        )
-                                    }
-                            </div>
+                                                {
+                                                     errors.autores && errors.autores[index] && errors.autores[index].Carnet && (                                  
+                                                        
+                                                        <span className="badge rounded-pill text-bg-danger">{errors.autores[index].Carnet.message}</span> 
 
 
-                            <div className="mb-3">
-                                    <label className="col-form-label"><strong>Primer nombre</strong></label>
-                                    <div className="col-sm-10">
-                                        <input type="text" className="form-control text-white bg-dark" {...register("primerNombre", {required: {value: true, message:'Es necesario escribir el primer nombre...'}})} />
-                                    </div>
-
-                                    {
-                                        errors.primerNombre && (                                  
-                                            
-                                            <span className="badge rounded-pill text-bg-danger">{errors.primerNombre.message}</span>
+                                                    )
+                                                }
+                                        </div>
 
 
-                                        )
-                                    }
-                            </div>
-                            <div className="mb-3">
-                                <label className="col-form-label"><strong>Segundo nombre</strong></label>
-                                <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{console.log(e.target.value); setSecondname(e.target.value)}}/>
+                                        <div className="mb-3">
+                                                <label className="col-form-label"><strong>Primer nombre</strong></label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" className="form-control text-white bg-dark" {...register(`autores[${index}].primerNombre`, {required: {value: true, message:'Es necesario escribir el primer nombre...'}})}  onChange={event => handleInputChange(index, event)}/>
+                                                </div>
+
+                                                {
+                                                    errors.autores && errors.autores[index] && errors.autores[index].primerNombre && (                                  
+                                                        
+                                                        <span className="badge rounded-pill text-bg-danger">{errors.autores[index].primerNombre.message}</span>
+
+
+                                                    )
+                                                }
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="col-form-label"><strong>Segundo nombre</strong></label>
+                                            <div className="col-sm-10">
+                                                {/* <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{console.log(e.target.value); setSecondname(e.target.value)}}/> */}
+                                                <input type="text" className="form-control text-white bg-dark" name='segundoNombre' onChange={event => handleInputChange(index, event)}/>
+                                            </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="col-form-label"><strong>Tercer nombre</strong></label>
+                                            <div className="col-sm-10">
+                                                {/* <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setThirdname(e.target.value)}} /> */}
+                                                <input type="text" className="form-control text-white bg-dark" name='tercerNombre' onChange={event => handleInputChange(index, event)} />
+                                            </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="col-form-label"><strong>Primer apellido</strong></label>
+                                            <div className="col-sm-10">
+                                                <input type="text" className="form-control text-white bg-dark" {...register(`autores[${index}].primerApellido`, {required: {value: true, message:'Es necesario escribir el primer apellido...'}})} onChange={event => handleInputChange(index, event)}/>
+                                            </div>
+
+                                            {
+                                                    errors.autores && errors.autores[index] && errors.autores[index].primerApellido && (                                  
+                                                        
+                                                        <span className="badge rounded-pill text-bg-danger">{errors.autores[index].primerApellido.message}</span>
+
+
+                                                    )
+                                            }
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="col-form-label"><strong>Segundo apellido</strong></label>
+                                            <div className="col-sm-10">
+                                                {/* <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setSecondlastname(e.target.value)}}/> */}
+                                                <input type="text" className="form-control text-white bg-dark"  name='segundoApellido' onChange={event => handleInputChange(index, event)}/>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" className="btn btn-danger" onClick={() => handleRemoveClick(index)}><i className="bi bi-trash3"></i> Eliminar</button>
                                 </div>
-                            </div>
-                            <div className="mb-3">
-                                <label className="col-form-label"><strong>Tercer nombre</strong></label>
-                                <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setThirdname(e.target.value)}} />
-                                </div>
-                            </div>
-                            <div className="mb-3">
-                                <label className="col-form-label"><strong>Primer apellido</strong></label>
-                                <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" {...register("primerApellido", {required: {value: true, message:'Es necesario escribir el primer apellido...'}})}/>
-                                </div>
 
-                                {
-                                        errors.primerApellido && (                                  
-                                            
-                                            <span className="badge rounded-pill text-bg-danger">{errors.primerApellido.message}</span>
+                            )
+                            )
+                        }
 
-
-                                        )
-                                }
-                            </div>
-                            <div className="mb-3">
-                                <label className="col-form-label"><strong>Segundo apellido</strong></label>
-                                <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setSecondlastname(e.target.value)}}/>
-                                </div>
-                            </div>
-                        </div>
-
+                        <button type="button" className="btn btn-success" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> Agregar autor</button>
                         <div className="col">
                             <legend className="text-center mb-4"><strong>Subir archivo</strong></legend>
                             {/* <input type="file" accept=".pdf" onChange={(e)=>{setFile(e.target.files[0])}}/> */}

@@ -105,8 +105,13 @@ export async function GET(request){
                     categoria:true,
                     archivo:true,
                     carrera:true,
-                    autor: true,
+                    //autor: true,
                     usuario:true,
+                    autores: {
+                        include: {
+                            autor: true
+                        }
+                    }
 
                 },
                 skip: (page-1) * itemsPerPage,
@@ -117,6 +122,7 @@ export async function GET(request){
 
         return NextResponse.json({items:detalles, total:totalItems});
     }catch(error){
+        console.log(error);
         return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
     }
 

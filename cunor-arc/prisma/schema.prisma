@@ -116,7 +116,7 @@ model Autor{
   primerApellido String
   segundoApellido String?
   carnet String?
-  registroTrabajograd registroTrabajoGraduacion[]
+  registroTrabajograd EnlaceTrabajoAutor[]
 }
 
 model registroTrabajoGraduacion{
@@ -130,12 +130,20 @@ model registroTrabajoGraduacion{
   ID_archivo Int
   carrera Carrera  @relation(fields: [ID_carrera], references: [ID_Carrera])
   ID_carrera Int
-  autor Autor  @relation(fields: [ID_autor], references: [ID_Autor])
-  ID_autor Int
+  // autor Autor  @relation(fields: [ID_autor], references: [ID_Autor])
+  // ID_autor Int
   usuario Usuario  @relation(fields: [ID_usuario], references: [ID_Usuario])
   ID_usuario Int
   estado estadoTrabajoGraduacion  @relation(fields: [ID_estado], references: [ID_Estado])
   ID_estado Int
+  autores EnlaceTrabajoAutor[]
 
 }
 
+model EnlaceTrabajoAutor{
+  ID_Autor Int
+  ID_Detalle Int
+  autor Autor @relation(fields: [ID_Autor], references: [ID_Autor])
+  registroTrabajoGraduacion registroTrabajoGraduacion @relation(fields: [ID_Detalle], references: [ID_Detalle])
+  @@id([ID_Autor, ID_Detalle])
+}
