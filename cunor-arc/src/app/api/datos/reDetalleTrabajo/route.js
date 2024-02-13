@@ -74,12 +74,12 @@ export async function GET(request){
                 OR: [
                     {trabajoGrad:{titulo:{contains:term, mode: 'insensitive'}}},
                     {trabajoGrad:{paClave:{contains:term, mode: 'insensitive'}}},
-                    {autor:{primerNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{segundoNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{tercerNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{primerApellido:{contains:term, mode: 'insensitive'}}},
-                    {autor:{segundoApellido:{contains:term, mode: 'insensitive'}}},
-                    {autor:{carnet:{contains:term, mode: 'insensitive'}}},
+                    {autores: {some: {autor: {primerNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {segundoNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {tercerNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {primerApellido: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {segundoApellido: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {carnet: {contains:term, mode: 'insensitive'}}}}},
                     {categoria:{nombreCategoria:{contains:term, mode: 'insensitive'}}},
                 ]
             }));
