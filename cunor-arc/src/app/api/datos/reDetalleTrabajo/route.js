@@ -24,7 +24,7 @@ export async function POST(request){
                 ID_categoria: Number(datos.ID_categoria),
                 ID_archivo: Number(datos.ID_archivo),
                 ID_carrera: Number(datos.ID_carrera),
-                ID_autor: Number(datos.ID_autor),
+                //ID_autor: Number(datos.ID_autor),
                 ID_usuario: Number(datos.ID_usuario),
                 ID_estado: Number(datos.ID_estado),
 
