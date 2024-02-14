@@ -31,7 +31,8 @@ export async function GET(request){
             whereClause={
                 ...whereClause,
                 OR:[
-                    {autor:{carnet:{contains:searchTerm}}},                
+                    // {autor:{carnet:{contains:searchTerm}}},
+                    {autores: {some: {autor: {carnet: {contains:searchTerm, mode: 'insensitive'}}}}},                
                 ]
             };
 
@@ -51,7 +52,12 @@ export async function GET(request){
                     categoria:true,
                     archivo:true,
                     carrera:true,
-                    autor: true,
+                    //autor: true,
+                    autores: {
+                        include: {
+                            autor: true
+                        }
+                    }
 
                 },
                 skip: (page-1) * itemsPerPage,

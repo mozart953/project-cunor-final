@@ -48,11 +48,16 @@ export async function GET(request){
         
             const searchConditions = searchTerms.map(term => ({
                 OR: [
-                    {autor:{primerNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{segundoNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{tercerNombre:{contains:term, mode: 'insensitive'}}},
-                    {autor:{primerApellido:{contains:term, mode: 'insensitive'}}},
-                    {autor:{segundoApellido:{contains:term, mode: 'insensitive'}}},
+                    // {autor:{primerNombre:{contains:term, mode: 'insensitive'}}},
+                    // {autor:{segundoNombre:{contains:term, mode: 'insensitive'}}},
+                    // {autor:{tercerNombre:{contains:term, mode: 'insensitive'}}},
+                    // {autor:{primerApellido:{contains:term, mode: 'insensitive'}}},
+                    // {autor:{segundoApellido:{contains:term, mode: 'insensitive'}}},
+                    {autores: {some: {autor: {primerNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {segundoNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {tercerNombre: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {primerApellido: {contains:term, mode: 'insensitive'}}}}},
+                    {autores: {some: {autor: {segundoApellido: {contains:term, mode: 'insensitive'}}}}},
                 ]
             }));
         
@@ -76,7 +81,12 @@ export async function GET(request){
                     categoria:true,
                     archivo:true,
                     carrera:true,
-                    autor: true,
+                    //autor: true,
+                    autores: {
+                        include: {
+                            autor: true
+                        }
+                    }
 
                 },
                 skip: (page-1) * itemsPerPage,

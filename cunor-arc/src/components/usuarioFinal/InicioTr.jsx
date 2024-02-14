@@ -558,10 +558,18 @@ function CompoInicioTr(){
                          trabajos && trabajos.length!==0?(trabajos.map((data)=>(
                             data.ID_estado===1&&(
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
-                                <div className="card-header">
+                                {/* <div className="card-header">
                                      <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
-                                </div>
-
+                                </div> */}
+                                           
+                                           {data.autores.map((autorData) => (
+                                                <div className="card-header" key={autorData.ID_Autor}>
+                                                <strong>Autor:</strong>{" "}
+                                                {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
+                                                - <strong>No. de carnet:</strong>
+                                                {autorData.autor.carnet}
+                                                </div>
+                                            ))}
                                 
 
                                 <div className="card-body">
