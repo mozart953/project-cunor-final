@@ -53,6 +53,8 @@ function CompoEditarTrabajos({idDetalle}){
             
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
+    const [autores, setAutores] = useState([{ ID_Autor:'', Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
+    const [autores3, setAutores3]=useState([]);
     const { data: session, status } = useSession();
 
     const router = useRouter();
@@ -103,19 +105,27 @@ function CompoEditarTrabajos({idDetalle}){
 
 
     useEffect(()=>{
-        if(datostrabajo){
+        if(datostrabajo && autores.length!==0){
             setValue('titulo', titulo);
             setValue('cantidadPaginas',cantidadpaginas);
             setValue('descripcion', descripcion);
-            setValue('primerNombre', primernombre);
-            setValue('segundoNombre', segundonombre);
-            setValue('tercerNombre', tercernombre);
-            setValue('primerApellido', primerapellido);
-            setValue('segundoApellido', segundoapellido);
-            setValue('Carnet', carnet);
+            console.log(autores);
+            autores.map(
+                (autor, index)=>{
+                    setValue(`autores[${index}].primerNombre`, autor.primerNombre);
+                    setValue(`autores[${index}].segundoNombre`, autor.segundoNombre);
+                    setValue(`autores[${index}].tercerNombre`, autor.tercerNombre);
+                    setValue(`autores[${index}].primerApellido`, autor.primerApellido);
+                    setValue(`autores[${index}]segundoApellido`, autor.segundoApellido);
+                    setValue(`autores[${index}].Carnet`, autor.Carnet);
+
+                }
+            )
+
+
             setValue('palabrasCla', palcl);
         }
-    },[datostrabajo]);
+    },[datostrabajo, autores]);
 
 
     useEffect(()=>{
@@ -123,13 +133,27 @@ function CompoEditarTrabajos({idDetalle}){
             fetch(`/api/datos/reDetalleTrabajo/filtroB?idDetalle=${idDetalle}&idUsuario=${iduser1}&idCarrera=${idcarrera1}`)
             .then(data => data.json()).then(datos=>{
                 console.log(datos); setDatostrabajo(datos);
-                setIdautor(datos.autor.ID_Autor);
-                setPrimernombre(datos.autor.primerNombre);
-                setSegundonombre(datos.autor.segundoNombre);
-                setTercerNombre(datos.autor.tercerNombre);
-                setPrimerapellido(datos.autor.primerApellido);
-                setSegundoapellido(datos.autor.segundoApellido);
-                setCarnet(datos.autor.carnet);
+
+                // setIdautor(datos.autor.ID_Autor);
+                // setPrimernombre(datos.autor.primerNombre);
+                // setSegundonombre(datos.autor.segundoNombre);
+                // setTercerNombre(datos.autor.tercerNombre);
+                // setPrimerapellido(datos.autor.primerApellido);
+                // setSegundoapellido(datos.autor.segundoApellido);
+                // setCarnet(datos.autor.carnet);
+
+                const autores = datos.autores.map(dato=>({
+                    ID_Autor:dato.autor.ID_Autor,
+                    Carnet:dato.autor.carnet,
+                    primerNombre: dato.autor.primerNombre, 
+                    segundoNombre: dato.autor.segundoNombre, 
+                    tercerNombre: dato.autor.tercerNombre, 
+                    primerApellido: dato.autor.primerApellido, 
+                    segundoApellido: dato.autor.segundoApellido,
+                }));
+                console.log(autores);
+                setAutores(autores);
+
 
                 setIdtrabajo(datos.trabajoGrad.ID_Trabajo);
                 setTitulo(datos.trabajoGrad.titulo);
@@ -399,8 +423,22 @@ function CompoEditarTrabajos({idDetalle}){
 
     });
 
+    const handleInputChange= (index, event)=> {
+        const values = [...autores];
+        values[index][event.target.name] = event.target.value;
+        setAutores(values);
+        console.log(values);
+    }
 
-
+    function handleAddClick() {
+        setAutores([...autores, { Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
+    }
+      
+    function handleRemoveClick(index) {
+        const values = [...autores];
+        values.splice(index, 1);
+        setAutores(values);
+    }
 
 
     console.log(idDetalle);
@@ -408,7 +446,7 @@ function CompoEditarTrabajos({idDetalle}){
     return(
         <>
             <div>Edicion de archivo {idDetalle}
-                <div className="card text-bg-secondary mb-3" style={{width:'80%', margin:'0 auto'}}>
+                <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
                     <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
                         <legend className="text-center mb-4"><strong>Edición de trabajos de graduación:</strong> {carrera}</legend>                       
@@ -435,7 +473,83 @@ function CompoEditarTrabajos({idDetalle}){
 
                                 <form onSubmit={onSubmit}>
                                         
-                                        <div className="row bg-secondary rounded" style={{width: '80%', margin: '0 auto'}}>
+                                        <div className="row bg-secondary rounded" style={{width: '95%', margin: '0 auto'}}>
+                                        <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
+                                            
+                                            {
+                                                autores.map((autor, index)=>(
+                                                    <div className="d-flex flex-row mb-4" key={index}>
+                                                            
+                                                            <div className="mb-3">
+                                                                    <label className="col-form-label"><strong>Carnet</strong></label>
+                                                                    <div className="col-sm-10">
+                                                                        <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue(`autores[${index}].Carnet`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].Carnet`, {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
+                                                                    </div>
+
+                                                                    {
+                                                                        errors.autores && errors.autores[index] && errors.autores[index].Carnet && (                                  
+                                                                            
+                                                                            <span className="badge rounded-pill text-bg-danger">{errors.autores[index].Carnet.message}</span>
+
+
+                                                                        )
+                                                                    }
+                                                            </div>                                                
+                                                            <div className="mb-3">
+                                                                    <label className="col-form-label"><strong>Primer nombre</strong></label>
+                                                                    <div className="col-sm-10">
+                                                                        <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue(`autores[${index}].primerNombre`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].primerNombre`, {required: {value: true, message:'Es necesario escribir el primer nombre...'}})} />
+                                                                    </div>
+
+                                                                    {
+                                                                        errors.autores && errors.autores[index] && errors.autores[index].primerNombre && (                                  
+                                                                            
+                                                                            <span className="badge rounded-pill text-bg-danger">{errors.autores[index].primerNombre.message}</span>
+
+
+                                                                        )
+                                                                    }
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label className="col-form-label"><strong>Segundo nombre</strong></label>
+                                                                <div className="col-sm-10">
+                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue(`autores[${index}].segundoNombre`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].segundoNombre`)}/>
+                                                                </div>
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label className="col-form-label"><strong>Tercer nombre</strong></label>
+                                                                <div className="col-sm-10">
+                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue(`autores[${index}].tercerNombre`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].tercerNombre`)}/>
+                                                                </div>
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label className="col-form-label"><strong>Primer apellido</strong></label>
+                                                                <div className="col-sm-10">
+                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue(`autores[${index})].primerApellido`, e.target.value, {shouldValidate: true});handleInputChange(index, e)}} {...register(`autores[${index}].primerApellido`, {required: {value: true, message:'Es necesario escribir el primer apellido...'}})}/>
+                                                                </div>
+
+                                                                {
+                                                                        errors.autores && errors.autores[index] && errors.autores[index].primerApellido && (                                  
+                                                                            
+                                                                            <span className="badge rounded-pill text-bg-danger">{errors.autores[index].primerApellido.message}</span>
+
+
+                                                                        )
+                                                                }
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label className="col-form-label"><strong>Segundo apellido</strong></label>
+                                                                <div className="col-sm-10">
+                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue(`autores[${index}].segundoApellido`, e.target.value, {shouldValidate: true}); handleInputChange(index,e)}} {...register(`autores[${index}].segundoApellido`)}/>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+
+                                                )
+                                                )
+
+                                            }
+
                                             <div className="col">
                                                 <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
                                                 <div className="mb-3">
@@ -529,72 +643,7 @@ function CompoEditarTrabajos({idDetalle}){
 
                                             </div>
                                             
-                                            <div className="col">
-                                                <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
-                                                <div className="mb-3">
-                                                        <label className="col-form-label"><strong>Carnet</strong></label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue('Carnet', e.target.value, {shouldValidate: true}); setCarnet(e.target.value)}} {...register("Carnet", {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
-                                                        </div>
 
-                                                        {
-                                                            errors.Carnet && (                                  
-                                                                
-                                                                <span className="badge rounded-pill text-bg-danger">{errors.Carnet.message}</span>
-
-
-                                                            )
-                                                        }
-                                                </div>                                                
-                                                <div className="mb-3">
-                                                        <label className="col-form-label"><strong>Primer nombre</strong></label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue('primerNombre', e.target.value, {shouldValidate: true}); setPrimernombre(e.target.value)}} {...register("primerNombre", {required: {value: true, message:'Es necesario escribir el primer nombre...'}})} />
-                                                        </div>
-
-                                                        {
-                                                            errors.primerNombre && (                                  
-                                                                
-                                                                <span className="badge rounded-pill text-bg-danger">{errors.primerNombre.message}</span>
-
-
-                                                            )
-                                                        }
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label className="col-form-label"><strong>Segundo nombre</strong></label>
-                                                    <div className="col-sm-10">
-                                                        <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue('segundoNombre', e.target.value, {shouldValidate: true}); setSegundonombre(e.target.value)}} {...register("segundoNombre")}/>
-                                                    </div>
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label className="col-form-label"><strong>Tercer nombre</strong></label>
-                                                    <div className="col-sm-10">
-                                                        <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue('tercerNombre', e.target.value, {shouldValidate: true}); setTercerNombre(e.target.value)}} {...register("tercerNombre")}/>
-                                                    </div>
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label className="col-form-label"><strong>Primer apellido</strong></label>
-                                                    <div className="col-sm-10">
-                                                        <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue('primerApellido', e.target.value, {shouldValidate: true});setPrimerapellido(e.target.value)}} {...register("primerApellido", {required: {value: true, message:'Es necesario escribir el primer apellido...'}})}/>
-                                                    </div>
-
-                                                    {
-                                                            errors.primerApellido && (                                  
-                                                                
-                                                                <span className="badge rounded-pill text-bg-danger">{errors.primerApellido.message}</span>
-
-
-                                                            )
-                                                    }
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label className="col-form-label"><strong>Segundo apellido</strong></label>
-                                                    <div className="col-sm-10">
-                                                        <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue('segundoApellido', e.target.value, {shouldValidate: true}); setSegundoapellido(e.target.value)}} {...register("segundoApellido")}/>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             <div className="col">
                                                 <embed className="mt-4" src={!file?url:(URL.createObjectURL(file))} type="application/pdf"  width="100%" height="300px"  />

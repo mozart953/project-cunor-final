@@ -21,7 +21,12 @@ export async function GET(request){
                 categoria:true,
                 archivo:true,
                 carrera:true,
-                autor: true,
+                //autor: true,
+                autores:{
+                    include:{
+                        autor:true
+                    }
+                }, 
                 usuario:true,
 
             }
