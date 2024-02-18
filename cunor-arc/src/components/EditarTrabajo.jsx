@@ -116,7 +116,7 @@ function CompoEditarTrabajos({idDetalle}){
                     setValue(`autores[${index}].segundoNombre`, autor.segundoNombre);
                     setValue(`autores[${index}].tercerNombre`, autor.tercerNombre);
                     setValue(`autores[${index}].primerApellido`, autor.primerApellido);
-                    setValue(`autores[${index}]segundoApellido`, autor.segundoApellido);
+                    setValue(`autores[${index}].segundoApellido`, autor.segundoApellido);
                     setValue(`autores[${index}].Carnet`, autor.Carnet);
 
                 }
@@ -184,9 +184,9 @@ function CompoEditarTrabajos({idDetalle}){
     useEffect(()=>{
         const actualizarDatos= async ()=>{
 
-            if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null && idautor!==null && idtrabajo!==null){
+            if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null && autores.length!==0 && idtrabajo!==null){
                 console.log("viendo datos" +JSON.stringify(data1));
-                console.log(tamanio + " " + " " +barraprogreso + " " + url+  " " + idautor + " "+ idtrabajo );
+                //console.log(tamanio + " " + " " +barraprogreso + " " + url+  " " + idautor + " "+ idtrabajo );
 
                 try{
 
@@ -208,23 +208,29 @@ function CompoEditarTrabajos({idDetalle}){
                     console.log(datos1);
                     setControl1(true);
 
-            
-                    const respuesta2 = await fetch(`/api/datos/reAutor/${idautor}`,{
-                        method:'PUT',
-                        body: JSON.stringify({
-                            primerNombre: data1.primerNombre,
-                            segundoNombre: data1.segundoNombre,
-                            tercerNombre: data1.tercerNombre,
-                            primerApellido: data1.primerApellido,
-                            segundoApellido: data1.segundoApellido,
-                            carnet:data1.Carnet,
-                        }),
-                        headers:{
-                            'Content-Type':'application/json',
-                        }
-                    });
-                    const datos2 = await respuesta2.json();
-                    console.log(datos2);
+                    for(let i=0;i< data1.autores.length;i++){
+                        let idAutor = autores[i].ID_Autor;
+                        console.log("el id del autor es> " + idAutor);
+
+                        const respuesta2 = await fetch(`/api/datos/reAutor/${idAutor}`,{
+                            method:'PUT',
+                            body: JSON.stringify({
+                                primerNombre: data1.autores[i].primerNombre,
+                                segundoNombre: data1.autores[i].segundoNombre,
+                                tercerNombre: data1.autores[i].tercerNombre,
+                                primerApellido: data1.autores[i].primerApellido,
+                                segundoApellido: data1.autores[i].segundoApellido,
+                                carnet:data1.autores[i].Carnet,
+                            }),
+                            headers:{
+                                'Content-Type':'application/json',
+                            }
+                        });
+                        const datos2 = await respuesta2.json();
+                        console.log(datos2);
+
+                    }
+
                     setControl2(true);        
 
                 }catch(error){
@@ -241,7 +247,7 @@ function CompoEditarTrabajos({idDetalle}){
         };
         actualizarDatos();    
 
-    },[tamanio,barraprogreso, url, data1, idautor, idtrabajo]);
+    },[tamanio,barraprogreso, url, data1, autores, idtrabajo]);
 
     useEffect(()=>{
         if(control1 && control2){
@@ -427,8 +433,29 @@ function CompoEditarTrabajos({idDetalle}){
         const values = [...autores];
         values[index][event.target.name] = event.target.value;
         setAutores(values);
+        //setValue(`autores[${index}].Carnet`, event.target.value, { shouldValidate: true });
+
         console.log(values);
     }
+
+    // const handleInputChange= (index, event)=> {
+    //     console.log("handleInputChange is triggered");
+    //     const values = [...autores];
+    //     const { name, value } = event.target;
+    //     const keys = name.split('.');
+    //     const lastKey = keys.pop();
+    //     keys.reduce((prevObj, key) => prevObj[key], values[index])[lastKey] = value;
+    //     setAutores(values);
+    //     console.log(values);
+    // };
+    // const handleInputChange= (index, event)=> {
+    //     console.log("handleInputChange is triggered");
+    //     const values = [...autores];
+    //     const { name, value } = event.target;
+    //     values[index][name] = value;
+    //     setAutores(values);
+    //     console.log(values);
+    // };
 
     function handleAddClick() {
         setAutores([...autores, { Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
@@ -483,7 +510,7 @@ function CompoEditarTrabajos({idDetalle}){
                                                             <div className="mb-3">
                                                                     <label className="col-form-label"><strong>Carnet</strong></label>
                                                                     <div className="col-sm-10">
-                                                                        <input type="text" className="form-control text-white bg-dark"  onChange={(e)=>{setValue(`autores[${index}].Carnet`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].Carnet`, {required: {value: true, message:'Es necesario escribir el número de carnet...'}})} />
+                                                                        <input type="number"   className="form-control text-white bg-dark"  onChange={(e)=>{setValue(`autores[${index}].Carnet`, e.target.value, {shouldValidate: true}); handleInputChange(index, e)}} {...register(`autores[${index}].Carnet`, {required: {value: true, message:'Es necesario escribir el número de carnet...'}})}  />
                                                                     </div>
 
                                                                     {
@@ -540,7 +567,7 @@ function CompoEditarTrabajos({idDetalle}){
                                                             <div className="mb-3">
                                                                 <label className="col-form-label"><strong>Segundo apellido</strong></label>
                                                                 <div className="col-sm-10">
-                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(e)=>{setValue(`autores[${index}].segundoApellido`, e.target.value, {shouldValidate: true}); handleInputChange(index,e)}} {...register(`autores[${index}].segundoApellido`)}/>
+                                                                    <input type="text" className="form-control text-white bg-dark" onChange={(event)=>{setValue(`autores[${index}].segundoApellido`, event.target.value, {shouldValidate: true}); handleInputChange(index,event)}} {...register(`autores[${index}].segundoApellido`)}/>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -549,6 +576,10 @@ function CompoEditarTrabajos({idDetalle}){
                                                 )
 
                                             }
+
+                                            <div className="d-flex justify-content-center align-items-center mb-4">
+                                                <button type="button" className="btn btn-primary" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> <strong>Agregar autor</strong></button>
+                                            </div>
 
                                             <div className="col">
                                                 <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
