@@ -17,7 +17,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [idusuario, setIdusuario] = useState(null);
     const [datostrabajo, setDatostrabajo] = useState({});
 
-    const {register, handleSubmit, setValue, formState:{errors}} = useForm(); 
+    const {register, handleSubmit, setValue, unregister, formState:{errors}} = useForm(); 
     const [tamanio, setTamanio] = useState(0);
     const [data1, setData1] = useState(null);
     const [barraprogreso, setBarraprogreso] = useState("0%");
@@ -28,6 +28,7 @@ function CompoEditarTrabajos({idDetalle}){
 
     const [control1, setControl1] = useState(false);
     const [control2, setControl2] = useState(false);
+    const [control3, setControl3] = useState(false);
 
     //autor
     const [idautor, setIdautor] = useState(null);
@@ -105,7 +106,7 @@ function CompoEditarTrabajos({idDetalle}){
 
 
     useEffect(()=>{
-        if(datostrabajo && autores.length!==0){
+        if(datostrabajo && autores.length!==0 && !control3){
             setValue('titulo', titulo);
             setValue('cantidadPaginas',cantidadpaginas);
             setValue('descripcion', descripcion);
@@ -125,7 +126,7 @@ function CompoEditarTrabajos({idDetalle}){
 
             setValue('palabrasCla', palcl);
         }
-    },[datostrabajo, autores]);
+    },[datostrabajo, autores, control3]);
 
 
     useEffect(()=>{
@@ -212,22 +213,59 @@ function CompoEditarTrabajos({idDetalle}){
                         let idAutor = autores[i].ID_Autor;
                         console.log("el id del autor es> " + idAutor);
 
-                        const respuesta2 = await fetch(`/api/datos/reAutor/${idAutor}`,{
-                            method:'PUT',
-                            body: JSON.stringify({
-                                primerNombre: data1.autores[i].primerNombre,
-                                segundoNombre: data1.autores[i].segundoNombre,
-                                tercerNombre: data1.autores[i].tercerNombre,
-                                primerApellido: data1.autores[i].primerApellido,
-                                segundoApellido: data1.autores[i].segundoApellido,
-                                carnet:data1.autores[i].Carnet,
-                            }),
-                            headers:{
-                                'Content-Type':'application/json',
-                            }
-                        });
-                        const datos2 = await respuesta2.json();
-                        console.log(datos2);
+                        if(idAutor!==undefined && idAutor!==''){
+                            
+                            const respuesta2 = await fetch(`/api/datos/reAutor/${idAutor}`,{
+                                method:'PUT',
+                                body: JSON.stringify({
+                                    primerNombre: data1.autores[i].primerNombre,
+                                    segundoNombre: data1.autores[i].segundoNombre,
+                                    tercerNombre: data1.autores[i].tercerNombre,
+                                    primerApellido: data1.autores[i].primerApellido,
+                                    segundoApellido: data1.autores[i].segundoApellido,
+                                    carnet:data1.autores[i].Carnet,
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            const datos2 = await respuesta2.json();
+                            console.log(datos2);
+
+                        }else{
+                            const respuesta2 = await fetch('/api/datos/reAutor',{
+                                method:'POST',
+                                body: JSON.stringify({
+                                    primerNombre: data1.autores[i].primerNombre,
+                                    segundoNombre: data1.autores[i].segundoNombre,
+                                    tercerNombre: data1.autores[i].tercerNombre,
+                                    primerApellido: data1.autores[i].primerApellido,
+                                    segundoApellido: data1.autores[i].segundoApellido,
+                                    carnet:data1.autores[i].Carnet,
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            
+                            const dato2= await respuesta2.json();
+                            console.log(dato2);
+
+                            const respuesta4 = await fetch('/api/datos/reEnlaceAutorRegistro', {
+                                method:'POST',                            
+                                body:JSON.stringify({
+                                    ID_Autor:dato2.ID_Autor,
+                                    ID_Detalle:Number(idDetalle),
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            const dato4 = await respuesta4.json();
+                            console.log(dato4);
+
+                        }
+
 
                     }
 
@@ -458,13 +496,25 @@ function CompoEditarTrabajos({idDetalle}){
     // };
 
     function handleAddClick() {
-        setAutores([...autores, { Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
+        setControl3(true);
+        setAutores([...autores, { ID_Autor:'',Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
+        console.log(autores);
     }
       
     function handleRemoveClick(index) {
+        setControl3(true);
         const values = [...autores];
         values.splice(index, 1);
         setAutores(values);
+        console.log(autores);
+        console.log("index> " + index);
+
+        unregister(`autores[${index}].primerNombre`);
+        unregister(`autores[${index}].segundoNombre`);
+        unregister(`autores[${index}].tercerNombre`);
+        unregister(`autores[${index}].primerApellido`);
+        unregister(`autores[${index}].segundoApellido`);
+        unregister(`autores[${index}].Carnet`);
     }
 
 
@@ -570,6 +620,18 @@ function CompoEditarTrabajos({idDetalle}){
                                                                     <input type="text" className="form-control text-white bg-dark" onChange={(event)=>{setValue(`autores[${index}].segundoApellido`, event.target.value, {shouldValidate: true}); handleInputChange(index,event)}} {...register(`autores[${index}].segundoApellido`)}/>
                                                                 </div>
                                                             </div>
+                                                            
+                                                                {
+                                                                    !autor.ID_Autor&&(
+                                                                        <div className="mt-4">
+                                                                        <button type="button" className="btn btn-danger btn-sm align-middle" onClick={() => handleRemoveClick(index)} disabled={index !== autores.length - 1}><strong><i className="bi bi-trash3"></i> Eliminar</strong></button>
+                            
+                                                                        </div>
+
+                                                                    )
+                                                                }
+
+
                                                     </div>
 
                                                 )
@@ -713,7 +775,7 @@ function CompoEditarTrabajos({idDetalle}){
                                                                                                                                       
 
 
-                                                <button className="btn btn-success mt-4 w-100">Actualizar datos</button>
+                                                <button className="btn btn-success mt-4 w-100"><strong>Actualizar datos</strong></button>
                                             </div>
 
                                         </div>
