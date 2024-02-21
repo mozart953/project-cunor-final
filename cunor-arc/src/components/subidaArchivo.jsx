@@ -474,7 +474,7 @@ function SubaArchivoPage(){
                                         {
                                             index!==0&&(
                                                 <div className="mt-4">
-                                                <button type="button" className="btn btn-danger btn-sm align-middle" onClick={() => handleRemoveClick(index)}><strong><i className="bi bi-trash3"></i> Eliminar</strong></button>
+                                                <button type="button" className="btn btn-danger btn-sm align-middle" onClick={() => handleRemoveClick(index)} disabled={index !==autores.length-1}><strong><i className="bi bi-trash3"></i> Eliminar</strong></button>
     
                                                 </div>
 

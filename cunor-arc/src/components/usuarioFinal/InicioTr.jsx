@@ -326,23 +326,57 @@ function CompoInicioTr(){
         }
     }
 
-    function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
-        let nombres = primernombre.charAt(0) + ".";
-            if(segundonombre !== ""){
-                nombres += segundonombre.charAt(0) + ".";
-            }
-            if(tercernombre !== ""){
-                nombres += tercernombre.charAt(0) + ".";
-            }
+    // function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
+    //     let nombres = primernombre.charAt(0) + ".";
+    //         if(segundonombre !== ""){
+    //             nombres += segundonombre.charAt(0) + ".";
+    //         }
+    //         if(tercernombre !== ""){
+    //             nombres += tercernombre.charAt(0) + ".";
+    //         }
 
-            let apellidos = primerapellido;
-            if(segundoapellido !== ""){
-                apellidos += " " + segundoapellido;
-            }
+    //         let apellidos = primerapellido;
+    //         if(segundoapellido !== ""){
+    //             apellidos += " " + segundoapellido;
+    //         }
 
-            return apellidos + ", " + nombres + " (" + new Date(anio).getFullYear() + "). " + titulo;       
+    //         return apellidos + ", " + nombres + " (" + new Date(anio).getFullYear() + "). " + titulo;       
                 
 
+    // }
+    function formatoApa(autores, anio, titulo){
+        //console.log(autores);
+        let referencia = "";
+    
+        for(let i = 0; i < autores.length; i++){
+            // Si no es el primer autor y es el último, añade "&"
+            if(i > 0 && i === autores.length - 1){
+                referencia += "& ";
+            }
+    
+            let nombres = autores[i].autor.primerNombre.charAt(0) + ".";
+            if(autores[i].autor.segundoNombre !== ""){
+                nombres += autores[i].autor.segundoNombre.charAt(0) + ".";
+            }
+            if(autores[i].autor.tercerNombre !== ""){
+                nombres += autores[i].autor.tercerNombre.charAt(0) + ".";
+            }
+    
+            let apellidos = autores[i].autor.primerApellido;
+            if(autores[i].autor.segundoApellido !== ""){
+                apellidos += " " + autores[i].autor.segundoApellido;
+            }
+    
+            referencia += apellidos + ", " + nombres;
+    
+            if(i < autores.length - 1){
+                referencia += ", ";
+            }
+        }
+    
+        referencia += " (" + new Date(anio).getFullYear() + "). " + titulo;
+    
+        return referencia;
     }
 
     // const filtro = (patron)=>{
@@ -636,7 +670,7 @@ function CompoInicioTr(){
                                     {
                                         modalShow===data.ID_Detalle &&(<MyVerticallyCenteredModal show={true} onHide={()=>setModalShow(null)} 
                                         title={"Referencia"} formato={"APA"} 
-                                        general={formatoApa(data.autor.primerNombre, data.autor.segundoNombre, data.autor.tercerNombre, data.autor.primerApellido, data.autor.segundoApellido, data.fechaCarga, data.trabajoGrad.titulo)}
+                                        general={formatoApa(data.autores, data.fechaCarga, data.trabajoGrad.titulo)}
                                         mensaje={"Esta es una referencia autogenerada con la información disponible en el registro, puede estar incompleta o contener datos erroneos. La identación o formato se puede perder al copiar y pegar."}/>)
 
 
