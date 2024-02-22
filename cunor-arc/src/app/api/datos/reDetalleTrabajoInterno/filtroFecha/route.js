@@ -56,7 +56,11 @@ export async function GET(request){
             where:whereClause,
         });
 
-        const orderBy = buildOrderBy(ordenCampo, orderDirection);
+        let orderBy={};
+
+        if(ordenCampo !== 'autor.primerNombre'){
+             orderBy = buildOrderBy(ordenCampo, orderDirection);
+        }
         
         // if (page > 1) {
         //     const lastItemFromPreviousPage = await db.registroTrabajoGraduacion.findFirst({
@@ -88,6 +92,19 @@ export async function GET(request){
                 orderBy:orderBy,
             }
         )
+
+        if (ordenCampo === 'autor.primerNombre') {
+            detalles.sort((a, b) => {
+                const primerNombreA = a.autores[0]?.autor?.primerNombre || '';
+                const primerNombreB = b.autores[0]?.autor?.primerNombre || '';
+    
+                if (orderDirection === 'asc') {
+                    return primerNombreA.localeCompare(primerNombreB);
+                } else {
+                    return primerNombreB.localeCompare(primerNombreA);
+                }
+            });
+        }
 
         return NextResponse.json({items:detalles, total:totalItems});
 
