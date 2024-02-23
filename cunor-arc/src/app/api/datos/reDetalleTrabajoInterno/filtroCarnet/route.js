@@ -44,7 +44,7 @@ export async function GET(request){
 
         let orderBy={};
 
-        if(ordenCampo !== 'autor.primerNombre'){
+        if(ordenCampo !== 'autor.primerNombre' && ordenCampo!=='autor.carnet'){
              orderBy = buildOrderBy(ordenCampo, orderDirection);
         }
 
@@ -79,6 +79,19 @@ export async function GET(request){
                     return primerNombreA.localeCompare(primerNombreB);
                 } else {
                     return primerNombreB.localeCompare(primerNombreA);
+                }
+            });
+        }
+
+        if (ordenCampo === 'autor.carnet') {
+            detalles.sort((a, b) => {
+                const primerCarneA = a.autores[0]?.autor?.carnet || '';
+                const primerCarneB = b.autores[0]?.autor?.carnet || '';
+    
+                if (orderDirection === 'asc') {
+                    return primerCarneA.localeCompare(primerCarneB);
+                } else {
+                    return primerCarneB.localeCompare(primerCarneA);
                 }
             });
         }
