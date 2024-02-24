@@ -44,7 +44,8 @@ function CompoInicioTr(){
                          {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
                          {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
                          {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
-                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'},
+                         {id:6, ord:'Carnet', ordBase:'autor.carnet'},];
     
     const [modalShow, setModalShow] = useState(null);
     const [showPDF, setShowPDF] = useState(null);
