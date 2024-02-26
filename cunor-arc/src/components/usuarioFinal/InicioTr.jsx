@@ -596,10 +596,21 @@ function CompoInicioTr(){
                                 {/* <div className="card-header">
                                      <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                 </div> */}
+                                            {
+                                                data.autores.length!==1?(
+                                                    <div className="card-header">
+                                                        <strong>Autores:</strong>{" "}
+                                                    </div>
+                                                ):(
+                                                    <div className="card-header">
+                                                        <strong>Autor:</strong>{" "}
+                                                    </div>
+                                                )
+                                            }
                                            
                                            {data.autores.map((autorData) => (
                                                 <div className="card-header" key={autorData.ID_Autor}>
-                                                <strong>Autor:</strong>{" "}
+                                                {/* <strong>Autor:</strong>{" "} */}
                                                 {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
                                                 - <strong>No. de carnet:</strong>
                                                 {autorData.autor.carnet}

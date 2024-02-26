@@ -667,9 +667,21 @@ function CompoListarArchivosPage(){
                                             - <strong>No. de carnet:</strong>{data.autores.autor.carnet}
                                         </div> */}
 
+                                        {
+                                            data.autores.length!==1?(
+                                                <div className="card-header">
+                                                    <strong>Autores:</strong>{" "}
+                                                </div>
+                                            ):(
+                                                <div className="card-header">
+                                                    <strong>Autor:</strong>{" "}
+                                                </div>
+                                            )
+                                        }
+
                                         {data.autores.map((autorData) => (
                                                 <div className="card-header" key={autorData.ID_Autor}>
-                                                <strong>Autor:</strong>{" "}
+                                                {/* <strong>Autor:</strong>{" "} */}
                                                 {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
                                                 - <strong>No. de carnet:</strong>
                                                 {autorData.autor.carnet}
