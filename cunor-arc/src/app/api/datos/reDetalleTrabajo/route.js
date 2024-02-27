@@ -22,7 +22,7 @@ export async function POST(request){
             data:{
                 ID_trabajo:Number(datos.ID_trabajo),
                 ID_categoria: Number(datos.ID_categoria),
-                ID_archivo: Number(datos.ID_archivo),
+                ID_formato: Number(datos.ID_formato),
                 ID_carrera: Number(datos.ID_carrera),
                 //ID_autor: Number(datos.ID_autor),
                 ID_usuario: Number(datos.ID_usuario),
@@ -108,7 +108,7 @@ export async function GET(request){
                 include:{
                     trabajoGrad:true,
                     categoria:true,
-                    archivo:true,
+                    formato:true,
                     carrera:true,
                     //autor: true,
                     usuario:true,

@@ -134,7 +134,7 @@ function SubaArchivoPage(){
                         body:JSON.stringify({
                             ID_trabajo: Number(idtrabajo),
                             ID_categoria:Number(idcategoria),
-                            ID_archivo: 1,
+                            ID_formato: 1,
                             ID_carrera: Number(idcarrera),
                             //ID_autor: Number(idautor),
                             ID_usuario: Number(idusuario),

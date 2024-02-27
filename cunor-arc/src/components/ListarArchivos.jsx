@@ -722,7 +722,7 @@ function CompoListarArchivosPage(){
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
-                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>

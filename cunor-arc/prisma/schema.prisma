@@ -96,9 +96,9 @@ model TrabajoGraduacion{
   registroTrabajograd registroTrabajoGraduacion[]
 }
 
-model Archivo{
-  ID_Archivo Int @id @default(autoincrement())
-  formato String
+model Formato{
+  ID_Formato Int @id @default(autoincrement())
+  nombreFormato String
   registroTrabajograd registroTrabajoGraduacion[]
 }
 
@@ -122,12 +122,13 @@ model Autor{
 model registroTrabajoGraduacion{
   ID_Detalle Int @id @default(autoincrement())
   fechaCarga DateTime @default(now())
+  fechaActualizacion DateTime @default(now())
   trabajoGrad TrabajoGraduacion  @relation(fields: [ID_trabajo], references: [ID_Trabajo])
   ID_trabajo Int
   categoria Categoria  @relation(fields: [ID_categoria], references: [ID_Categoria])
   ID_categoria Int
-  archivo Archivo  @relation(fields: [ID_archivo], references: [ID_Archivo])
-  ID_archivo Int
+  formato Formato  @relation(fields: [ID_formato], references: [ID_Formato])
+  ID_formato Int
   carrera Carrera  @relation(fields: [ID_carrera], references: [ID_Carrera])
   ID_carrera Int
   // autor Autor  @relation(fields: [ID_autor], references: [ID_Autor])
@@ -137,6 +138,7 @@ model registroTrabajoGraduacion{
   estado estadoTrabajoGraduacion  @relation(fields: [ID_estado], references: [ID_Estado])
   ID_estado Int
   autores EnlaceTrabajoAutor[]
+  archivoAnexo ArchivoAnexo[]
 
 }
 
@@ -146,4 +148,11 @@ model EnlaceTrabajoAutor{
   autor Autor @relation(fields: [ID_Autor], references: [ID_Autor])
   registroTrabajoGraduacion registroTrabajoGraduacion @relation(fields: [ID_Detalle], references: [ID_Detalle])
   @@id([ID_Autor, ID_Detalle])
+}
+
+model ArchivoAnexo{
+  ID_Archivo Int @id @default(autoincrement())
+  direccionGuardado String
+  registroTrabajoGraduacion registroTrabajoGraduacion @relation(fields: [ID_detalle], references: [ID_Detalle])
+  ID_detalle Int
 }
