@@ -53,7 +53,7 @@ export async function GET(request){
                 include:{
                     trabajoGrad:true,
                     categoria:true,
-                    archivo:true,
+                    formato:true,
                     carrera:true,
                     //autor: true,
                     autores: {
