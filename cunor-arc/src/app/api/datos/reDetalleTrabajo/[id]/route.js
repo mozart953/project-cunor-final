@@ -11,6 +11,7 @@ export async function PUT(request,{params}){
             },
             data:{
                 ID_categoria: Number(datos.ID_categoria),
+                fechaActualizacion: datos.fechaActualizacion,
 
             }
         }

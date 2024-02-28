@@ -291,11 +291,13 @@ function CompoEditarTrabajos({idDetalle}){
         if(control1 && control2){
             setBarraprogreso('0%');
             try{
+                let fechaActualizacion = new Date().toISOString();
 
                 fetch(`/api/datos/reDetalleTrabajo/${idDetalle}`,{
                     method:'PUT',
                     body:JSON.stringify({
-                        ID_categoria:Number(idcategoria),                        
+                        ID_categoria:Number(idcategoria),
+                        fechaActualizacion:fechaActualizacion,                        
     
                     }),
                     headers:{

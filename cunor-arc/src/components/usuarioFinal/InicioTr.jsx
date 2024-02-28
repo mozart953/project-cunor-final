@@ -660,6 +660,13 @@ function CompoInicioTr(){
                                             </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Última fecha de actualización:</strong></h6>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                {new Date(data.fechaActualizacion).getDate()}/{new Date(data.fechaActualizacion).getMonth()+1}/{new Date(data.fechaActualizacion).getFullYear()}
+                                                 - {new Date(data.fechaActualizacion).getHours()}:{new Date(data.fechaActualizacion).getMinutes()<10?'0'+new Date(data.fechaActualizacion).getMinutes():new Date(data.fechaActualizacion).getMinutes()}:{new Date(data.fechaActualizacion).getSeconds()}
+                                            </p>
+                                        </div>
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>URL:</strong></h6>
                                             <h6 className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                <a href={data.trabajoGrad.direccionGuardado}>{data.trabajoGrad.titulo}</a>  
