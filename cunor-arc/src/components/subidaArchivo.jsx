@@ -12,6 +12,8 @@ function SubaArchivoPage(){
     const {register, handleSubmit, setValue, formState:{errors}} = useForm(); 
     const [datosg, setUsuario1] = useLog2(null);
     const [file, setFile] = useState(null);
+    const [files, setFiles] = useState(null);
+    const [urlfiles, setUrlfiles] = useState("");
     const [url, setUrl] = useState("");
     const [nombreusuario, setNombreusuario] = useState("");
     const [carrera, setCarrera] = useState("");
@@ -22,6 +24,7 @@ function SubaArchivoPage(){
     const [thirdname, setThirdname] = useState("");
     const [secondlastname, setSecondlastname] = useState("");
     const [barraprogreso, setBarraprogreso] = useState("0%");
+    const [barraprogreso2, setBarraprogreso2] = useState("0%");
     const [idtrabajo, setIdtrabajo] = useState(null);
     const [idautor, setIdautor] = useState(null);
     const [idusuario, setIdusuario] = useState(null);
@@ -184,6 +187,23 @@ function SubaArchivoPage(){
 
                     }
 
+                    if(urlfiles!==''){
+                        setBarraprogreso2('0%');
+                        const respuesta5 = await fetch('/api/datos/reArchivoAnexo',{
+                            method:'POST',
+                            body:JSON.stringify({
+                                direccionGuardado:urlfiles,
+                                ID_detalle:dato3.ID_Detalle,
+                            }),
+                            headers:{
+                                'Content-Type':'application/json',
+                            }
+
+                        });
+                        const dato5 = await respuesta5.json();
+                        console.log(dato5);
+                    }
+
                     setControl(true);
 
 
@@ -201,7 +221,7 @@ function SubaArchivoPage(){
         actualizarDetalle();
         
 
-    },[idtrabajo, idusuario, autores3]);
+    },[idtrabajo, idusuario, autores3, urlfiles]);
 
 
     useEffect(()=>{
@@ -270,6 +290,10 @@ function SubaArchivoPage(){
 
         if(!expresion.test(data.cantidadPaginas)){
             alert("Escriba un número en el numero de paginas");
+        }
+
+        if(files!==null && file!==null){
+            cargarArchivos();
         }
 
         if(file!==null){
@@ -369,6 +393,63 @@ function SubaArchivoPage(){
         setAutores(values);
     }
 
+    function cargarArchivos(){
+        const tiempoHoy = Date.now();
+        //const nombreArchivo = file.name.split('.').slice(0, -1).join('.');
+        const nombreCompletoArchivo = tiempoHoy + "_archivo";    
+
+        const fileref = ref(analytics, `newfiles/${nombreCompletoArchivo}`);
+        //si ocurre un error, descomentar el codigo siguiente
+        // uploadBytes(fileref, file).then((data)=>{
+        //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
+        // })
+
+        const uploadTask = uploadBytesResumable(fileref,files);
+
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                setBarraprogreso2(progress+'%');
+                switch (snapshot.state) {
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
+                }
+            }, 
+            (error) => {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+                case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+
+                // ...
+
+                case 'storage/unknown':
+                    // Unknown error occurred, inspect error.serverResponse
+                    break;
+                }
+            }, 
+            () => {
+                // Upload completed successfully, now we can get the download URL
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    setUrlfiles(downloadURL);
+                  });
+              
+            }
+            );
+    }
+
     return(
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
@@ -380,6 +461,18 @@ function SubaArchivoPage(){
 
 
             <div className="text-white mt-4">
+                        <div className="mb-3" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'black', width:'80%', margin:'0 auto'}}>
+                            <div className="progress" role="progressbar" aria-label="Warning example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'95%', margin:'0 auto'}}>
+                                <div className="progress-bar bg-warning" style={{width: barraprogreso2}}></div>
+                            </div> 
+                            {
+                                barraprogreso2=='100%' &&(
+                                    <div>
+                                        <img src="/images/icono-verde.jpg" alt="" style={{width:'25px'}}/>
+                                    </div>
+                                )
+                            }
+                        </div>
                         <div className="mb-3" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'black', width:'80%', margin:'0 auto'}}>
                             <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'95%', margin:'0 auto'}}>
                                 <div className="progress-bar" style={{width: barraprogreso}}></div>
@@ -610,6 +703,24 @@ function SubaArchivoPage(){
 
 
                             <button className="btn btn-success mt-4 w-100"><strong>Cargar datos</strong></button>
+                        </div>
+
+                        <div className="d-flex flex-row">
+                            <div className="col">
+                                <legend className="text-center mb-4"><strong>Subir archivo anexo - opcional</strong></legend>
+                                <div className="input-group mb-3">
+                                    <input type="file" className="form-control text-white bg-dark" id="ArchivoAnexo" accept=".pdf" onChange={(e)=>{setFiles(e.target.files[0])}}/>
+                                </div>
+
+                                {
+                                    files &&(
+                                        <embed src={URL.createObjectURL(files)} type="application/pdf"  width="100%" height="300px"  />
+                                        
+                                    )
+
+                                }
+                            </div>
+
                         </div>
 
                     </div>
