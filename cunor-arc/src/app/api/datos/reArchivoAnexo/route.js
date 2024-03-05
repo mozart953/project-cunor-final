@@ -9,7 +9,7 @@ export async function POST(request){
             {
                 data:{
                     direccionGuardado:datos.direccionGuardado,
-                    ID_detalle:datos.ID_detalle,
+                    ID_detalle:Number(datos.ID_detalle),
                 }   
             }
         )
@@ -17,7 +17,7 @@ export async function POST(request){
         return NextResponse.json(datoArc);
 
     }catch(error){
-        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
+        return NextResponse.json({message: "Ha ocurrido un error inesperado." + error},{status:500});
     }
 
 
