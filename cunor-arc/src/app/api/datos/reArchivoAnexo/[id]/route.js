@@ -1,22 +1,25 @@
 import { NextResponse } from "next/server";
 import db from "@/libs/db";
 
-export async function POST(request){
+export async function PUT(request, {params}){
     const datos = await request.json();
 
     try{
-        const datoArc = await db.archivoAnexo.create(
+        const archivoAnexo = await db.archivoAnexo.update(
             {
+                where:{
+                    ID_Archivo: Number(params.id),
+                },
                 data:{
                     direccionGuardado:datos.direccionGuardado,
-                    ID_detalle:datos.ID_detalle,
-                }   
+                }
             }
         )
     
-        return NextResponse.json(datoArc);
+        return NextResponse.json(archivoAnexo);
 
-    }catch(error){
+    }
+    catch(error){
         return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
     }
 

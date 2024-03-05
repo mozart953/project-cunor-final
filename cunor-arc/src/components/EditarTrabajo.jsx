@@ -49,6 +49,10 @@ function CompoEditarTrabajos({idDetalle}){
     const [palcl, setPalcl] = useState("");
 
     const [ocultar, setOcultar] = useState(true);
+    const [archivosanexos, setArchivosanexos] = useState([]);
+    const [files, setFiles] = useState(null);
+    const [urlfiles, setUrlfiles] = useState("");
+    const [barraprogreso2, setBarraprogreso2] = useState("0%");
     const [eliminado, setEliminado] = useState(false);
     const [interruptor, setInterruptor] = useState(false);
             
@@ -165,6 +169,8 @@ function CompoEditarTrabajos({idDetalle}){
                 setPalcl(datos.trabajoGrad.paClave);
 
                 setIdcategoria(datos.categoria.ID_Categoria); 
+                setArchivosanexos(datos.archivoAnexo);
+                console.log(datos.archivoAnexo);
             });
         }
     },[idcarrera1, iduser1]);
@@ -269,6 +275,39 @@ function CompoEditarTrabajos({idDetalle}){
 
                     }
 
+                    if(urlfiles!==''){
+                        if(archivosanexos.length!==0){
+                            setBarraprogreso2('0%');
+                            const respuesta5 = await fetch(`/api/datos/reArchivoAnexo/${archivosanexos[0].ID_Archivo}`,{
+                                method:'PUT',
+                                body:JSON.stringify({
+                                    direccionGuardado:urlfiles
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            const dato5= await respuesta5.json();
+                            console.log(dato5);
+                        }
+                        else{
+                            setBarraprogreso2('0%');
+                            const respuesta5 = await fetch('/api/datos/reArchivoAnexo',{
+                                method:'POST',
+                                body:JSON.stringify({
+                                    direccionGuardado:urlfiles,
+                                    ID_detalle:idDetalle,
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+    
+                            });
+                            const dato5 = await respuesta5.json();
+                            console.log(dato5);
+                        }
+                    }
+
                     setControl2(true);        
 
                 }catch(error){
@@ -285,7 +324,7 @@ function CompoEditarTrabajos({idDetalle}){
         };
         actualizarDatos();    
 
-    },[tamanio,barraprogreso, url, data1, autores, idtrabajo]);
+    },[tamanio,barraprogreso, url, data1, autores, idtrabajo, urlfiles]);
 
     useEffect(()=>{
         if(control1 && control2){
@@ -360,6 +399,10 @@ function CompoEditarTrabajos({idDetalle}){
 
         if(!expresion.test(data.cantidadPaginas)){
             alert("Escriba un número en el numero de paginas");
+        }
+
+        if(files!==null){
+            await cargarArchivos();
         }
 
         if(file!==null){
@@ -519,6 +562,87 @@ function CompoEditarTrabajos({idDetalle}){
         unregister(`autores[${index}].Carnet`);
     }
 
+    function cargarArchivos(){
+        return new Promise((resolve)=>{
+
+            if(archivosanexos.length!==0){
+                let urldecodificada = decodeURIComponent(archivosanexos[0].direccionGuardado);
+                let inicioNombre = urldecodificada.lastIndexOf('/')+1;
+                let finNombre = urldecodificada.indexOf('?');
+                let nombre = urldecodificada.slice(inicioNombre, finNombre);
+                console.log(nombre);
+
+                const desertRef = ref(analytics, `newfiles/${nombre}`);
+
+                // Delete the file
+                deleteObject(desertRef).then(() => {
+                    console.log("Archivo eliminado")
+                }).catch((error) => {
+                    console.log("ocurrio un error: " +error);
+                });
+
+            }
+           
+        
+            const tiempoHoy = Date.now();
+            //const nombreArchivo = file.name.split('.').slice(0, -1).join('.');
+            const nombreCompletoArchivo = tiempoHoy + "_archivo";    
+
+            const fileref = ref(analytics, `newfiles/${nombreCompletoArchivo}`);
+            //si ocurre un error, descomentar el codigo siguiente
+            // uploadBytes(fileref, file).then((data)=>{
+            //     getDownloadURL(data.ref).then((url)=>{console.log(url); setUrl(url)});
+            // })
+
+            const uploadTask = uploadBytesResumable(fileref,files);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    setBarraprogreso2(progress+'%');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    // A full list of error codes is available at
+                    // https://firebase.google.com/docs/storage/web/handle-errors
+                    switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+
+                    // ...
+
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                    }
+                }, 
+                () => {
+                    // Upload completed successfully, now we can get the download URL
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        setUrlfiles(downloadURL);
+                        resolve(downloadURL);
+                    });
+                
+                }
+                );
+            }
+        );
+    }
+
 
     console.log(idDetalle);
 
@@ -536,6 +660,19 @@ function CompoEditarTrabajos({idDetalle}){
                     datostrabajo &&(
 
                         <div className="text-white mt-4">
+
+                                <div className="mb-3" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'black', width:'80%', margin:'0 auto'}}>
+                                    <div className="progress" role="progressbar" aria-label="Warning example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'95%', margin:'0 auto'}}>
+                                        <div className="progress-bar bg-warning" style={{width: barraprogreso2}}></div>
+                                    </div> 
+                                    {
+                                        barraprogreso2=='100%' &&(
+                                            <div>
+                                                <img src="/images/icono-verde.jpg" alt="" style={{width:'25px'}}/>
+                                            </div>
+                                        )
+                                    }
+                                </div>
                           
                                 <div className="mb-3" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'black', width:'80%', margin:'0 auto'}}>
                                     <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{backgroundColor:'black', width:'95%', margin:'0 auto'}}>
@@ -778,6 +915,26 @@ function CompoEditarTrabajos({idDetalle}){
 
 
                                                 <button className="btn btn-success mt-4 w-100"><strong>Actualizar datos</strong></button>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                            
+                                            <div className="col">
+                                                <legend className="text-center mb-4"><strong>Subir archivo anexo - opcional</strong></legend>
+                                                <div className="input-group mb-3">
+                                                    <input type="file" className="form-control text-white bg-dark" id="ArchivoAnexo" accept=".pdf" onChange={(e)=>{setFiles(e.target.files[0])}}/>
+                                                </div>
+
+                                                    {
+                                                         files ? (
+                                                            <embed src={URL.createObjectURL(files)} type="application/pdf"  width="100%" height="300px"  />
+                                                        ) : archivosanexos.length!==0 ? (
+                                                            <embed src={archivosanexos[0].direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
+                                                        ) : null
+
+                                                    }
+                                                </div>
+
                                             </div>
 
                                         </div>

@@ -28,6 +28,7 @@ export async function GET(request){
                     }
                 }, 
                 usuario:true,
+                archivoAnexo:true,
 
             }
         }
