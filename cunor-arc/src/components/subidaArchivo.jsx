@@ -31,6 +31,7 @@ function SubaArchivoPage(){
     const [tamanio, setTamanio] = useState(0);
     const [data1, setData1] = useState(null);
     const [control, setControl] = useState(false);
+    const [formularioenviado, setFormularioenviado] = useState(true);
     const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
     const { data: session, status } = useSession();
@@ -256,6 +257,7 @@ function SubaArchivoPage(){
     const onSubmit= handleSubmit (async (data)=>{
         console.log(data);
         console.log(autores);
+        setFormularioenviado(false);
         let autores2 = [];
         //setAutores3(autores2);
         for (let i = 0; i < autores.length; i++) {
@@ -355,6 +357,7 @@ function SubaArchivoPage(){
 
         }else{
             alert("seleccionar archivo");
+            setFormularioenviado(true);
         }
 
         // if(file!==null && barraprogreso=='100%'){
@@ -456,6 +459,13 @@ function SubaArchivoPage(){
         );
     }
 
+    function removeAnnexedField(){
+        const valor = confirm("¿Está seguro de eliminar el archivo anexo?");
+        if(valor==true){
+            setFiles(null);
+        }
+    }
+
     return(
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
@@ -491,7 +501,7 @@ function SubaArchivoPage(){
                                 )
                             }
                         </div>
-                            
+                <fieldset disabled={!formularioenviado}>            
                 <form onSubmit={onSubmit}>
                     
 
@@ -720,8 +730,15 @@ function SubaArchivoPage(){
 
                                 {
                                     files &&(
+                                        <>
+                                        <div className="mt-2 mb-2">
+                                        <button type="button" className="btn btn-danger btn-sm align-middle" onClick={() => removeAnnexedField()} ><strong><i className="bi bi-trash3"></i> Eliminar</strong></button>
+
+                                        </div>
+
                                         <embed src={URL.createObjectURL(files)} type="application/pdf"  width="100%" height="300px"  />
                                         
+                                        </>
                                     )
 
                                 }
@@ -732,6 +749,7 @@ function SubaArchivoPage(){
                     </div>
 
                 </form>
+                </fieldset>
 
                 
             {/* 

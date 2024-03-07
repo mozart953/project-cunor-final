@@ -648,6 +648,13 @@ function CompoEditarTrabajos({idDetalle}){
         );
     }
 
+    function removeAnnexedField(){
+        const valor = confirm("¿Está seguro de eliminar el archivo anexo?");
+        if(valor==true){
+            setFiles(null);
+        }
+    }
+
 
     console.log(idDetalle);
 
@@ -968,7 +975,13 @@ function CompoEditarTrabajos({idDetalle}){
 
                                                     {
                                                          files ? (
+                                                            <>
+                                                            <div className="mt-2 mb-2">
+                                                            <button type="button" className="btn btn-danger btn-sm align-middle" onClick={() => removeAnnexedField()} ><strong><i className="bi bi-trash3"></i> Eliminar</strong></button>
+                    
+                                                            </div>
                                                             <embed src={URL.createObjectURL(files)} type="application/pdf"  width="100%" height="300px"  />
+                                                            </>
                                                         ) : archivosanexos.length!==0 ? (
                                                             <embed src={archivosanexos[0].direccionGuardado} type="application/pdf"  width="100%" height="300px"  />
                                                         ) : null
