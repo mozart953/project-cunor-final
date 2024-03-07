@@ -49,6 +49,8 @@ function CompoEditarTrabajos({idDetalle}){
     const [palcl, setPalcl] = useState("");
 
     const [ocultar, setOcultar] = useState(true);
+    const [ocultarx, setOcultarx] = useState(true);
+    const [formularioenviado, setFormularioenviado] = useState(true);
     const [archivosanexos, setArchivosanexos] = useState([]);
     const [files, setFiles] = useState(null);
     const [urlfiles, setUrlfiles] = useState("");
@@ -394,6 +396,7 @@ function CompoEditarTrabajos({idDetalle}){
 
         console.log(file);
         
+        setFormularioenviado(false);
 
         const expresion = /^[0-9]+$/;
 
@@ -483,12 +486,14 @@ function CompoEditarTrabajos({idDetalle}){
             
 
         }else{
-            alert("seleccionar archivo");
+            alert("Seleccionar archivo de trabajo de graduación");
             const valor = confirm("¿Desea conservar el mismo archivo?");
             console.log(valor);
             //setInterruptor(valor);
             if(valor==true){
                 setBarraprogreso('100%');
+            }else{
+                setFormularioenviado(true);
             }
 
         }
@@ -686,7 +691,7 @@ function CompoEditarTrabajos({idDetalle}){
                                         )
                                     }
                                 </div>
-
+                                <fieldset disabled={!formularioenviado}>
                                 <form onSubmit={onSubmit}>
                                         
                                         <div className="row bg-secondary rounded" style={{width: '95%', margin: '0 auto'}}>
@@ -921,9 +926,45 @@ function CompoEditarTrabajos({idDetalle}){
                             
                                             <div className="col">
                                                 <legend className="text-center mb-4"><strong>Subir archivo anexo - opcional</strong></legend>
-                                                <div className="input-group mb-3">
-                                                    <input type="file" className="form-control text-white bg-dark" id="ArchivoAnexo" accept=".pdf" onChange={(e)=>{setFiles(e.target.files[0])}}/>
-                                                </div>
+                                                
+                                                {
+                                                    archivosanexos.length!==0&&(
+                                                        <div className="mt-4 mb-4 d-flex justify-content-center align-items-center">
+                                                            <button type="button" className="btn btn-primary" onClick={()=>{
+                                                                if(ocultarx){
+                                                                    setOcultarx(!ocultarx);
+                                                                }else{
+                                                                    setOcultarx(!ocultarx);
+                                                                    setFiles(null);
+                                                                }
+                                                                
+                                                                }}>
+                                                                    {ocultarx?"Cambiar archivo":"Conservar archivo anterior"}
+                                                            </button>
+                                                            
+                                                        </div>
+
+                                                    )
+                                                }
+                                                
+                                                
+                                                {
+                                                    archivosanexos.length!==0?(
+                                                        !ocultarx &&(
+                                                            <div className="input-group mb-3">
+                                                                <input type="file" className="form-control text-white bg-dark" id="ArchivoAnexo" accept=".pdf" onChange={(e)=>{setFiles(e.target.files[0])}}/>
+                                                            </div> 
+                                                        )
+
+                                                    ):(
+                                                        <div className="input-group mb-3">
+                                                            <input type="file" className="form-control text-white bg-dark" id="ArchivoAnexo" accept=".pdf" onChange={(e)=>{setFiles(e.target.files[0])}}/>
+                                                        </div>
+
+                                                    )
+                                                    
+                                                }
+
 
                                                     {
                                                          files ? (
@@ -940,6 +981,7 @@ function CompoEditarTrabajos({idDetalle}){
                                         </div>
 
                             </form>
+                            </fieldset>
 
 
                         </div>
