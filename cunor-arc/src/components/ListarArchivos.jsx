@@ -48,6 +48,7 @@ function CompoListarArchivosPage(){
     const [busquedaCa, setBusquedaCa]=useState("");
     const [busquedainte, setBusquedainte]=useState("");
     const [showPDF, setShowPDF] = useState(null);
+    const [showPDF2, setShowPDF2] = useState(null);
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -753,6 +754,19 @@ function CompoListarArchivosPage(){
                                                 </button>
                                                 {showPDF===data.ID_Detalle && <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
                                             </div>
+
+                                            {
+                                                data.archivoAnexo.length!==0&&(
+                                                    <>
+                                                    <div className="card-body mt-0 mb-3" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                                            <button type="button" className={showPDF2===data.ID_Detalle?"btn btn-danger mb-3 btn-lg":"btn btn-warning btn-lg me-3 mb-3"} onClick={()=>setShowPDF2(showPDF2 === data.ID_Detalle ? null : data.ID_Detalle)}>
+                                                                <strong>{showPDF2===data.ID_Detalle ? <span><i className="bi bi-box-arrow-down"></i> Ocultar anexo</span> :<span><i className="bi bi-arrows-fullscreen"></i> Mostrar anexo</span> }</strong>
+                                                            </button>
+                                                            {showPDF2===data.ID_Detalle && <embed src={data.archivoAnexo[0].direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
+                                                    </div>
+                                                    </>
+                                                )
+                                            }
 
                                             {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
                                              

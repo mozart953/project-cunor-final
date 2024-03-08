@@ -90,6 +90,7 @@ export async function GET(request){
                             autor: true
                         }
                     },
+                    archivoAnexo:true,
                     usuario:true,
 
                 },
