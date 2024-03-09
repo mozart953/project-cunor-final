@@ -100,7 +100,8 @@ export async function GET(request){
                         include: {
                             autor: true
                         }
-                    }
+                    },
+                    archivoAnexo:true,
 
                 },
                 skip: (page-1) * itemsPerPage,
