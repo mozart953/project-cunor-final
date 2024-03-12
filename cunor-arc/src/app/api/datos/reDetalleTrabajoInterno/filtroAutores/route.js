@@ -20,7 +20,7 @@ export async function GET(request){
     const idCarrera = paramametros.get('idCarrera');
     const page = Number(paramametros.get('page')) || 1;
     const itemsPerPage = Number(paramametros.get('itemsPagina'));
-    const searchTerm = paramametros.get('searchTerm');
+    const searchTerm = paramametros.get('searchTerm')|| '';
     const orderDirection = paramametros.get('orderDirection')|| 'desc';
     const ordenCampo = paramametros.get('orderCampo') || 'primerNombre';
 
@@ -66,14 +66,14 @@ export async function GET(request){
             where:whereClause,
         });
 
-        let orderBy={};
+        let orderBy=buildOrderBy(ordenCampo, orderDirection);;
 
-        if(ordenCampo == 'autor.primerNombre'){
-            orderBy = buildOrderBy('primerNombre', orderDirection);
-        }
-        else if(ordenCampo =='autor.carnet'){
-            orderBy = buildOrderBy('carnet');
-        }
+        // if(ordenCampo == 'autor.primerNombre'){
+        //     orderBy = buildOrderBy('primerNombre', orderDirection);
+        // }
+        // else if(ordenCampo =='autor.carnet'){
+        //     orderBy = buildOrderBy('carnet');
+        // }
 
         const autores = await db.autor.findMany({
             where:whereClause,

@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
 import FormFecha2Component from "@/components/usuarioFinal/busquedaA2/FormFecha2";
 import FormGenerico2Component from "@/components/usuarioFinal/busquedaA2/FormGenerico2";
+import MyButtonF from "@/components/ModalesFiltro/ModalFA/BotonModalF";
+import MyVerticallyCenteredModalF from "@/components/ModalesFiltro/ModalFA/VerticalModalF";
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
@@ -36,6 +38,7 @@ function CompoListarArchivosPage(){
     const [interruptorCa, setInterruptorCa] = useState(false);
     const [interruptorPC, setInterruptorPc] = useState(false);
     const [interruptorcarnet, setInterruptorcarnet] = useState(false);
+    const [interrputorModal, setInterruptorModal] = useState(false);
 
     const [busqueda, setBusqueda] = useState("");
     const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
@@ -563,7 +566,21 @@ function CompoListarArchivosPage(){
 
                             {
                                 interruptorA&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+                                    <>
+                                        <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+
+                                        <MyButtonF onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalF show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de autores"}
+                                                    idusuario={iduser1}
+                                                    idcarrera={idcarrera1}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
 
                             }
