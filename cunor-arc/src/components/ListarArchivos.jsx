@@ -771,7 +771,7 @@ function CompoListarArchivosPage(){
                                             {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i><strong>Eliminar archivo</strong></button>
+                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autores[0].autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i><strong>Eliminar archivo principal</strong></button>
                                                 
                                                 {
                                                     controlestado[data.ID_Detalle]?(
