@@ -41,6 +41,7 @@ function CompoListarArchivosPage(){
     const [interrputorModal, setInterruptorModal] = useState(false);
 
     const [busqueda, setBusqueda] = useState("");
+    const [isBusquedaUpdated, setIsBusquedaUpdated] = useState(false);
     const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
     const [fechafin, SetFechafin] = useState(new Date().toISOString().split('T')[0]);
 
@@ -376,8 +377,18 @@ function CompoListarArchivosPage(){
         
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated){
+                onSubmitG();
+                setIsBusquedaUpdated(false);
+            }
+            
+        },[isBusquedaUpdated]
+    );
+
     const onSubmitG = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         console.log(busqueda);
         setBusquedainte(busqueda);
 
@@ -577,6 +588,10 @@ function CompoListarArchivosPage(){
                                                     title={"Listado de autores"}
                                                     idusuario={iduser1}
                                                     idcarrera={idcarrera1}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
                                                 />
                                             )
                                         }

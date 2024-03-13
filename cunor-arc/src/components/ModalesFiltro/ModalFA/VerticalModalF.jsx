@@ -1,12 +1,11 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useState,useEffect } from 'react';
+import {useState,useEffect } from 'react';
 
-function MyVerticallyCenteredModalF(props) {
+function MyVerticallyCenteredModalF({setBusqueda,...props}) {
 
     const [trabajos, setTrabajos] = useState([]);
-    const [busqueda, setBusqueda] = useState("");
-    
+    const [busquedaA, setBusquedaA] = useState("");    
    
     const [totalitems, setTotalitems] = useState(null);
     const [itemspagina, setItemspagina] = useState(10);
@@ -25,7 +24,7 @@ function MyVerticallyCenteredModalF(props) {
     useEffect(()=>{
       console.log("idUse: " + props.idusuario + "idCarrera " + props.idcarrera);
         if(props.idusuario && props.idcarrera){
-            fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutores?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=10&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+            fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutores?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=10&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
             .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
         }
         
@@ -55,10 +54,10 @@ function MyVerticallyCenteredModalF(props) {
 
     const onSubmit = async (e)=>{
       e.preventDefault();
-      console.log(busqueda);
-      setBusquedainte(busqueda);
+      console.log(busquedaA);
+      setBusquedainte(busquedaA);
       
-      const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutores?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=10&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+      const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroAutores?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=10&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
           const datos = await respuesta.json();
           console.log(datos);
 
@@ -73,6 +72,11 @@ function MyVerticallyCenteredModalF(props) {
           
       
   }
+
+//   const handleButtonClick = (nombreAutor) => {
+//         setBusqueda(nombreAutor);
+//         props.onHide();
+//     };
 
   return (
     <Modal
@@ -89,7 +93,7 @@ function MyVerticallyCenteredModalF(props) {
       <Modal.Body>
                     <div className="mb-3 d-flex justify-content-center align-items-center">
                         <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
-                                <input type="search" className="form-control" placeholder="Buscar autores en este espacio" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                                <input type="search" className="form-control" placeholder="Buscar autores en este espacio" aria-label="Search" value={busquedaA} onChange={(e)=>{setBusquedaA(e.target.value)}}/>
                                 <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
                                 <i className="bi bi-search"></i> Buscar 
                                 </button>
@@ -157,13 +161,26 @@ function MyVerticallyCenteredModalF(props) {
                                                
 
                                               
-                                                      <div className="card-header" >
+                                                      <div className="card-header d-flex align-items-center" >
                                                       {/* <strong>Autor:</strong>{" "} */}
-                                                      {data.primerNombre} {data.segundoNombre} {data.tercerNombre} {data.primerApellido} {data.segundoApellido}
-                                                      - <strong>No. de carnet:</strong>
-                                                      {data.carnet}
-                                                      
+                                                        <div>
+                                                            {data.primerNombre} {data.segundoNombre} {data.tercerNombre} {data.primerApellido} {data.segundoApellido}
+                                                            - <strong>No. de carnet:</strong>
+                                                            {data.carnet}
+                                                        </div>
+                                                                                                                 
                                                       </div>
+ 
+                                                        <div className='mt-3 mb-2'>
+                                                            <button type="button" className="btn btn-success" style={{ marginLeft: '20px' }}
+                                                                onClick={()=>{
+                                                                    const nombreAutor = `${data.primerNombre} ${data.segundoNombre} ${data.tercerNombre} ${data.primerApellido} ${data.segundoApellido}`;
+                                                                    setBusqueda(nombreAutor);
+                                                                    props.onHide();
+                                                                }}
+                                                            ><strong>Ver trabajo asociado</strong></button>
+                                                        </div>                            
+
                                                   
 
                                               
