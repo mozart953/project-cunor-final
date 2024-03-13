@@ -7,6 +7,8 @@ function MyVerticallyCenteredModalF({setBusqueda,...props}) {
     const [trabajos, setTrabajos] = useState([]);
     const [busquedaA, setBusquedaA] = useState("");    
    
+    const [letraSeleccionada, setLetraSeleccionada] = useState(null);
+
     const [totalitems, setTotalitems] = useState(null);
     const [itemspagina, setItemspagina] = useState(10);
     const [totalPaginas, setTotalpaginas] = useState(null);
@@ -19,6 +21,9 @@ function MyVerticallyCenteredModalF({setBusqueda,...props}) {
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Autor', ordBase:'primerNombre'},
                          {id:2, ord:'Carnet', ordBase:'carnet'},];
+    
+    const letras = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
+
 
     
     useEffect(()=>{
@@ -90,7 +95,7 @@ function MyVerticallyCenteredModalF({setBusqueda,...props}) {
           {props.title}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body       style={{ backgroundColor: 'black', color: 'white' }}>
                     <div className="mb-3 d-flex justify-content-center align-items-center">
                         <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
                                 <input type="search" className="form-control" placeholder="Buscar autores en este espacio" aria-label="Search" value={busquedaA} onChange={(e)=>{setBusquedaA(e.target.value)}}/>
@@ -99,6 +104,20 @@ function MyVerticallyCenteredModalF({setBusqueda,...props}) {
                                 </button>
                         </form>
                     </div>
+
+                    {/* <div className="mb-3 d-flex justify-content-center align-items-center">
+                        <nav aria-label="Page navigation example" className="mt-3" style={{cursor:'pointer'}}>
+                            <ul className="pagination pagination-sm">
+                                {letras.map(letra => (
+                                <li className={`page-item ${letra === letraSeleccionada ? 'active' : ''}`} key={letra}>
+                                    <a className="page-link" onClick={() => setLetraSeleccionada(letra)}>
+                                    {letra}
+                                    </a>
+                                </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    </div> */}
 
                     <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center col-sm" style={{maxWidth:'75%', margin:'0 auto'}}>
                         <h3>Resultados: {totalitems} </h3>
