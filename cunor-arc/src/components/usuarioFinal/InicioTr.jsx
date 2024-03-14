@@ -5,6 +5,10 @@ import FormGenericoComponent from "@/components/usuarioFinal/busquedaA/FormGener
 import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 import MyButton from "@/components/Modal/BotonModal";
 import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
+import MyButtonF2 from "@/components/ModalesFiltro/ModalFA2/BotonModalF2";
+import MyVerticallyCenteredModalF2 from "@/components/ModalesFiltro/ModalFA2/VerticalModalF2";
+import MyButtonT2 from "@/components/ModalesFiltro/ModalFT2/BotonModalFT2";
+import MyVerticallyCenteredModalT2 from "@/components/ModalesFiltro/ModalFT2/VerticalModalFT2";
 
 //export const dynamic = 'force-dynamic';
 
@@ -12,6 +16,8 @@ function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
     const [trabajosfiltro, setTrabajosfiltro] = useState([]);
     const [busqueda, setBusqueda] = useState("");
+    const [isBusquedaUpdated, setIsBusquedaUpdated] = useState(false);
+    const [isBusquedaUpdated2, setIsBusquedaUpdated2] = useState(false);
 
     const [currentpage, setCurrentpage] = useState(1);
     const [totalitems, setTotalitems] = useState(null);
@@ -30,6 +36,7 @@ function CompoInicioTr(){
     const [interruptorAn, setInterruptorAn] = useState(false);
     const [interruptorCa, setInterruptorCa] = useState(false);
     const [interruptorPC, setInterruptorPc] = useState(false);
+    const [interrputorModal, setInterruptorModal] = useState(false);
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
@@ -44,10 +51,12 @@ function CompoInicioTr(){
                          {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
                          {id:3, ord:'Autor', ordBase:'autor.primerNombre'},
                          {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
-                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'}];
+                         {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'},
+                         {id:6, ord:'Carnet', ordBase:'autor.carnet'},];
     
     const [modalShow, setModalShow] = useState(null);
     const [showPDF, setShowPDF] = useState(null);
+    const [showPDF2, setShowPDF2] = useState(null);
 
 
     useEffect(()=>{
@@ -217,8 +226,18 @@ function CompoInicioTr(){
         
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated2){
+                onSubmitT();
+                setIsBusquedaUpdated2(false);
+            }
+            
+        },[isBusquedaUpdated2]
+    );
+
     const onSubmitT = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         //console.log(busqueda);
         setBusquedainte(busqueda);
         const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
@@ -235,8 +254,18 @@ function CompoInicioTr(){
 
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated){
+                onSubmitG();
+                setIsBusquedaUpdated(false);
+            }
+            
+        },[isBusquedaUpdated]
+    );
+
     const onSubmitG = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         //console.log(busqueda);
         setBusquedainte(busqueda);
 
@@ -326,23 +355,57 @@ function CompoInicioTr(){
         }
     }
 
-    function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
-        let nombres = primernombre.charAt(0) + ".";
-            if(segundonombre !== ""){
-                nombres += segundonombre.charAt(0) + ".";
-            }
-            if(tercernombre !== ""){
-                nombres += tercernombre.charAt(0) + ".";
-            }
+    // function formatoApa(primernombre, segundonombre, tercernombre, primerapellido, segundoapellido, anio, titulo){
+    //     let nombres = primernombre.charAt(0) + ".";
+    //         if(segundonombre !== ""){
+    //             nombres += segundonombre.charAt(0) + ".";
+    //         }
+    //         if(tercernombre !== ""){
+    //             nombres += tercernombre.charAt(0) + ".";
+    //         }
 
-            let apellidos = primerapellido;
-            if(segundoapellido !== ""){
-                apellidos += " " + segundoapellido;
-            }
+    //         let apellidos = primerapellido;
+    //         if(segundoapellido !== ""){
+    //             apellidos += " " + segundoapellido;
+    //         }
 
-            return apellidos + ", " + nombres + " (" + new Date(anio).getFullYear() + "). " + titulo;       
+    //         return apellidos + ", " + nombres + " (" + new Date(anio).getFullYear() + "). " + titulo;       
                 
 
+    // }
+    function formatoApa(autores, anio, titulo){
+        //console.log(autores);
+        let referencia = "";
+    
+        for(let i = 0; i < autores.length; i++){
+            // Si no es el primer autor y es el último, añade "&"
+            if(i > 0 && i === autores.length - 1){
+                referencia += "& ";
+            }
+    
+            let nombres = autores[i].autor.primerNombre.charAt(0) + ".";
+            if(autores[i].autor.segundoNombre !== ""){
+                nombres += autores[i].autor.segundoNombre.charAt(0) + ".";
+            }
+            if(autores[i].autor.tercerNombre !== ""){
+                nombres += autores[i].autor.tercerNombre.charAt(0) + ".";
+            }
+    
+            let apellidos = autores[i].autor.primerApellido;
+            if(autores[i].autor.segundoApellido !== ""){
+                apellidos += " " + autores[i].autor.segundoApellido;
+            }
+    
+            referencia += apellidos + ", " + nombres;
+    
+            if(i < autores.length - 1){
+                referencia += ", ";
+            }
+        }
+    
+        referencia += " (" + new Date(anio).getFullYear() + "). " + titulo;
+    
+        return referencia;
     }
 
     // const filtro = (patron)=>{
@@ -421,7 +484,22 @@ function CompoInicioTr(){
 
                             {
                                 interruptorT&&(
-                                    <PorTituloComponent onSubmitT={onSubmitT} busqueda={busqueda} setBusqueda={setBusqueda}/>
+                                    <>
+                                        <PorTituloComponent onSubmitT={onSubmitT} busqueda={busqueda} setBusqueda={setBusqueda}/>
+                                        <MyButtonT2 onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalT2 show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de títulos"}
+                                                     setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated2(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
                                 
                             }
@@ -449,7 +527,23 @@ function CompoInicioTr(){
 
                             {
                                 interruptorA&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+                                    <>
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+
+                                        <MyButtonF2 onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalF2 show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de autores"}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
 
                             }
@@ -558,10 +652,29 @@ function CompoInicioTr(){
                          trabajos && trabajos.length!==0?(trabajos.map((data)=>(
                             data.ID_estado===1&&(
                                 <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
-                                <div className="card-header">
+                                {/* <div className="card-header">
                                      <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
-                                </div>
-
+                                </div> */}
+                                            {
+                                                data.autores.length!==1?(
+                                                    <div className="card-header">
+                                                        <strong>Autores:</strong>{" "}
+                                                    </div>
+                                                ):(
+                                                    <div className="card-header">
+                                                        <strong>Autor:</strong>{" "}
+                                                    </div>
+                                                )
+                                            }
+                                           
+                                           {data.autores.map((autorData) => (
+                                                <div className="card-header" key={autorData.ID_Autor}>
+                                                {/* <strong>Autor:</strong>{" "} */}
+                                                {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
+                                                - <strong>No. de carnet:</strong>
+                                                {autorData.autor.carnet}
+                                                </div>
+                                            ))}
                                 
 
                                 <div className="card-body">
@@ -596,13 +709,20 @@ function CompoInicioTr(){
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
-                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                 {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
                                                  - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
+                                            </p>
+                                        </div>
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Última fecha de actualización:</strong></h6>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                {new Date(data.fechaActualizacion).getDate()}/{new Date(data.fechaActualizacion).getMonth()+1}/{new Date(data.fechaActualizacion).getFullYear()}
+                                                 - {new Date(data.fechaActualizacion).getHours()}:{new Date(data.fechaActualizacion).getMinutes()<10?'0'+new Date(data.fechaActualizacion).getMinutes():new Date(data.fechaActualizacion).getMinutes()}:{new Date(data.fechaActualizacion).getSeconds()}
                                             </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
@@ -620,6 +740,19 @@ function CompoInicioTr(){
                                         </button>
                                         {showPDF===data.ID_Detalle && <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
                                     </div>
+                                    
+                                        {
+                                                data.archivoAnexo.length!==0&&(
+                                                    <>
+                                                    <div className="card-body mt-0 mb-3" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                                            <button type="button" className={showPDF2===data.ID_Detalle?"btn btn-danger mb-3 btn-lg":"btn btn-warning btn-lg me-3 mb-3"} onClick={()=>setShowPDF2(showPDF2 === data.ID_Detalle ? null : data.ID_Detalle)}>
+                                                                <strong>{showPDF2===data.ID_Detalle ? <span><i className="bi bi-box-arrow-down"></i> Ocultar anexo</span> :<span><i className="bi bi-arrows-fullscreen"></i> Mostrar anexo</span> }</strong>
+                                                            </button>
+                                                            {showPDF2===data.ID_Detalle && <embed src={data.archivoAnexo[0].direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
+                                                    </div>
+                                                    </>
+                                                )
+                                        }
 
 
                                     {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
@@ -628,7 +761,7 @@ function CompoInicioTr(){
                                     {
                                         modalShow===data.ID_Detalle &&(<MyVerticallyCenteredModal show={true} onHide={()=>setModalShow(null)} 
                                         title={"Referencia"} formato={"APA"} 
-                                        general={formatoApa(data.autor.primerNombre, data.autor.segundoNombre, data.autor.tercerNombre, data.autor.primerApellido, data.autor.segundoApellido, data.fechaCarga, data.trabajoGrad.titulo)}
+                                        general={formatoApa(data.autores, data.fechaCarga, data.trabajoGrad.titulo)}
                                         mensaje={"Esta es una referencia autogenerada con la información disponible en el registro, puede estar incompleta o contener datos erroneos. La identación o formato se puede perder al copiar y pegar."}/>)
 
 

@@ -95,11 +95,11 @@ CREATE TABLE "TrabajoGraduacion" (
 );
 
 -- CreateTable
-CREATE TABLE "Archivo" (
-    "ID_Archivo" SERIAL NOT NULL,
-    "formato" TEXT NOT NULL,
+CREATE TABLE "Formato" (
+    "ID_Formato" SERIAL NOT NULL,
+    "nombreFormato" TEXT NOT NULL,
 
-    CONSTRAINT "Archivo_pkey" PRIMARY KEY ("ID_Archivo")
+    CONSTRAINT "Formato_pkey" PRIMARY KEY ("ID_Formato")
 );
 
 -- CreateTable
@@ -127,15 +127,32 @@ CREATE TABLE "Autor" (
 CREATE TABLE "registroTrabajoGraduacion" (
     "ID_Detalle" SERIAL NOT NULL,
     "fechaCarga" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "fechaActualizacion" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "ID_trabajo" INTEGER NOT NULL,
     "ID_categoria" INTEGER NOT NULL,
-    "ID_archivo" INTEGER NOT NULL,
+    "ID_formato" INTEGER NOT NULL,
     "ID_carrera" INTEGER NOT NULL,
-    "ID_autor" INTEGER NOT NULL,
     "ID_usuario" INTEGER NOT NULL,
     "ID_estado" INTEGER NOT NULL,
 
     CONSTRAINT "registroTrabajoGraduacion_pkey" PRIMARY KEY ("ID_Detalle")
+);
+
+-- CreateTable
+CREATE TABLE "EnlaceTrabajoAutor" (
+    "ID_Autor" INTEGER NOT NULL,
+    "ID_Detalle" INTEGER NOT NULL,
+
+    CONSTRAINT "EnlaceTrabajoAutor_pkey" PRIMARY KEY ("ID_Autor","ID_Detalle")
+);
+
+-- CreateTable
+CREATE TABLE "ArchivoAnexo" (
+    "ID_Archivo" SERIAL NOT NULL,
+    "direccionGuardado" TEXT NOT NULL,
+    "ID_detalle" INTEGER NOT NULL,
+
+    CONSTRAINT "ArchivoAnexo_pkey" PRIMARY KEY ("ID_Archivo")
 );
 
 -- CreateIndex
@@ -169,16 +186,22 @@ ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacio
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_categoria_fkey" FOREIGN KEY ("ID_categoria") REFERENCES "Categoria"("ID_Categoria") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_archivo_fkey" FOREIGN KEY ("ID_archivo") REFERENCES "Archivo"("ID_Archivo") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_formato_fkey" FOREIGN KEY ("ID_formato") REFERENCES "Formato"("ID_Formato") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_carrera_fkey" FOREIGN KEY ("ID_carrera") REFERENCES "Carrera"("ID_Carrera") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_autor_fkey" FOREIGN KEY ("ID_autor") REFERENCES "Autor"("ID_Autor") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_usuario_fkey" FOREIGN KEY ("ID_usuario") REFERENCES "Usuario"("ID_Usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_estado_fkey" FOREIGN KEY ("ID_estado") REFERENCES "estadoTrabajoGraduacion"("ID_Estado") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnlaceTrabajoAutor" ADD CONSTRAINT "EnlaceTrabajoAutor_ID_Autor_fkey" FOREIGN KEY ("ID_Autor") REFERENCES "Autor"("ID_Autor") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnlaceTrabajoAutor" ADD CONSTRAINT "EnlaceTrabajoAutor_ID_Detalle_fkey" FOREIGN KEY ("ID_Detalle") REFERENCES "registroTrabajoGraduacion"("ID_Detalle") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArchivoAnexo" ADD CONSTRAINT "ArchivoAnexo_ID_detalle_fkey" FOREIGN KEY ("ID_detalle") REFERENCES "registroTrabajoGraduacion"("ID_Detalle") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -4,6 +4,10 @@ import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
 import FormFecha2Component from "@/components/usuarioFinal/busquedaA2/FormFecha2";
 import FormGenerico2Component from "@/components/usuarioFinal/busquedaA2/FormGenerico2";
+import MyButtonF from "@/components/ModalesFiltro/ModalFA/BotonModalF";
+import MyVerticallyCenteredModalF from "@/components/ModalesFiltro/ModalFA/VerticalModalF";
+import MyButtonT from "@/components/ModalesFiltro/ModalFT/BotonModalFT";
+import MyVerticallyCenteredModalT from "@/components/ModalesFiltro/ModalFT/VerticalModalFT";
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
@@ -36,8 +40,10 @@ function CompoListarArchivosPage(){
     const [interruptorCa, setInterruptorCa] = useState(false);
     const [interruptorPC, setInterruptorPc] = useState(false);
     const [interruptorcarnet, setInterruptorcarnet] = useState(false);
+    const [interrputorModal, setInterruptorModal] = useState(false);
 
     const [busqueda, setBusqueda] = useState("");
+    const [isBusquedaUpdated, setIsBusquedaUpdated] = useState(false);
     const [fechainicio, SetFechainicio] = useState(new Date().toISOString().split('T')[0]);
     const [fechafin, SetFechafin] = useState(new Date().toISOString().split('T')[0]);
 
@@ -48,6 +54,7 @@ function CompoListarArchivosPage(){
     const [busquedaCa, setBusquedaCa]=useState("");
     const [busquedainte, setBusquedainte]=useState("");
     const [showPDF, setShowPDF] = useState(null);
+    const [showPDF2, setShowPDF2] = useState(null);
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
     const ordenQuery2 = [{id:1, ord:'Fecha', ordBase:'fechaCarga'}, 
@@ -372,8 +379,18 @@ function CompoListarArchivosPage(){
         
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated){
+                onSubmitG();
+                setIsBusquedaUpdated(false);
+            }
+            
+        },[isBusquedaUpdated]
+    );
+
     const onSubmitG = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         console.log(busqueda);
         setBusquedainte(busqueda);
 
@@ -534,7 +551,26 @@ function CompoListarArchivosPage(){
 
                             {
                                 interruptorT&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por titulo"}/>
+                                    <>
+                                                                       
+                                        <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por titulo"}/>
+
+                                        <MyButtonT onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalT show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de títulos"}
+                                                    idusuario={iduser1}
+                                                    idcarrera={idcarrera1}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
                                 
                             }
@@ -562,7 +598,25 @@ function CompoListarArchivosPage(){
 
                             {
                                 interruptorA&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+                                    <>
+                                        <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+
+                                        <MyButtonF onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalF show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de autores"}
+                                                    idusuario={iduser1}
+                                                    idcarrera={idcarrera1}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
 
                             }
@@ -662,10 +716,31 @@ function CompoListarArchivosPage(){
                                 
                                     
                                     <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'85%', margin:'0 auto', borderWidth: '3px'}} key={data.ID_Detalle}>
-                                        <div className="card-header">
-                                             <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
-                                            - <strong>No. de carnet:</strong>{data.autor.carnet}
-                                        </div>
+                                        {/* <div className="card-header">
+                                             <strong>Autor:</strong> {data.autores.autor.primerNombre} {data.autores.autor.segundoNombre} {data.autores.autor.tercerNombre} {data.autores.autor.primerApellido} {data.autores.autor.segundoApellido}
+                                            - <strong>No. de carnet:</strong>{data.autores.autor.carnet}
+                                        </div> */}
+
+                                        {
+                                            data.autores.length!==1?(
+                                                <div className="card-header">
+                                                    <strong>Autores:</strong>{" "}
+                                                </div>
+                                            ):(
+                                                <div className="card-header">
+                                                    <strong>Autor:</strong>{" "}
+                                                </div>
+                                            )
+                                        }
+
+                                        {data.autores.map((autorData) => (
+                                                <div className="card-header" key={autorData.ID_Autor}>
+                                                {/* <strong>Autor:</strong>{" "} */}
+                                                {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
+                                                - <strong>No. de carnet:</strong>
+                                                {autorData.autor.carnet}
+                                                </div>
+                                            ))}
 
                                         
 
@@ -701,13 +776,20 @@ function CompoListarArchivosPage(){
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
-                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.archivo.formato} </p>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
                                                         {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaCarga).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
                                                          - {new Date(data.fechaCarga).getHours()}:{new Date(data.fechaCarga).getMinutes()<10?'0'+new Date(data.fechaCarga).getMinutes():new Date(data.fechaCarga).getMinutes()}:{new Date(data.fechaCarga).getSeconds()}
+                                                    </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Última fecha de actualización:</strong></h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                        {new Date(data.fechaActualizacion).getDate()}/{new Date(data.fechaActualizacion).getMonth()+1}/{new Date(data.fechaActualizacion).getFullYear()}
+                                                         - {new Date(data.fechaActualizacion).getHours()}:{new Date(data.fechaActualizacion).getMinutes()<10?'0'+new Date(data.fechaActualizacion).getMinutes():new Date(data.fechaActualizacion).getMinutes()}:{new Date(data.fechaActualizacion).getSeconds()}
                                                     </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
@@ -726,10 +808,23 @@ function CompoListarArchivosPage(){
                                                 {showPDF===data.ID_Detalle && <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
                                             </div>
 
+                                            {
+                                                data.archivoAnexo.length!==0&&(
+                                                    <>
+                                                    <div className="card-body mt-0 mb-3" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                                                            <button type="button" className={showPDF2===data.ID_Detalle?"btn btn-danger mb-3 btn-lg":"btn btn-warning btn-lg me-3 mb-3"} onClick={()=>setShowPDF2(showPDF2 === data.ID_Detalle ? null : data.ID_Detalle)}>
+                                                                <strong>{showPDF2===data.ID_Detalle ? <span><i className="bi bi-box-arrow-down"></i> Ocultar anexo</span> :<span><i className="bi bi-arrows-fullscreen"></i> Mostrar anexo</span> }</strong>
+                                                            </button>
+                                                            {showPDF2===data.ID_Detalle && <embed src={data.archivoAnexo[0].direccionGuardado} type="application/pdf"  width="100%" height="300px" />}
+                                                    </div>
+                                                    </>
+                                                )
+                                            }
+
                                             {/* <embed src={data.trabajoGrad.direccionGuardado} type="application/pdf"  width="100%" height="300px"  /> */}
                                              
                                             <div className="col" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i><strong>Eliminar archivo</strong></button>
+                                                <button type="button" className="btn btn-danger" onClick={()=>{eliminarRegistro(data.ID_Detalle, data.autores[0].autor.ID_Autor, data.trabajoGrad.ID_Trabajo, data.trabajoGrad.direccionGuardado)}}><i className="bi bi-trash"></i><strong>Eliminar archivo principal</strong></button>
                                                 
                                                 {
                                                     controlestado[data.ID_Detalle]?(

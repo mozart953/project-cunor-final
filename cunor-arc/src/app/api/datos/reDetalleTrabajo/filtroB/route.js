@@ -19,10 +19,16 @@ export async function GET(request){
             include:{
                 trabajoGrad:true,
                 categoria:true,
-                archivo:true,
+                formato:true,
                 carrera:true,
-                autor: true,
+                //autor: true,
+                autores:{
+                    include:{
+                        autor:true
+                    }
+                }, 
                 usuario:true,
+                archivoAnexo:true,
 
             }
         }
