@@ -560,7 +560,7 @@ function CompoListarArchivosPage(){
                                         {
                                             interrputorModal&&(
                                                 <MyVerticallyCenteredModalT show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
-                                                    title={"Listado de titulos"}
+                                                    title={"Listado de títulos"}
                                                     idusuario={iduser1}
                                                     idcarrera={idcarrera1}
                                                     setBusqueda={(value) => {

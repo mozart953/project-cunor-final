@@ -2,10 +2,11 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {useState,useEffect } from 'react';
 
-function MyVerticallyCenteredModalT({setBusqueda,...props}) {
+function MyVerticallyCenteredModalT2({setBusqueda,...props}) {
 
     const [trabajos, setTrabajos] = useState([]);
-    const [busquedaA, setBusquedaA] = useState("");    
+    const [busquedaA, setBusquedaA] = useState("");
+    const [estado, setEstado] = useState(1);    
    
     const [letraSeleccionada, setLetraSeleccionada] = useState(null);
 
@@ -27,14 +28,14 @@ function MyVerticallyCenteredModalT({setBusqueda,...props}) {
 
     
     useEffect(()=>{
-      console.log("idUse: " + props.idusuario + "idCarrera " + props.idcarrera);
-        if(props.idusuario && props.idcarrera){
-            fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulos?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
-            .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
-        }
+      //console.log("idUse: " + props.idusuario + "idCarrera " + props.idcarrera);
+        
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+        .then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total)});
+        
         
 
-    },[props.idusuario, props.idcarrera,currentpage, valorseleccionado, valorseleccionado2]);
+    },[currentpage, valorseleccionado, valorseleccionado2]);
     
     useEffect(()=>{
         if(totalitems!==null){
@@ -59,12 +60,12 @@ function MyVerticallyCenteredModalT({setBusqueda,...props}) {
 
     const onSubmit = async (e)=>{
       e.preventDefault();
-      console.log(busquedaA);
+      //console.log(busquedaA);
       setBusquedainte(busquedaA);
       
-      const respuesta = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroTitulos?idUsuario=${props.idusuario}&idCarrera=${props.idcarrera}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+      const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
           const datos = await respuesta.json();
-          console.log(datos);
+          //console.log(datos);
 
           if(respuesta.ok){
               setTrabajos(datos.items); 
@@ -264,4 +265,4 @@ function MyVerticallyCenteredModalT({setBusqueda,...props}) {
   );
 }
 
-export default MyVerticallyCenteredModalT;
+export default MyVerticallyCenteredModalT2;

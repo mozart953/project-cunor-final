@@ -6,7 +6,9 @@ import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 import MyButton from "@/components/Modal/BotonModal";
 import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
 import MyButtonF2 from "@/components/ModalesFiltro/ModalFA2/BotonModalF2";
-import MyVerticallyCenteredModalF2 from "../ModalesFiltro/ModalFA2/VerticalModalF2";
+import MyVerticallyCenteredModalF2 from "@/components/ModalesFiltro/ModalFA2/VerticalModalF2";
+import MyButtonT2 from "@/components/ModalesFiltro/ModalFT2/BotonModalFT2";
+import MyVerticallyCenteredModalT2 from "@/components/ModalesFiltro/ModalFT2/VerticalModalFT2";
 
 //export const dynamic = 'force-dynamic';
 
@@ -15,6 +17,7 @@ function CompoInicioTr(){
     const [trabajosfiltro, setTrabajosfiltro] = useState([]);
     const [busqueda, setBusqueda] = useState("");
     const [isBusquedaUpdated, setIsBusquedaUpdated] = useState(false);
+    const [isBusquedaUpdated2, setIsBusquedaUpdated2] = useState(false);
 
     const [currentpage, setCurrentpage] = useState(1);
     const [totalitems, setTotalitems] = useState(null);
@@ -223,8 +226,18 @@ function CompoInicioTr(){
         
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated2){
+                onSubmitT();
+                setIsBusquedaUpdated2(false);
+            }
+            
+        },[isBusquedaUpdated2]
+    );
+
     const onSubmitT = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         //console.log(busqueda);
         setBusquedainte(busqueda);
         const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulo?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
@@ -471,7 +484,22 @@ function CompoInicioTr(){
 
                             {
                                 interruptorT&&(
-                                    <PorTituloComponent onSubmitT={onSubmitT} busqueda={busqueda} setBusqueda={setBusqueda}/>
+                                    <>
+                                        <PorTituloComponent onSubmitT={onSubmitT} busqueda={busqueda} setBusqueda={setBusqueda}/>
+                                        <MyButtonT2 onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalT2 show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de títulos"}
+                                                     setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated2(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
                                 
                             }
