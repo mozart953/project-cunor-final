@@ -5,6 +5,8 @@ import FormGenericoComponent from "@/components/usuarioFinal/busquedaA/FormGener
 import FormFechaComponent from "@/components/usuarioFinal/busquedaA/FormFecha";
 import MyButton from "@/components/Modal/BotonModal";
 import MyVerticallyCenteredModal from "@/components/Modal/VerticalModal";
+import MyButtonF2 from "@/components/ModalesFiltro/ModalFA2/BotonModalF2";
+import MyVerticallyCenteredModalF2 from "../ModalesFiltro/ModalFA2/VerticalModalF2";
 
 //export const dynamic = 'force-dynamic';
 
@@ -12,6 +14,7 @@ function CompoInicioTr(){
     const [trabajos, setTrabajos] = useState([]);
     const [trabajosfiltro, setTrabajosfiltro] = useState([]);
     const [busqueda, setBusqueda] = useState("");
+    const [isBusquedaUpdated, setIsBusquedaUpdated] = useState(false);
 
     const [currentpage, setCurrentpage] = useState(1);
     const [totalitems, setTotalitems] = useState(null);
@@ -30,6 +33,7 @@ function CompoInicioTr(){
     const [interruptorAn, setInterruptorAn] = useState(false);
     const [interruptorCa, setInterruptorCa] = useState(false);
     const [interruptorPC, setInterruptorPc] = useState(false);
+    const [interrputorModal, setInterruptorModal] = useState(false);
 
     const [valorseleccionado, setValorseleccionado] = useState('');
     const [valorseleccionado2, setValorseleccionado2] = useState('');
@@ -237,8 +241,18 @@ function CompoInicioTr(){
 
     }
 
+    useEffect(
+        ()=>{
+            if(isBusquedaUpdated){
+                onSubmitG();
+                setIsBusquedaUpdated(false);
+            }
+            
+        },[isBusquedaUpdated]
+    );
+
     const onSubmitG = async(e)=>{
-        e.preventDefault();
+        if(e) e.preventDefault();
         //console.log(busqueda);
         setBusquedainte(busqueda);
 
@@ -485,7 +499,23 @@ function CompoInicioTr(){
 
                             {
                                 interruptorA&&(
-                                    <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+                                    <>
+                                        <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por autor"}/>
+
+                                        <MyButtonF2 onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalF2 show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de autores"}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
 
                             }
