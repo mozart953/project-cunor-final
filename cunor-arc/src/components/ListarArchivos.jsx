@@ -6,6 +6,8 @@ import FormFecha2Component from "@/components/usuarioFinal/busquedaA2/FormFecha2
 import FormGenerico2Component from "@/components/usuarioFinal/busquedaA2/FormGenerico2";
 import MyButtonF from "@/components/ModalesFiltro/ModalFA/BotonModalF";
 import MyVerticallyCenteredModalF from "@/components/ModalesFiltro/ModalFA/VerticalModalF";
+import MyButtonT from "@/components/ModalesFiltro/ModalFT/BotonModalFT";
+import MyVerticallyCenteredModalT from "@/components/ModalesFiltro/ModalFT/VerticalModalFT";
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
@@ -549,7 +551,26 @@ function CompoListarArchivosPage(){
 
                             {
                                 interruptorT&&(
-                                    <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por titulo"}/>
+                                    <>
+                                                                       
+                                        <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por titulo"}/>
+
+                                        <MyButtonT onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalT show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de titulos"}
+                                                    idusuario={iduser1}
+                                                    idcarrera={idcarrera1}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
+                                    </>
                                 )
                                 
                             }
