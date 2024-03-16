@@ -8,6 +8,8 @@ import MyButtonF from "@/components/ModalesFiltro/ModalFA/BotonModalF";
 import MyVerticallyCenteredModalF from "@/components/ModalesFiltro/ModalFA/VerticalModalF";
 import MyButtonT from "@/components/ModalesFiltro/ModalFT/BotonModalFT";
 import MyVerticallyCenteredModalT from "@/components/ModalesFiltro/ModalFT/VerticalModalFT";
+import MyButtonC from "@/components/ModalesFiltro/ModalFC/BotonModalC";
+import MyVerticallyCenteredModalC from "@/components/ModalesFiltro/ModalFC/VerticalModalC";
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject} from "firebase/storage";
 import {useRouter} from "next/navigation";
@@ -83,21 +85,22 @@ function CompoListarArchivosPage(){
     
     },[]);
 
-    useEffect(()=>{
-        const datosCategorias = async()=>{
-            const Dcategorias = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, {next: { revalidate: 10 } })
-            .then(data=> data.json());
-            setCategoria([...Dcategorias, ...categoria]);
-        }
-        datosCategorias();
+    // useEffect(()=>{
+    //     const datosCategorias = async()=>{
+    //         const Dcategorias = await fetch(`/api/datos/reDetalleTrabajoInterno/filtroDaCategoria`, {next: { revalidate: 10 } })
+    //         .then(data=> data.json());
+    //         setCategoria([...Dcategorias, ...categoria]);
+    //     }
+    //     datosCategorias();
 
-    },[]);
+    // },[]);
 
     useEffect(()=>{
         
         if(categoria.length>0 && interruptorCa){
-            setBusqueda(categoria[0].nombreCategoria);
-            setBusquedaCa(categoria[0].nombreCategoria);
+            // setBusqueda(categoria[0].nombreCategoria);
+            // setBusquedaCa(categoria[0].nombreCategoria);
+            setBusqueda("");
             setBusquedainte("");
         }
         else if(interruptorT){
@@ -184,7 +187,7 @@ function CompoListarArchivosPage(){
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
             }
             else if(interruptorCa){
-                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busquedaCa}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+                fetch(`/api/datos/reDetalleTrabajoInterno/filtroCategoria?idUsuario=${iduser1}&idCarrera=${idcarrera1}&page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
                 .then(data=>data.json()).then(datos=>{console.log(datos); setTrabajos(datos.items); setTotalitems(datos.total)});
 
             }
@@ -420,7 +423,7 @@ function CompoListarArchivosPage(){
                 setTrabajos(datos.items); 
                 //setTrabajosfiltro(datos.items); 
                 setTotalitems(datos.total);
-                setBusquedaCa(busqueda);
+                //setBusquedaCa(busqueda);
             }else{
                 alert("Algo salio mal, intentelo nuevamente...");
             }
@@ -578,16 +581,31 @@ function CompoListarArchivosPage(){
                             {
                                 interruptorCa&&(
                                     <div className="col-md-4" style={{marginRight:'20px'}}>
-                                        <div>
+                                        {/* <div>
                                             <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por categoria:</label>
                                         </div>
                                         <div className="w-100 mb-3">
                                             <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onClick={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
                                                 {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                         <FormGenerico2Component onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoria"}/>    
+                                        <MyButtonC onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalC show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de categorias"}
+                                                    idusuario={iduser1}
+                                                    idcarrera={idcarrera1}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
                                     </div>
 
 
