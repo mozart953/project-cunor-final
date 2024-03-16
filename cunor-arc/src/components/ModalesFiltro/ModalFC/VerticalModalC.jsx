@@ -19,7 +19,7 @@ function MyVerticallyCenteredModalC({setBusqueda,...props}) {
     const [busquedainte, setBusquedainte]=useState("");
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
-    const ordenQuery2 = [{id:1, ord:'Autor', ordBase:'nombreCategoria'},
+    const ordenQuery2 = [{id:1, ord:'Nombre', ordBase:'nombreCategoria'},
                          ];
     
     const letras = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
