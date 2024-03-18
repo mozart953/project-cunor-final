@@ -9,7 +9,10 @@ import MyButtonF2 from "@/components/ModalesFiltro/ModalFA2/BotonModalF2";
 import MyVerticallyCenteredModalF2 from "@/components/ModalesFiltro/ModalFA2/VerticalModalF2";
 import MyButtonT2 from "@/components/ModalesFiltro/ModalFT2/BotonModalFT2";
 import MyVerticallyCenteredModalT2 from "@/components/ModalesFiltro/ModalFT2/VerticalModalFT2";
-
+import MyButtonC2 from "@/components/ModalesFiltro/ModalFC2/BotonModalC2";
+import MyVerticallyCenteredModalC2 from "@/components/ModalesFiltro/ModalFC2/VerticalModalC2";
+import MyButtonCA from "@/components/ModalesFiltro/ModalCA/BotonModalCA";
+import MyVerticallyCenteredModalCA from "@/components/ModalesFiltro/ModalCA/VerticalModalCA";
 //export const dynamic = 'force-dynamic';
 
 function CompoInicioTr(){
@@ -69,37 +72,39 @@ function CompoInicioTr(){
         
     },[]);
 
-    useEffect(()=>{
-        const datosCarreras = async ()=>{
-            const Dcarreras = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`,  { next: { revalidate: 10 } })
-            .then(data=> data.json());
-            setCarrera([...Dcarreras, ...carrera]);
+    // useEffect(()=>{
+    //     const datosCarreras = async ()=>{
+    //         const Dcarreras = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCarreras`,  { next: { revalidate: 10 } })
+    //         .then(data=> data.json());
+    //         setCarrera([...Dcarreras, ...carrera]);
             
-        }
+    //     }
 
-        datosCarreras();
+    //     datosCarreras();
 
-    },[]);
+    // },[]);
+
+    // useEffect(()=>{
+    //     const datosCategorias = async ()=>{
+    //         const Dcategorias = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`,  { next: { revalidate: 10 } })
+    //         .then(data=> data.json());
+    //         setCategoria([...Dcategorias,...categoria]);
+    //     }
+
+    //     datosCategorias();
+    // },[]);
 
     useEffect(()=>{
-        const datosCategorias = async ()=>{
-            const Dcategorias = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroDaCategoria`,  { next: { revalidate: 10 } })
-            .then(data=> data.json());
-            setCategoria([...Dcategorias,...categoria]);
-        }
-
-        datosCategorias();
-    },[]);
-
-    useEffect(()=>{
-        if(carrera.length>0 && interruptorC){
-            setBusqueda(carrera[0].nombreCarrera);
-            setBusquedaC(carrera[0].nombreCarrera);
+        if(interruptorC){
+            // setBusqueda(carrera[0].nombreCarrera);
+            // setBusquedaC(carrera[0].nombreCarrera);
+            setBusqueda("");
             setBusquedainte("");
         }
-        else if(categoria.length>0 && interruptorCa){
-            setBusqueda(categoria[0].nombreCategoria);
-            setBusquedaCa(categoria[0].nombreCategoria);
+        else if(interruptorCa){
+            // setBusqueda(categoria[0].nombreCategoria);
+            // setBusquedaCa(categoria[0].nombreCategoria);
+            setBusqueda("");
             setBusquedainte("");
         }
         else if(interruptorT){
@@ -141,7 +146,7 @@ function CompoInicioTr(){
 
         }
         else if(currentpage && interruptorC && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaC}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCarrera?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorA && valorseleccionado){
@@ -149,7 +154,7 @@ function CompoInicioTr(){
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
         }
         else if(currentpage && interruptorCa && valorseleccionado){
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaCa}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoria?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busqueda}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`).
             then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total);});
 
         }
@@ -278,7 +283,7 @@ function CompoInicioTr(){
                 setTrabajos(datos.items); 
                 //setTrabajosfiltro(datos.items); 
                 setTotalitems(datos.total);
-                setBusquedaC(busqueda);
+                //setBusquedaC(busqueda);
             }else{
                 alert("Algo salio mal, intentelo nuevamente...");
             }
@@ -311,7 +316,7 @@ function CompoInicioTr(){
                 setTrabajos(datos.items); 
                 //setTrabajosfiltro(datos.items); 
                 setTotalitems(datos.total);
-                setBusquedaCa(busqueda);
+                //setBusquedaCa(busqueda);
             }else{
                 alert("Algo salio mal, intentelo nuevamente...");
             }
@@ -508,16 +513,28 @@ function CompoInicioTr(){
                                 interruptorC&&(
                                     
                                     <div className="col-md-4" style={{marginRight:'20px'}}>
-                                        <div>
+                                        {/* <div>
                                             <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por carrera:</label>
                                         </div>
                                         <div className="w-100 mb-3">
                                             <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onClick={(e)=>{setBusqueda(e.target.value), setBusquedaC(e.target.value)}}>
                                                 {carrera.map((data)=>(<option value={data.nombreCarrera} key={data.ID_Carrera}>{data.nombreCarrera}</option>))}
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                         <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por carrera"}/>
+                                        <MyButtonCA onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalCA show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de carreras"}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
                                     </div>
                                     
                                     
@@ -557,16 +574,28 @@ function CompoInicioTr(){
                             {
                                 interruptorCa&&(
                                     <div className="col-md-4" style={{marginRight:'20px'}}>
-                                        <div>
+                                        {/* <div>
                                             <label className='text-white' style={{fontWeight:'bold', marginRight:'10px'}}>Buscar por categoria:</label>
                                         </div>
                                         <div className="w-100 mb-3">
                                             <select className="bg-dark text-white w-100" style={{borderRadius:'20px', fontWeight:'bold'}}  onClick={(e)=>{setBusqueda(e.target.value), setBusquedaCa(e.target.value)}}>
                                                 {categoria.map((data)=>(<option value={data.nombreCategoria} key={data.ID_Categoria}>{data.nombreCategoria}</option>))}
                                             </select>
-                                        </div>
-
+                                        </div> */}
+                                        
                                         <FormGenericoComponent onSubmit={onSubmitG} busqueda={busqueda} setBusqueda={setBusqueda} placeholder={"Buscar por categoría"}/>
+                                        <MyButtonC2 onOpenModal={()=>setInterruptorModal(!interrputorModal)}/>
+                                        {
+                                            interrputorModal&&(
+                                                <MyVerticallyCenteredModalC2 show={true} onHide={()=>setInterruptorModal(!interrputorModal)}
+                                                    title={"Listado de categorias"}
+                                                    setBusqueda={(value) => {
+                                                        setBusqueda(value);
+                                                        setIsBusquedaUpdated(true);
+                                                    }}
+                                                />
+                                            )
+                                        }
                                     </div>
 
                                    
