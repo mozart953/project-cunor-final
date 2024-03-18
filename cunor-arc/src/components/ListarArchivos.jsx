@@ -97,7 +97,7 @@ function CompoListarArchivosPage(){
 
     useEffect(()=>{
         
-        if(categoria.length>0 && interruptorCa){
+        if(interruptorCa){
             // setBusqueda(categoria[0].nombreCategoria);
             // setBusquedaCa(categoria[0].nombreCategoria);
             setBusqueda("");
