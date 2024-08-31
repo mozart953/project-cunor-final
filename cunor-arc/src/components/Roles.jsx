@@ -13,7 +13,7 @@ function compoRolesPage({datos}){
                     </div>
             </div>
 
-
+{/* 
          <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <div style={{paddingTop:'20px', paddingLeft:'10px', paddingBottom:'10px'}}>
                     <button type="button" className="btn btn-success" 
@@ -27,7 +27,7 @@ function compoRolesPage({datos}){
                     ><i className="bi bi-plus-lg"></i>Crear restricción</button>
                 </div> 
 
-         </div>
+         </div> */}
 
             
 
@@ -37,7 +37,7 @@ function compoRolesPage({datos}){
                                 <tr>
                                 <th scope="col">No.</th>
                                 <th scope="col">Nombre del rol</th>
-                                <th scope="col">Operaciones</th>
+                                {/* <th scope="col">Operaciones</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,13 +46,13 @@ function compoRolesPage({datos}){
                                         <tr key={index}>
                                         <th scope="row">{data.ID_Rol}</th>
                                         <td>{data.nombreRol}</td>
-                                        <td>
+                                        {/* <td>
                                         <button type="button" className="btn btn-success mr-4" style={{ marginRight: '10px' , marginLeft:'10px'}} onClick={()=>{router.push(`/dashboardAdmin/adminRoles/asignarPermisos/${data.ID_Rol}`)}}><i className="bi bi-plus-lg"></i>Agregar permisos</button>
                                         <button type="button" className="btn btn-warning" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminRoles`)}}><i className="bi bi-plus-lg"></i>Agregar restricciones</button>
                                         <button type="button" className="btn btn-info" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminRoles`)}}><i className="bi bi-plus-lg"></i>Detalles</button>                                                                              
                                         
 
-                                        </td>
+                                        </td> */}
                                         </tr>        
 
                                     ))
