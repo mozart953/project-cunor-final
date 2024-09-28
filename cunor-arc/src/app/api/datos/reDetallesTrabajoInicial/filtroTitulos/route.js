@@ -22,6 +22,7 @@ export async function GET(request){
     const searchTerm = paramametros.get('searchTerm')||'';
     const orderDirection = paramametros.get('orderDirection') || 'desc';
     const ordenCampo = paramametros.get('orderCampo')|| 'fechaCarga';    
+    const letra = paramametros.get('letra') || '';
  
 
     let whereClause = {ID_estado:Number(idEstado)};
@@ -36,6 +37,19 @@ export async function GET(request){
                 ]
             };
 
+        }
+
+        if (letra) {
+            whereClause = {
+                ...whereClause,
+                trabajoGrad: {
+                    ...whereClause.trabajoGrad,
+                    titulo: {
+                        startsWith: letra,
+                        mode: 'insensitive'
+                    }
+                }
+            };
         }
 
         const totalItems = await db.registroTrabajoGraduacion.count({
