@@ -39,7 +39,7 @@ export async function GET(request){
 
         }
 
-        if (letra) {
+        if (letra!=='' && letra!==null) {
             whereClause = {
                 ...whereClause,
                 trabajoGrad: {

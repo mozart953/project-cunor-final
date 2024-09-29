@@ -29,8 +29,9 @@ function MyVerticallyCenteredModalT2({setBusqueda,...props}) {
     
     useEffect(()=>{
       //console.log("idUse: " + props.idusuario + "idCarrera " + props.idcarrera);
-        
-        fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}&letra=${letraSeleccionada}`)
+        const letraS= letraSeleccionada?`&letra=${letraSeleccionada}`:'';  
+
+        fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}${letraS}`)
         .then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total)});
         
         
@@ -62,8 +63,9 @@ function MyVerticallyCenteredModalT2({setBusqueda,...props}) {
       e.preventDefault();
       //console.log(busquedaA);
       setBusquedainte(busquedaA);
-      
-      const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
+      const letraS= letraSeleccionada!==''&&letraSeleccionada!==null?`&letra=${letraSeleccionada}`:'';
+
+      const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroTitulos?page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}${letraS}`);
           const datos = await respuesta.json();
           //console.log(datos);
 
@@ -112,7 +114,10 @@ function MyVerticallyCenteredModalT2({setBusqueda,...props}) {
                             <ul className="pagination pagination-sm">
                                 {letras.map(letra => (
                                 <li className={`page-item ${letra === letraSeleccionada ? 'active' : ''}`} key={letra}>
-                                    <a className="page-link" onClick={() => setLetraSeleccionada(letra)}>
+                                    <a className="page-link" 
+                                        onClick={() => {if(letraSeleccionada==''){setLetraSeleccionada(letra)}
+                                                        else if(letraSeleccionada!==letra){setLetraSeleccionada(letra)}
+                                                        else{setLetraSeleccionada('')}}}>
                                     {letra}
                                     </a>
                                 </li>
