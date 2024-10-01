@@ -22,6 +22,7 @@ export async function GET(request){
     const searchTerm = paramametros.get('searchTerm')|| '';
     const orderDirection = paramametros.get('orderDirection')|| 'desc';
     const ordenCampo = paramametros.get('orderCampo') || 'nombreCarrera';
+    const letra = paramametros.get('letra') || '';
 
     let whereClause ={};
 
@@ -52,6 +53,17 @@ export async function GET(request){
                 AND: searchConditions
             };
         }
+
+        if (letra!=='' && letra!==null) {
+            whereClause = {
+                ...whereClause,
+                nombreCarrera: {
+                        startsWith: letra,
+                        mode: 'insensitive'
+                    }
+                }
+        };
+        
 
         const totalItems = await db.carrera.count({
             where:whereClause,
