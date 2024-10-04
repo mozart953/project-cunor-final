@@ -29,13 +29,13 @@ function MyVerticallyCenteredModalC2({setBusqueda,...props}) {
     
     useEffect(()=>{
       //console.log("idUse: " + props.idusuario + "idCarrera " + props.idcarrera);
-        
-            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoriasP?&page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`)
+            const letraS= letraSeleccionada!==''&&letraSeleccionada!==null?`&letra=${letraSeleccionada}`:'';
+            fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoriasP?&page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}${letraS}`)
             .then(data=>data.json()).then(datos=>{setTrabajos(datos.items); setTotalitems(datos.total)});
         
         
 
-    },[currentpage, valorseleccionado, valorseleccionado2]);
+    },[currentpage, valorseleccionado, valorseleccionado2, letraSeleccionada]);
     
     useEffect(()=>{
         if(totalitems!==null){
@@ -62,9 +62,11 @@ function MyVerticallyCenteredModalC2({setBusqueda,...props}) {
       e.preventDefault();
       //console.log(busquedaA);
       setBusquedainte(busquedaA);
+
+      const letraS= letraSeleccionada!==''&&letraSeleccionada!==null?`&letra=${letraSeleccionada}`:'';
       
-      const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoriasP?&page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}`);
-          const datos = await respuesta.json();
+        const respuesta = await fetch(`/api/datos/reDetallesTrabajoInicial/filtroCategoriasP?&page=${currentpage}&itemsPagina=${itemspagina}&idEstado=${estado}&searchTerm=${busquedaA}&orderDirection=${valorseleccionado}&orderCampo=${valorseleccionado2}${letraS}`);
+        const datos = await respuesta.json();
           //console.log(datos);
 
           if(respuesta.ok){
@@ -106,19 +108,21 @@ function MyVerticallyCenteredModalC2({setBusqueda,...props}) {
                         </form>
                     </div>
 
-                    {/* <div className="mb-3 d-flex justify-content-center align-items-center">
+                    <div className="mb-3 d-flex justify-content-center align-items-center">
                         <nav aria-label="Page navigation example" className="mt-3" style={{cursor:'pointer'}}>
                             <ul className="pagination pagination-sm">
                                 {letras.map(letra => (
                                 <li className={`page-item ${letra === letraSeleccionada ? 'active' : ''}`} key={letra}>
-                                    <a className="page-link" onClick={() => setLetraSeleccionada(letra)}>
+                                    <a className="page-link" onClick={() => {if(letraSeleccionada==''){setLetraSeleccionada(letra)}
+                                                        else if(letraSeleccionada!==letra){setLetraSeleccionada(letra)}
+                                                        else{setLetraSeleccionada('')}}}>
                                     {letra}
                                     </a>
                                 </li>
                                 ))}
                             </ul>
                         </nav>
-                    </div> */}
+                    </div>
 
                     <div className="bg-dark text-white border border-secondary mb-3 pt-2 content-center d-flex justify-content-center align-items-center col-sm" style={{maxWidth:'75%', margin:'0 auto'}}>
                         <h3>Resultados: {totalitems} </h3>
