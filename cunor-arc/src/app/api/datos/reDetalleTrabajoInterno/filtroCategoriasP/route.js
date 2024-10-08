@@ -23,6 +23,7 @@ export async function GET(request){
     const searchTerm = paramametros.get('searchTerm')|| '';
     const orderDirection = paramametros.get('orderDirection')|| 'desc';
     const ordenCampo = paramametros.get('orderCampo') || 'nombreCategoria';
+    const letra = paramametros.get('letra') || '';
 
     let whereClause ={};
 
@@ -54,6 +55,16 @@ export async function GET(request){
                 AND: searchConditions
             };
         }
+        
+        if (letra!=='' && letra!==null) {
+            whereClause = {
+                ...whereClause,
+                nombreCategoria: {
+                        startsWith: letra,
+                        mode: 'insensitive'
+                    }
+                }
+        };
 
         const totalItems = await db.categoria.count({
             where:whereClause,
