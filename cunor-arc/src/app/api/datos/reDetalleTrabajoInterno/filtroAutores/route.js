@@ -23,6 +23,7 @@ export async function GET(request){
     const searchTerm = paramametros.get('searchTerm')|| '';
     const orderDirection = paramametros.get('orderDirection')|| 'desc';
     const ordenCampo = paramametros.get('orderCampo') || 'primerNombre';
+    const letra = paramametros.get('letra') || '';
 
     let whereClause ={};
 
@@ -61,6 +62,17 @@ export async function GET(request){
                 AND: searchConditions
             };
         }
+
+        
+        if (letra!=='' && letra!==null) {
+            whereClause = {
+                ...whereClause,
+                primerNombre: {
+                        startsWith: letra,
+                        mode: 'insensitive'
+                    }
+                }
+        };
 
         const totalItems = await db.autor.count({
             where:whereClause,
