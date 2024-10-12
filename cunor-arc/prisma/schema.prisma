@@ -72,11 +72,43 @@ model registroUsuario{
   descripcion String? 
 }
 
+model NivelEducativo{
+  ID_NivelEducativo Int @id @default(autoincrement())
+  nombreNivelEducativo String
+  gradoAcademico GradoAcademico[]
+}
+
+model GradoAcademico{
+  ID_Grado Int @id @default(autoincrement())
+  nombreGrado String
+  nivelEducativo NivelEducativo @relation(fields: [ID_NivelEducativo], references: [ID_NivelEducativo])
+  ID_NivelEducativo Int
+  carrera EnlaceGradoCarrera[]
+}
+
+model Facultad{
+  ID_Facultad Int @id @default(autoincrement())
+  nombreFacultad String
+  carrera Carrera[]
+}
+
 model Carrera{
   ID_Carrera Int @id @default(autoincrement())
   nombreCarrera String
+  codigoCarrera String
+  facultad Facultad @relation(fields: [ID_Facultad], references: [ID_Facultad])
+  ID_Facultad Int
   registroTrabajograd registroTrabajoGraduacion[]
   usuario Usuario[]
+  gradoAcademico EnlaceGradoCarrera[]
+}
+
+model EnlaceGradoCarrera{
+  ID_Grado Int
+  ID_Carrera Int
+  gradoAcademico GradoAcademico @relation(fields: [ID_Grado], references: [ID_Grado])
+  carrera Carrera @relation(fields: [ID_Carrera], references: [ID_Carrera])
+  @@id([ID_Grado, ID_Carrera])
 }
 
 model Categoria{
@@ -87,18 +119,34 @@ model Categoria{
 
 model TrabajoGraduacion{
   ID_Trabajo Int @id @default(autoincrement())
+  correlativo String
   titulo String
   cantidadPaginas Int?
   descripcion String ?
   tamanio Int?
   direccionGuardado String
   paClave String?
+  notaTesis String?
+  editorial String?
   registroTrabajograd registroTrabajoGraduacion[]
 }
 
 model Formato{
   ID_Formato Int @id @default(autoincrement())
   nombreFormato String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model TipoMaterial{
+  ID_TipoMaterial Int @id @default(autoincrement())
+  nombreTipoMaterial String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
+model Idiomas{
+  ID_Idioma Int @id @default(autoincrement())
+  nombre String
+  codigo String
   registroTrabajograd registroTrabajoGraduacion[]
 }
 
@@ -123,6 +171,7 @@ model registroTrabajoGraduacion{
   ID_Detalle Int @id @default(autoincrement())
   fechaCarga DateTime @default(now())
   fechaActualizacion DateTime @default(now())
+  fechaPublicacion DateTime?
   trabajoGrad TrabajoGraduacion  @relation(fields: [ID_trabajo], references: [ID_Trabajo])
   ID_trabajo Int
   categoria Categoria  @relation(fields: [ID_categoria], references: [ID_Categoria])
@@ -137,6 +186,10 @@ model registroTrabajoGraduacion{
   ID_usuario Int
   estado estadoTrabajoGraduacion  @relation(fields: [ID_estado], references: [ID_Estado])
   ID_estado Int
+  tipoMaterial TipoMaterial @relation(fields: [ID_TipoMaterial], references: [ID_TipoMaterial])
+  ID_TipoMaterial Int
+  idiomas Idiomas @relation(fields: [ID_Idioma], references: [ID_Idioma])
+  ID_Idioma Int
   autores EnlaceTrabajoAutor[]
   archivoAnexo ArchivoAnexo[]
 

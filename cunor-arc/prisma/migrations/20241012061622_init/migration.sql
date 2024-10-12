@@ -66,11 +66,46 @@ CREATE TABLE "registroUsuario" (
 );
 
 -- CreateTable
+CREATE TABLE "NivelEducativo" (
+    "ID_NivelEducativo" SERIAL NOT NULL,
+    "nombreNivelEducativo" TEXT NOT NULL,
+
+    CONSTRAINT "NivelEducativo_pkey" PRIMARY KEY ("ID_NivelEducativo")
+);
+
+-- CreateTable
+CREATE TABLE "GradoAcademico" (
+    "ID_Grado" SERIAL NOT NULL,
+    "nombreGrado" TEXT NOT NULL,
+    "ID_NivelEducativo" INTEGER NOT NULL,
+
+    CONSTRAINT "GradoAcademico_pkey" PRIMARY KEY ("ID_Grado")
+);
+
+-- CreateTable
+CREATE TABLE "Facultad" (
+    "ID_Facultad" SERIAL NOT NULL,
+    "nombreFacultad" TEXT NOT NULL,
+
+    CONSTRAINT "Facultad_pkey" PRIMARY KEY ("ID_Facultad")
+);
+
+-- CreateTable
 CREATE TABLE "Carrera" (
     "ID_Carrera" SERIAL NOT NULL,
     "nombreCarrera" TEXT NOT NULL,
+    "codigoCarrera" TEXT NOT NULL,
+    "ID_Facultad" INTEGER NOT NULL,
 
     CONSTRAINT "Carrera_pkey" PRIMARY KEY ("ID_Carrera")
+);
+
+-- CreateTable
+CREATE TABLE "EnlaceGradoCarrera" (
+    "ID_Grado" INTEGER NOT NULL,
+    "ID_Carrera" INTEGER NOT NULL,
+
+    CONSTRAINT "EnlaceGradoCarrera_pkey" PRIMARY KEY ("ID_Grado","ID_Carrera")
 );
 
 -- CreateTable
@@ -84,12 +119,15 @@ CREATE TABLE "Categoria" (
 -- CreateTable
 CREATE TABLE "TrabajoGraduacion" (
     "ID_Trabajo" SERIAL NOT NULL,
+    "correlativo" TEXT NOT NULL,
     "titulo" TEXT NOT NULL,
     "cantidadPaginas" INTEGER,
     "descripcion" TEXT,
     "tamanio" INTEGER,
     "direccionGuardado" TEXT NOT NULL,
     "paClave" TEXT,
+    "notaTesis" TEXT,
+    "editorial" TEXT,
 
     CONSTRAINT "TrabajoGraduacion_pkey" PRIMARY KEY ("ID_Trabajo")
 );
@@ -100,6 +138,23 @@ CREATE TABLE "Formato" (
     "nombreFormato" TEXT NOT NULL,
 
     CONSTRAINT "Formato_pkey" PRIMARY KEY ("ID_Formato")
+);
+
+-- CreateTable
+CREATE TABLE "TipoMaterial" (
+    "ID_TipoMaterial" SERIAL NOT NULL,
+    "nombreTipoMaterial" TEXT NOT NULL,
+
+    CONSTRAINT "TipoMaterial_pkey" PRIMARY KEY ("ID_TipoMaterial")
+);
+
+-- CreateTable
+CREATE TABLE "Idiomas" (
+    "ID_Idioma" SERIAL NOT NULL,
+    "nombre" TEXT NOT NULL,
+    "codigo" TEXT NOT NULL,
+
+    CONSTRAINT "Idiomas_pkey" PRIMARY KEY ("ID_Idioma")
 );
 
 -- CreateTable
@@ -128,12 +183,15 @@ CREATE TABLE "registroTrabajoGraduacion" (
     "ID_Detalle" SERIAL NOT NULL,
     "fechaCarga" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "fechaActualizacion" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "fechaPublicacion" TIMESTAMP(3),
     "ID_trabajo" INTEGER NOT NULL,
     "ID_categoria" INTEGER NOT NULL,
     "ID_formato" INTEGER NOT NULL,
     "ID_carrera" INTEGER NOT NULL,
     "ID_usuario" INTEGER NOT NULL,
     "ID_estado" INTEGER NOT NULL,
+    "ID_TipoMaterial" INTEGER NOT NULL,
+    "ID_Idioma" INTEGER NOT NULL,
 
     CONSTRAINT "registroTrabajoGraduacion_pkey" PRIMARY KEY ("ID_Detalle")
 );
@@ -180,6 +238,18 @@ ALTER TABLE "Usuario" ADD CONSTRAINT "Usuario_ID_carrera_fkey" FOREIGN KEY ("ID_
 ALTER TABLE "registroUsuario" ADD CONSTRAINT "registroUsuario_ID_usuario_fkey" FOREIGN KEY ("ID_usuario") REFERENCES "Usuario"("ID_Usuario") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "GradoAcademico" ADD CONSTRAINT "GradoAcademico_ID_NivelEducativo_fkey" FOREIGN KEY ("ID_NivelEducativo") REFERENCES "NivelEducativo"("ID_NivelEducativo") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Carrera" ADD CONSTRAINT "Carrera_ID_Facultad_fkey" FOREIGN KEY ("ID_Facultad") REFERENCES "Facultad"("ID_Facultad") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnlaceGradoCarrera" ADD CONSTRAINT "EnlaceGradoCarrera_ID_Grado_fkey" FOREIGN KEY ("ID_Grado") REFERENCES "GradoAcademico"("ID_Grado") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnlaceGradoCarrera" ADD CONSTRAINT "EnlaceGradoCarrera_ID_Carrera_fkey" FOREIGN KEY ("ID_Carrera") REFERENCES "Carrera"("ID_Carrera") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_trabajo_fkey" FOREIGN KEY ("ID_trabajo") REFERENCES "TrabajoGraduacion"("ID_Trabajo") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -196,6 +266,12 @@ ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacio
 
 -- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_estado_fkey" FOREIGN KEY ("ID_estado") REFERENCES "estadoTrabajoGraduacion"("ID_Estado") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_TipoMaterial_fkey" FOREIGN KEY ("ID_TipoMaterial") REFERENCES "TipoMaterial"("ID_TipoMaterial") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_Idioma_fkey" FOREIGN KEY ("ID_Idioma") REFERENCES "Idiomas"("ID_Idioma") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EnlaceTrabajoAutor" ADD CONSTRAINT "EnlaceTrabajoAutor_ID_Autor_fkey" FOREIGN KEY ("ID_Autor") REFERENCES "Autor"("ID_Autor") ON DELETE RESTRICT ON UPDATE CASCADE;
