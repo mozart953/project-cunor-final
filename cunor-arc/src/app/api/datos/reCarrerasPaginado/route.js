@@ -29,6 +29,9 @@ export async function GET(request){
             where:whereClause,
             skip: (page-1)*itemsPerPage,
             take: itemsPerPage,
+            include:{
+                facultad:true,
+            }
             
         });
 
