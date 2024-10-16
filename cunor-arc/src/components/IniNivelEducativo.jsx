@@ -100,7 +100,7 @@ function CompoNivelEducativoPage({datos, totalItems}){
 
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
-                    onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
+                    onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo/crearNivel')}}
                 ><i className="bi bi-plus-lg"></i><strong>Agregar Nivel Educativo</strong></button>
             </div>
 
