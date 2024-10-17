@@ -139,7 +139,7 @@ function CompoNivelEducativoPage({datos, totalItems}){
                                         <th scope="row">{data.ID_NivelEducativo}</th>
                                         <td>{data.nombreNivelEducativo}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminNivelEducativo/editarNivel/${data.ID_NivelEducativo}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
