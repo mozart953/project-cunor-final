@@ -14,25 +14,28 @@ export async function GET(request){
         if(searchTerm){
             whereClause={
                 OR:[
-                    {nombreNivelEducativo:{contains:searchTerm, mode: 'insensitive'}},                
+                    {nombreGrado:{contains:searchTerm, mode: 'insensitive'}},                
                 ]
             };
 
         };
 
-        const totalItems = await db.nivelEducativo.count({
+        const totalItems = await db.gradoAcademico.count({
             where:whereClause,
         });
 
 
-        const nivelE = await db.nivelEducativo.findMany({
+        const grado = await db.gradoAcademico.findMany({
             where:whereClause,
             skip: (page-1)*itemsPerPage,
             take: itemsPerPage,
+            include:{
+                nivelEducativo:true,
+            }
                         
         });
 
-        return NextResponse.json({items: nivelE, total: totalItems});
+        return NextResponse.json({items: grado, total: totalItems});
 
     }catch(error){
         return NextResponse({message:'Ha ocurrido un error inesperado'}, {status:500});

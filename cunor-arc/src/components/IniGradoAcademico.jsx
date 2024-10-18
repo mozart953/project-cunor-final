@@ -2,10 +2,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function compoCarrerasPage({datos, totalItems}){
+function CompoGradoAcademicoPage({datos, totalItems}){
+
     const router = useRouter();
 
-    const [datoscarrera, setDatoscarrera] = useState([]);
+    const [datosnivel, setNivel] = useState([]);
     
 
     const [currentpage, setCurrentpage] = useState(1);
@@ -18,15 +19,15 @@ function compoCarrerasPage({datos, totalItems}){
 
     useEffect(()=>{
         console.log(datos);
-        setDatoscarrera(datos);
+        setNivel(datos);
         setTotalitems(totalItems);
     }, [datos, totalItems]);
 
     useEffect(
         ()=>{
             if(currentpage){
-                fetch(`/api/datos/reCarrerasPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
-                .then(data=>data.json()).then(datos=>{setDatoscarrera(datos.items); setTotalitems(datos.total);})
+                fetch(`/api/datos/reGradoAPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`)
+                .then(data=>data.json()).then(datos=>{setNivel(datos.items); setTotalitems(datos.total);})
             }
         },[currentpage]
     )
@@ -58,17 +59,19 @@ function compoCarrerasPage({datos, totalItems}){
         console.log(busqueda);
         setBusquedainte(busqueda);
 
-        const respuesta = await fetch(`/api/datos/reCarrerasPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
+        const respuesta = await fetch(`/api/datos/reGradoAPaginado?page=${currentpage}&itemsPagina=${itemspagina}&searchTerm=${busqueda}`);
         const datos = await respuesta.json();
         console.log(datos);
 
         if(respuesta.ok){
-            setDatoscarrera(datos.items); 
+            setNivel(datos.items); 
             setTotalitems(datos.total);
         }else{
             alert("Algo salio mal, intententelo nuevamente...")
         }
     }
+
+
 
 
     return(
@@ -81,7 +84,7 @@ function compoCarrerasPage({datos, totalItems}){
 
             <div className="mb-3 d-flex justify-content-center align-items-center">
                         <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
-                                <input type="search" className="form-control" placeholder="Buscar carrera" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
+                                <input type="search" className="form-control" placeholder="Buscar grado académico" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
                                 <button className="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark" style={{padding: ".45rem 1.5rem .35rem"}}>
                                 <i className="bi bi-search"></i> Buscar 
                                 </button>
@@ -97,22 +100,11 @@ function compoCarrerasPage({datos, totalItems}){
 
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
-                    onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
-                ><i className="bi bi-plus-lg"></i><strong>Agregar carrera</strong></button>
+                    onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo/crearNivel')}}
+                ><i className="bi bi-plus-lg"></i><strong>Agregar Grado Académico</strong></button>
             </div>
 
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-            <button type="button" className="btn btn-success" 
-                onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo')}}
-            ><i className="bi bi-plus-lg"></i><strong>Administrar Nivel Educativo</strong></button>
-            </div>
-           
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-            <button type="button" className="btn btn-success" 
-                onClick={()=>{router.push('/dashboardAdmin/adminGradoAcademico')}}
-            ><i className="bi bi-plus-lg"></i><strong>Administrar Grado Academico</strong></button>
-            </div>
-
+         
             <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
                     <div className="content-center d-flex justify-content-center align-items-center">
                             <nav aria-label="..." style={{cursor:"pointer"}}>
@@ -136,22 +128,20 @@ function compoCarrerasPage({datos, totalItems}){
                             <thead>
                                 <tr>
                                 <th scope="col">No.</th>
-                                <th scope="col">Nombre de la carrera</th>
-                                <th scope="col">Código de carrera</th>
-                                <th scope="col">Facultad</th>
+                                <th scope="col">Grado académico</th>
+                                <th scope="col">Nivel educativo</th>
                                 <th scope="col">Operaciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    datoscarrera && datoscarrera.length!==0?(datoscarrera.map((data)=>(
-                                        <tr key={data.ID_Carrera}>
-                                        <th scope="row">{data.ID_Carrera}</th>
-                                        <td>{data.nombreCarrera}</td>
-                                        <td>{data.codigoCarrera}</td>
-                                        <td>{data.facultad.nombreFacultad}</td>
+                                    datosnivel && datosnivel.length!==0?(datosnivel.map((data)=>(
+                                        <tr key={data.ID_Grado}>
+                                        <th scope="row">{data.ID_Grado}</th>
+                                        <td>{data.nombreGrado}</td>
+                                        <td>{data.nivelEducativo.nombreNivelEducativo}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminNivelEducativo/editarNivel/${data.ID_NivelEducativo}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
@@ -166,7 +156,7 @@ function compoCarrerasPage({datos, totalItems}){
                         </table>
 
                         {
-                            datoscarrera && datoscarrera.length===0?(
+                            datosnivel && datosnivel.length===0?(
                                 busquedainte!==""?(
                                     <div className="text-white mt-1" style={{width:'100%', margin:'0 auto'}}>
                                     <div className="card mb-4 bg-dark text-white border-secondary" style={{width:'100%', margin:'0 auto', borderWidth: '3px'}} >
@@ -224,10 +214,8 @@ function compoCarrerasPage({datos, totalItems}){
 
 
             </div>
-        
         </>
     );
-
 }
 
-export default compoCarrerasPage;
+export default CompoGradoAcademicoPage;
