@@ -141,7 +141,7 @@ function CompoGradoAcademicoPage({datos, totalItems}){
                                         <td>{data.nombreGrado}</td>
                                         <td>{data.nivelEducativo.nombreNivelEducativo}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminNivelEducativo/editarNivel/${data.ID_NivelEducativo}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminGradoAcademico/editarGrado/${data.ID_Grado}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
