@@ -139,7 +139,7 @@ function CompoFacultadesPage({datos, totalItems}){
                                         <th scope="row">{data.ID_Facultad}</th>
                                         <td>{data.nombreFacultad}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminGradoAcademico/editarGrado/${data.ID_Grado}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminFacultades/editarFacultad/${data.ID_Facultad}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
