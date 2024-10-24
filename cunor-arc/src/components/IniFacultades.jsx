@@ -100,8 +100,8 @@ function CompoFacultadesPage({datos, totalItems}){
 
             <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
-                    onClick={()=>{router.push('/dashboardAdmin/adminGradoAcademico/crearGrado')}}
-                ><i className="bi bi-plus-lg"></i><strong>Agregar Grado Académico</strong></button>
+                    onClick={()=>{router.push('/dashboardAdmin/adminFacultades/crearFacultad')}}
+                ><i className="bi bi-plus-lg"></i><strong>Agregar facultad</strong></button>
             </div>
 
          
