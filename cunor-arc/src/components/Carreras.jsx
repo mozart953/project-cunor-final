@@ -144,6 +144,8 @@ function compoCarrerasPage({datos, totalItems}){
                                 <th scope="col">No.</th>
                                 <th scope="col">Nombre de la carrera</th>
                                 <th scope="col">Código de carrera</th>
+                                <th scope="col">Grado Académico</th>
+                                <th scope="col">Nivel Educativo</th>
                                 <th scope="col">Facultad</th>
                                 <th scope="col">Operaciones</th>
                                 </tr>
@@ -155,6 +157,8 @@ function compoCarrerasPage({datos, totalItems}){
                                         <th scope="row">{data.ID_Carrera}</th>
                                         <td>{data.nombreCarrera}</td>
                                         <td>{data.codigoCarrera}</td>
+                                        {data.gradoAcademico.map((datos)=>(<td key={datos.ID_Grado}>{datos.gradoAcademico.nombreGrado}</td>))}
+                                        {data.gradoAcademico.map((datos)=>(<td key={datos.gradoAcademico.nivelEducativo.ID_NivelEducativo}>{datos.gradoAcademico.nivelEducativo.nombreNivelEducativo}</td>))}
                                         <td>{data.facultad.nombreFacultad}</td>
                                         <td>
                                         <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminCarreras/editarCarrera/${data.ID_Carrera}`)}}><i className="bi bi-pencil-square"></i></button>

@@ -31,6 +31,15 @@ export async function GET(request){
             take: itemsPerPage,
             include:{
                 facultad:true,
+                gradoAcademico:{
+                    include:{
+                        gradoAcademico:{
+                            include:{
+                                nivelEducativo:true,
+                            }
+                        }
+                    }
+                },
             }
             
         });
