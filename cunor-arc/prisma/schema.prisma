@@ -109,6 +109,14 @@ model EnlaceGradoCarrera{
   gradoAcademico GradoAcademico @relation(fields: [ID_Grado], references: [ID_Grado])
   carrera Carrera @relation(fields: [ID_Carrera], references: [ID_Carrera])
   @@id([ID_Grado, ID_Carrera])
+  estadoGC estadoEnlaceCarrera @relation(fields: [ID_Estado], references: [ID_Estado])
+  ID_Estado Int
+}
+
+model estadoEnlaceCarrera{
+  ID_Estado Int @id @default(autoincrement())
+  estado Int
+  enlaceGC EnlaceGradoCarrera[]
 }
 
 model Categoria{
@@ -192,6 +200,7 @@ model registroTrabajoGraduacion{
   ID_Idioma Int
   autores EnlaceTrabajoAutor[]
   archivoAnexo ArchivoAnexo[]
+  autoresCorp EnlaceTrabajoACorporativo[]
 
 }
 
@@ -201,6 +210,20 @@ model EnlaceTrabajoAutor{
   autor Autor @relation(fields: [ID_Autor], references: [ID_Autor])
   registroTrabajoGraduacion registroTrabajoGraduacion @relation(fields: [ID_Detalle], references: [ID_Detalle])
   @@id([ID_Autor, ID_Detalle])
+}
+
+model AutorCorporativo{
+  ID_AutorC Int @id @default(autoincrement())
+  nombreAutor String
+  registroTrabajograd EnlaceTrabajoACorporativo[]
+}
+
+model EnlaceTrabajoACorporativo{
+  ID_AutorC Int
+  ID_Detalle Int 
+  autorCorp AutorCorporativo @relation(fields: [ID_AutorC], references: [ID_AutorC])
+  registroTrabajoGraduacion registroTrabajoGraduacion @relation(fields: [ID_Detalle], references: [ID_Detalle])
+  @@id([ID_AutorC, ID_Detalle])
 }
 
 model ArchivoAnexo{
