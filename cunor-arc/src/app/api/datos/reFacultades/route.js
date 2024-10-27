@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 
 export async function GET(){
-    const facultades = await db.facultades.findMany();
+    const facultades = await db.facultad.findMany();
 
     return NextResponse.json(facultades);
 }

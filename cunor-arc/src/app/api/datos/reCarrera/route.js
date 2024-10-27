@@ -13,6 +13,8 @@ export async function POST(request){
     const carrera = await db.carrera.create({
         data:{
             nombreCarrera:datos.nombreCarrera,
+            codigoCarrera:datos.codigoCarrera,
+            ID_Facultad:Number(datos.ID_Facultad),
         }
     }
 
