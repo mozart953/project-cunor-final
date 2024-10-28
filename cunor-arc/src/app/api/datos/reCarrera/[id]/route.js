@@ -16,10 +16,12 @@ export async function PUT(request, {params}){
 
     const carrera = await db.carrera.update({
         where:{
-            ID_Carrera:Number(params.id)
-        },
+            ID_Carrera:Number(params.id),
+         },
         data:{
             nombreCarrera:datos.nombreCarrera,
+            codigoCarrera:datos.codigoCarrera,
+            ID_Facultad:Number(datos.ID_Facultad)
         }
     }
 

@@ -38,7 +38,7 @@ function CrearCarreraPage(){
         event.preventDefault();
         const selectGrado = event.target.value;
         console.log(selectGrado);
-        setIdfacultad(selectGrado);
+        setIdGradoAcademico(selectGrado);
     }
 
 

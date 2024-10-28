@@ -12,6 +12,13 @@ function EditCarreraPage({params}){
 
     const [datoscarrera, setDatoscarrera] = useState({});
 
+    const [facultades, setFacultades] = useState([]);
+    const [idfacultad, setIdfacultad] = useState(0);
+    const [gradoAcademico, setGradoAcademico] = useState([]);
+    const [idGradoAcademico, setIdGradoAcademico] = useState(0);
+    const [idGradoAcademicoA, setIdGradoAcademicoA] = useState(0);
+    const [codigoCarrera, setCodigoCarrera] = useState();
+
     const route = useRouter();
     
     useEffect(() => {
@@ -27,8 +34,44 @@ function EditCarreraPage({params}){
     useEffect(()=>{
         if(datoscarrera){
             setValue('nombreCarrera', carrera);
+            setValue('Codigo', codigoCarrera);
         }
-    },[datoscarrera])
+    },[datoscarrera]);
+
+    const obtenerIdFacultad = (event)=>{
+        event.preventDefault();
+        const selectFacultad = event.target.value;
+        console.log(selectFacultad);
+        setIdfacultad(selectFacultad);
+    }
+
+    const obtenerIdGrado = (event)=>{
+        event.preventDefault();
+        const selectGrado = event.target.value;
+        console.log(selectGrado);
+        setIdGradoAcademico(selectGrado);
+    }
+
+
+    useEffect(()=>{
+        fetch(`/api/datos/reFacultades`).then(data=>data.json()).then(
+            datos=>{
+                console.log(datos);
+                setFacultades([...datos, ...facultades]);
+          
+            }
+        );
+
+        fetch(`/api/datos/reGradoAcademico`).then(data=>data.json()).then(
+            datos=>{
+                console.log(datos);
+                setGradoAcademico([...datos, ...gradoAcademico]);
+
+            }
+        );
+
+
+    },[]);
 
 
     useEffect(()=>{
@@ -37,10 +80,27 @@ function EditCarreraPage({params}){
                 
                 setDatoscarrera(data);
 
-                 setCarrera(data.nombreCarrera)
+                 setCarrera(data.nombreCarrera);
+
+                 setCodigoCarrera(data.codigoCarrera);
+
+                 setIdfacultad(data.ID_Facultad);
 
                  console.log(data.nombreCarrera)
                 });
+
+        fetch(`/api/datos/reCarreraEG/${params.id}`).then(data=>data.json()).then(
+            datos=>{
+                console.log(datos.gradoAcademico[0].ID_Grado);
+                console.log(datos);
+                console.log("ID_Grado " + datos.gradoAcademico[0].ID_Grado);
+                setIdGradoAcademico(datos.gradoAcademico[0].ID_Grado);
+                setIdGradoAcademicoA(datos.gradoAcademico[0].ID_Grado);
+                
+            }
+        )
+
+        
     },[]);
 
     const onSubmit = handleSubmit(async (data)=>{
@@ -54,7 +114,9 @@ function EditCarreraPage({params}){
         const datos = await fetch(`/api/datos/reCarrera/${params.id}`,{
             method:'PUT',
             body:JSON.stringify({
-                nombreCarrera:data.nombreCarrera,            
+                nombreCarrera:data.nombreCarrera,
+                codigoCarrera:data.Codigo,
+                ID_Facultad:Number(idfacultad),              
                   
 
             }),
@@ -62,15 +124,43 @@ function EditCarreraPage({params}){
                 'Content-Type':'application/json'
             }
         });
-        //const respuesta = await datos.json();
-        if(datos.ok){
-           setRegistro(true);
-           route.push('/dashboardAdmin/adminCarreras');
-           route.refresh();
+        const respuesta = await datos.json();
+
+        if(idGradoAcademico!== idGradoAcademicoA){
+            const datos2 = await fetch(`/api/datos/reEnlaceGradoC/${params.id}`,{
+                method:'PUT',
+                body:JSON.stringify({
+                    old_ID_Grado:Number(idGradoAcademicoA),
+                    new_ID_Grado:Number(idGradoAcademico),
+                    ID_Estado:Number(1),
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            });
+
+            const respuesta2 = await datos2.json();
+
+            if(datos.ok && datos2.ok){
+                setRegistro(true);
+                route.push('/dashboardAdmin/adminCarreras');
+                route.refresh();
+             }else{
+                 alert("Algo salio mal..."); //cambiar diseno
+             }
         }else{
-            alert("Algo salio mal..."); //cambiar diseno
+            
+            if(datos.ok){
+                setRegistro(true);
+                route.push('/dashboardAdmin/adminCarreras');
+                route.refresh();
+            }else{
+                alert("Algo salio mal..."); //cambiar diseno
+            }
+            console.log(datos);
         }
-        console.log(datos);
+
+
         
     }); 
 
@@ -105,6 +195,56 @@ function EditCarreraPage({params}){
                 
 
                         </div>
+
+                        <div className='row mb-3'>
+                            <div className="col-4">
+                                <label htmlFor="disabledTextInput" className="text-white"><strong>Código de carrera</strong></label>
+                            </div>
+
+                            <div className="col"> 
+                                <input type="text" placeholder="Código"  {...register("Codigo", {required: {value: true, message:'Es necesario escribir el código de carrera...'}})}   className="form-control bg-secondary text-white" />
+                            </div> 
+
+                            {
+                                errors.Codigo && (                                  
+                                    
+                                    <span className="badge rounded-pill text-bg-danger">{errors.Codigo.message}</span>
+
+
+                                )
+                            }
+
+                
+
+                        </div>
+
+                        <div className='row mb-2'>
+                            <div className='col-4'>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar facultad</strong></label>
+                            </div>
+
+
+
+                            <select className='col form-select text-white bg-dark' value={idfacultad} onChange={obtenerIdFacultad}>
+                                {facultades.map((datos)=><option key={datos.ID_Facultad} value={datos.ID_Facultad}>{datos.nombreFacultad}</option>)}
+                            </select> 
+
+
+                        </div>  
+
+                        <div className='row mb-2'>
+                            <div className='col-4'>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar Grado Académico</strong></label>
+                            </div>
+
+
+
+                            <select className='col form-select text-white bg-dark' value={idGradoAcademico} onChange={obtenerIdGrado}>
+                                {gradoAcademico.map((datos)=><option key={datos.ID_Grado} value={datos.ID_Grado}>{datos.nombreGrado}</option>)}
+                            </select> 
+
+
+                        </div>  
                       
                        
 
