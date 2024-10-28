@@ -1,4 +1,5 @@
 import db from '@/libs/db.js';
+import { serverHooks } from 'next/dist/server/app-render/entry-base';
 import { NextResponse } from 'next/server';
 
 export async function GET(request){
@@ -14,7 +15,11 @@ export async function GET(request){
         if(searchTerm){
             whereClause={
                 OR:[
-                    {nombreCarrera:{contains:searchTerm, mode: 'insensitive'}},                
+                    {nombreCarrera:{contains:searchTerm, mode: 'insensitive'}}, 
+                    {codigoCarrera:{contains:searchTerm, mode: 'insensitive'}}, 
+                    {facultad:{nombreFacultad:{contains:searchTerm, mode:'insensitive'}}},
+                    {gradoAcademico:{some:{gradoAcademico:{nombreGrado:{contains:searchTerm, mode: 'insensitive'}}}}},
+                    {gradoAcademico:{some:{gradoAcademico:{nivelEducativo:{nombreNivelEducativo:{contains:searchTerm, mode: 'insensitive'}}}}}}              
                 ]
             };
 

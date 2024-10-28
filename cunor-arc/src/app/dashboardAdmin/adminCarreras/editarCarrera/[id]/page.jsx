@@ -141,6 +141,8 @@ function EditCarreraPage({params}){
 
             const respuesta2 = await datos2.json();
 
+            console.log("inside");
+
             if(datos.ok && datos2.ok){
                 setRegistro(true);
                 route.push('/dashboardAdmin/adminCarreras');
@@ -149,6 +151,7 @@ function EditCarreraPage({params}){
                  alert("Algo salio mal..."); //cambiar diseno
              }
         }else{
+            console.log("outside");
             
             if(datos.ok){
                 setRegistro(true);
