@@ -78,7 +78,7 @@ function CompoFacultadesPage({datos, totalItems}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de carreras -CUNOR-</strong></legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de facultades -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -97,11 +97,18 @@ function CompoFacultadesPage({datos, totalItems}){
             </div>
 
     
+            <div className="d-flex justify-content-between" style={{ padding: '10px 120px 10px 0px' }}>
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-success" 
+                        onClick={()=>{router.push('/dashboardAdmin/adminFacultades/crearFacultad')}}
+                    ><i className="bi bi-plus-lg"></i><strong>Agregar facultad</strong></button>
+                </div>
 
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" 
-                    onClick={()=>{router.push('/dashboardAdmin/adminFacultades/crearFacultad')}}
-                ><i className="bi bi-plus-lg"></i><strong>Agregar facultad</strong></button>
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-primary" 
+                        onClick={()=>{router.push('/dashboardAdmin/adminCarreras')}}
+                    ><i className="bi bi-backspace-fill"></i><strong>Regresar</strong></button>
+                </div>
             </div>
 
          

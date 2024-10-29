@@ -79,6 +79,35 @@ function compoCarrerasPage({datos, totalItems}){
                     </div>
             </div>
 
+
+
+            <div className="d-flex justify-content-between" style={{ padding: '10px 120px 10px 0px' }}>
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                        <button type="button" className="btn btn-success" 
+                            onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
+                        ><i className="bi bi-plus-lg"></i><strong>Agregar carrera</strong></button>
+                </div>
+                
+
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                <button type="button" className="btn btn-success" 
+                    onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo')}}
+                ><i className="bi bi-plus-lg"></i><strong>Administrar Nivel Educativo</strong></button>
+                </div>
+            
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                <button type="button" className="btn btn-success" 
+                    onClick={()=>{router.push('/dashboardAdmin/adminGradoAcademico')}}
+                ><i className="bi bi-plus-lg"></i><strong>Administrar Grado Académico</strong></button>
+                </div>
+
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                <button type="button" className="btn btn-success" 
+                    onClick={()=>{router.push('/dashboardAdmin/adminFacultades')}}
+                ><i className="bi bi-plus-lg"></i><strong>Administrar Facultades</strong></button>
+                </div>
+            </div>
+
             <div className="mb-3 d-flex justify-content-center align-items-center">
                         <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
                                 <input type="search" className="form-control" placeholder="Buscar carrera" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
@@ -93,31 +122,7 @@ function compoCarrerasPage({datos, totalItems}){
                 <h3>Resultados: {totalitems} </h3>
             </div>
 
-    
 
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" 
-                    onClick={()=>{router.push('/dashboardAdmin/adminCarreras/crearCarrera')}}
-                ><i className="bi bi-plus-lg"></i><strong>Agregar carrera</strong></button>
-            </div>
-
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-            <button type="button" className="btn btn-success" 
-                onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo')}}
-            ><i className="bi bi-plus-lg"></i><strong>Administrar Nivel Educativo</strong></button>
-            </div>
-           
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-            <button type="button" className="btn btn-success" 
-                onClick={()=>{router.push('/dashboardAdmin/adminGradoAcademico')}}
-            ><i className="bi bi-plus-lg"></i><strong>Administrar Grado Academico</strong></button>
-            </div>
-
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-            <button type="button" className="btn btn-success" 
-                onClick={()=>{router.push('/dashboardAdmin/adminFacultades')}}
-            ><i className="bi bi-plus-lg"></i><strong>Administrar Facultades</strong></button>
-            </div>
 
             <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
                     <div className="content-center d-flex justify-content-center align-items-center">
