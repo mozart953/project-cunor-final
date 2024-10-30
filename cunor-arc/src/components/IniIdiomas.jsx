@@ -150,7 +150,7 @@ function CompoIdiomasPage({datos, totalItems}){
                                         <td>{data.nombre}</td>
                                         <td>{data.codigo}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminNivelEducativo/editarNivel/${data.ID_NivelEducativo}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminIdiomas/editarIdioma/${data.ID_Idioma}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
