@@ -100,7 +100,7 @@ function CompoMaterialesPage({datos, totalItems}){
             <div className="d-flex justify-content-between" style={{ padding: '10px 120px 10px 0px' }}>
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                     <button type="button" className="btn btn-success" 
-                        onClick={()=>{router.push('/dashboardAdmin/adminIdiomas/crearIdioma')}}
+                        onClick={()=>{router.push('/dashboardAdmin/adminMateriales/crearMaterial')}}
                     ><i className="bi bi-plus-lg"></i><strong>Agregar tipo de material</strong></button>
                 </div>
 
