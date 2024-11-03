@@ -148,7 +148,7 @@ function CompoMaterialesPage({datos, totalItems}){
                                         <th scope="row">{data.ID_TipoMaterial}</th>
                                         <td>{data.nombreTipoMaterial}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminIdiomas/editarIdioma/${data.ID_Idioma}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminMateriales/editarMaterial/${data.ID_TipoMaterial}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
