@@ -175,6 +175,13 @@ model Autor{
   registroTrabajograd EnlaceTrabajoAutor[]
 }
 
+model Pais{
+  ID_Pais Int @id @default(autoincrement())
+  nombrePais String
+  codigo String
+  registroTrabajograd registroTrabajoGraduacion[]
+}
+
 model registroTrabajoGraduacion{
   ID_Detalle Int @id @default(autoincrement())
   fechaCarga DateTime @default(now())
@@ -198,6 +205,8 @@ model registroTrabajoGraduacion{
   ID_TipoMaterial Int
   idiomas Idiomas @relation(fields: [ID_Idioma], references: [ID_Idioma])
   ID_Idioma Int
+  paises Pais @relation(fields: [ID_Pais], references: [ID_Pais])
+  ID_Pais Int
   autores EnlaceTrabajoAutor[]
   archivoAnexo ArchivoAnexo[]
   autoresCorp EnlaceTrabajoACorporativo[]

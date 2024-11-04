@@ -188,6 +188,15 @@ CREATE TABLE "Autor" (
 );
 
 -- CreateTable
+CREATE TABLE "Pais" (
+    "ID_Pais" SERIAL NOT NULL,
+    "nombrePais" TEXT NOT NULL,
+    "codigo" TEXT NOT NULL,
+
+    CONSTRAINT "Pais_pkey" PRIMARY KEY ("ID_Pais")
+);
+
+-- CreateTable
 CREATE TABLE "registroTrabajoGraduacion" (
     "ID_Detalle" SERIAL NOT NULL,
     "fechaCarga" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -201,6 +210,7 @@ CREATE TABLE "registroTrabajoGraduacion" (
     "ID_estado" INTEGER NOT NULL,
     "ID_TipoMaterial" INTEGER NOT NULL,
     "ID_Idioma" INTEGER NOT NULL,
+    "ID_Pais" INTEGER NOT NULL,
 
     CONSTRAINT "registroTrabajoGraduacion_pkey" PRIMARY KEY ("ID_Detalle")
 );
@@ -300,6 +310,9 @@ ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacio
 
 -- AddForeignKey
 ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_Idioma_fkey" FOREIGN KEY ("ID_Idioma") REFERENCES "Idiomas"("ID_Idioma") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "registroTrabajoGraduacion" ADD CONSTRAINT "registroTrabajoGraduacion_ID_Pais_fkey" FOREIGN KEY ("ID_Pais") REFERENCES "Pais"("ID_Pais") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EnlaceTrabajoAutor" ADD CONSTRAINT "EnlaceTrabajoAutor_ID_Autor_fkey" FOREIGN KEY ("ID_Autor") REFERENCES "Autor"("ID_Autor") ON DELETE RESTRICT ON UPDATE CASCADE;
