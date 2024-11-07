@@ -78,7 +78,7 @@ function CompoPaisesPage({datos, totalItems}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de Idiomas -CUNOR-</strong></legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de Países -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -150,7 +150,7 @@ function CompoPaisesPage({datos, totalItems}){
                                         <td>{data.nombrePais}</td>
                                         <td>{data.codigo}</td>
                                         <td>
-                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminIdiomas/editarIdioma/${data.ID_Idioma}`)}}><i className="bi bi-pencil-square"></i></button>
+                                        <button type="button" className="btn btn-secondary mr-4" style={{ marginRight: '10px' }} onClick={()=>{router.push(`/dashboardAdmin/adminPaises/editarPais/${data.ID_Pais}`)}}><i className="bi bi-pencil-square"></i></button>
                                         
                                         
                                         
