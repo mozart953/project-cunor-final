@@ -74,6 +74,24 @@ function CompoCategorias(){
                     </div>
             </div>
 
+            <div className="d-flex justify-content-between" style={{ padding: '10px 120px 10px 0px' }}>
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i><strong>Crear categoria</strong></button>
+                </div>
+
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminIdiomas')}}><i className="bi bi-plus-lg"></i><strong>Administrar idiomas</strong></button>
+                </div>
+
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminMateriales')}}><i className="bi bi-plus-lg"></i><strong>Administrar tipos de material</strong></button>
+                </div>
+
+                <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminPaises')}}><i className="bi bi-plus-lg"></i><strong>Administrar países</strong></button>
+                </div>
+            </div>
+
             <div className="mb-3 d-flex justify-content-center align-items-center">
                         <form className="input-group" style={{width: "600px"}} onSubmit={onSubmit}>
                                 <input type="search" className="form-control" placeholder="Buscar categoria" aria-label="Search" value={busqueda} onChange={(e)=>{setBusqueda(e.target.value)}}/>
@@ -89,21 +107,6 @@ function CompoCategorias(){
             </div>
 
 
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i><strong>Crear categoria</strong></button>
-            </div>
-
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminIdiomas')}}><i className="bi bi-plus-lg"></i><strong>Administrar idiomas</strong></button>
-            </div>
-
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminMateriales')}}><i className="bi bi-plus-lg"></i><strong>Administrar tipos de material</strong></button>
-            </div>
-
-            <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminPaises')}}><i className="bi bi-plus-lg"></i><strong>Administrar paises</strong></button>
-            </div>
 
             <div className="mt-4" style={{width:'85%', margin:'0 auto'}}>
                     

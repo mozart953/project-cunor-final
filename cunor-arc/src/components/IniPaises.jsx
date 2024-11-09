@@ -78,7 +78,7 @@ function CompoPaisesPage({datos, totalItems}){
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de Países -CUNOR-</strong></legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-pin-angle-fill"></i><strong>Gestión de países -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
@@ -101,7 +101,7 @@ function CompoPaisesPage({datos, totalItems}){
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                     <button type="button" className="btn btn-success" 
                         onClick={()=>{router.push('/dashboardAdmin/adminPaises/crearPais')}}
-                    ><i className="bi bi-plus-lg"></i><strong>Agregar País</strong></button>
+                    ><i className="bi bi-plus-lg"></i><strong>Agregar país</strong></button>
                 </div>
 
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
