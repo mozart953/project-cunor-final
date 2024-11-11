@@ -92,19 +92,19 @@ function compoCarrerasPage({datos, totalItems}){
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminNivelEducativo')}}
-                ><i className="bi bi-plus-lg"></i><strong>Administrar Nivel Educativo</strong></button>
+                ><i className="bi bi-plus-lg"></i><strong>Administrar nivel educativo</strong></button>
                 </div>
             
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminGradoAcademico')}}
-                ><i className="bi bi-plus-lg"></i><strong>Administrar Grado Académico</strong></button>
+                ><i className="bi bi-plus-lg"></i><strong>Administrar grado académico</strong></button>
                 </div>
 
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
                 <button type="button" className="btn btn-success" 
                     onClick={()=>{router.push('/dashboardAdmin/adminFacultades')}}
-                ><i className="bi bi-plus-lg"></i><strong>Administrar Facultades</strong></button>
+                ><i className="bi bi-plus-lg"></i><strong>Administrar facultades</strong></button>
                 </div>
             </div>
 

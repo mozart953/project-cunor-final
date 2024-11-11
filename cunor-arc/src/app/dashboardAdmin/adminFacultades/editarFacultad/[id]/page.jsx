@@ -77,6 +77,14 @@ function EditFacultadPage({params}){
 
     return(
         <>
+
+            <div className="d-flex justify-content-between" style={{ padding: '2px 120px 10px 0px' }}>
+                        <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                            <button type="button" className="btn btn-primary" 
+                                onClick={()=>{route.push('/dashboardAdmin/adminFacultades')}}
+                            ><i className="bi bi-backspace-fill"></i><strong>Regresar</strong></button>
+                        </div>
+            </div>
         
 
             <div className="d-flex justify-content-center align-items-center bg-dark text-white ">

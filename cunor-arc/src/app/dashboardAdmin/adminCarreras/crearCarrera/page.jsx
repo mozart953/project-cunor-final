@@ -130,10 +130,18 @@ function CrearCarreraPage(){
 
     return(
         <>
+            <div className="d-flex justify-content-between" style={{ padding: '2px 120px 10px 0px' }}>
+                        <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
+                            <button type="button" className="btn btn-primary" 
+                                onClick={()=>{route.push('/dashboardAdmin/adminCarreras')}}
+                            ><i className="bi bi-backspace-fill"></i><strong>Regresar</strong></button>
+                        </div>
+            </div>
+
               <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                 <form  onSubmit={onSubmit} className="w-50">
                     
-                        <legend className="text-center mb-4"><strong>Creación de carreas -CUNOR-</strong></legend>
+                        <legend className="text-center mb-4"><strong>Creación de carrera -CUNOR-</strong></legend>
 
                         <div className='row mb-3'>
                             <div className="col-4">
@@ -196,7 +204,7 @@ function CrearCarreraPage(){
 
                         <div className='row mb-2'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar Grado Académico</strong></label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar grado académico</strong></label>
                             </div>
 
 
@@ -227,7 +235,7 @@ function CrearCarreraPage(){
 
                     <div className="d-flex justify-content-end">
                         <div className="alert alert-success" role="alert">
-                            ¡Carrera editada correctamente!
+                            ¡Carrera creada correctamente!
                         </div>
 
                     </div>
