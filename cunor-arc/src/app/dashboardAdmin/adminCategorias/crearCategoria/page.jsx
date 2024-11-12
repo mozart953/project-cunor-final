@@ -69,7 +69,7 @@ function CrearCategoriaPage(){
                          <div className="d-flex justify-content-center align-items-center bg-dark text-white ">
                             <form  onSubmit={onSubmit} className="w-50">
                                 
-                                    <legend className="text-center mb-4"><strong>Creación de categorias</strong></legend>
+                                    <legend className="text-center mb-4"><strong>Creación de categoria -CUNOR-</strong></legend>
 
                                     <div className='row mb-3'>
                                         <div className="col-2">

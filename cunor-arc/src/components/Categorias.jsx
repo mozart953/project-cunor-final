@@ -70,13 +70,13 @@ function CompoCategorias(){
         <>
             <div className="card text-bg-secondary mb-3 rounded-xl" style={{width:'50%', margin:'0 auto', borderRadius:'15px'}}>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><i className="bi bi-bookmark-fill"></i><strong>Gestión de categorias</strong></legend>                       
+                        <legend className="text-center mb-4"><i className="bi bi-bookmark-fill"></i><strong>Gestión de categorias -CUNOR-</strong></legend>                       
                     </div>
             </div>
 
             <div className="d-flex justify-content-between" style={{ padding: '10px 120px 10px 0px' }}>
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>
-                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i><strong>Crear categoria</strong></button>
+                    <button type="button" className="btn btn-success" onClick={()=>{router.push('/dashboardAdmin/adminCategorias/crearCategoria')}}><i className="bi bi-plus-lg"></i><strong>Agregar categoria</strong></button>
                 </div>
 
                 <div className="d-flex content-center" style={{paddingTop:'20px', paddingLeft:'100px', paddingBottom:'10px'}}>

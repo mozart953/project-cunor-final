@@ -141,7 +141,7 @@ function EditPaisPage({params}){
                        
 
                         <button type="submit" className="btn btn-outline-success w-100 mt-3">
-                            Actualizar Pais
+                            Actualizar país
                         </button>
                         
                     
