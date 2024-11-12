@@ -146,7 +146,7 @@ function EditGradoPage({params}){
                         </div>  
 
                         <button type="submit" className="btn btn-outline-success w-100 mt-3">
-                            Actualizar grado acádemico
+                            Actualizar grado académico
                         </button>
                         
                     

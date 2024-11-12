@@ -244,7 +244,7 @@ function EditCarreraPage({params}){
 
                         <div className='row mb-2'>
                             <div className='col-4'>
-                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar Grado Académico</strong></label>
+                                <label htmlFor="disabledTextInput" className="col-form-label"><strong>Asignar grado académico</strong></label>
                             </div>
 
 
