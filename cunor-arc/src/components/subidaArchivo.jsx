@@ -5,12 +5,14 @@ import { analytics } from "@/app/firebase/firebase-config";
 import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import useLog4 from "@/hooks/log4";
 import {useRouter} from "next/navigation";
 
 
 function SubaArchivoPage(){
     const {register, handleSubmit, setValue, formState:{errors}} = useForm(); 
     const [datosg, setUsuario1] = useLog2(null);
+    const [datosg4, setUsuario4] = useLog4(null);
     const [file, setFile] = useState(null);
     const [files, setFiles] = useState(null);
     const [urlfiles, setUrlfiles] = useState("");
@@ -31,6 +33,11 @@ function SubaArchivoPage(){
     const [tamanio, setTamanio] = useState(0);
     const [data1, setData1] = useState(null);
     const [control, setControl] = useState(false);
+    const [carreraG, setCarreraG] = useState(null);
+    const [facultad, setFacultad] = useState("");
+    const [codigoCarrera, setCodigoCarrera] = useState("");
+    const [gradoAcademico, setGradoAcademico] = useState("");
+    const [nivelEducativo, setNivelEducativo] = useState("");
     const [formularioenviado, setFormularioenviado] = useState(true);
     const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
@@ -57,8 +64,22 @@ function SubaArchivoPage(){
     
     useEffect(()=>{
          setUsuario1(nombreusuario);
+         setUsuario4(nombreusuario);
             
     },[nombreusuario]);
+
+    useEffect(()=>{
+        if(datosg4!==null && nombreusuario!==""){
+            setCarreraG(datosg4);
+            setFacultad(datosg4.carrera.facultad.nombreFacultad);
+            setCodigoCarrera(datosg4.carrera.codigoCarrera);
+            setGradoAcademico(datosg4.carrera.gradoAcademico[0].gradoAcademico.nombreGrado);
+            setNivelEducativo(datosg4.carrera.gradoAcademico[0].gradoAcademico.nivelEducativo.nombreNivelEducativo);
+            console.log(datosg4);
+
+        }
+
+    },[datosg4]);
 
     useEffect(()=>{
         if(datosg!==null && nombreusuario !==""){
@@ -471,7 +492,11 @@ function SubaArchivoPage(){
             <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
                     <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><strong>Publicación de trabajos de graduación:</strong> {carrera}</legend>                       
+                        <legend className="text-center mb-4"><strong>Nombre de facultad:</strong> {facultad}</legend>
+                        <legend className="text-center mb-4"><strong>Publicación de trabajos de graduación:</strong> {carrera} <strong>/</strong> {codigoCarrera}</legend>
+                        <legend className="text-center mb-4"><strong>Código de carrera:</strong> {codigoCarrera}</legend>
+                        <legend className="text-center mb-4"><strong>Nivel educativo:</strong> {nivelEducativo}</legend>
+                        <legend className="text-center mb-4"><strong>Grado Académico:</strong> {gradoAcademico}</legend>                       
                     </div>
             </div>
 
