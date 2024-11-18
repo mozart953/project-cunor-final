@@ -655,12 +655,43 @@ function SubaArchivoPage(){
                                     }
 
                             </div>
+
+                            <div className="mb-3">
+                                <label className="col-sm-10 col-form-label"><strong>Facultad</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" value={facultad} onChange={(e)=>{e.target.value}} disabled/>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="col-sm-10 col-form-label"><strong>Nivel educativo</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" value={nivelEducativo} onChange={(e)=>{e.target.value}} disabled/>
+                                </div>
+                            </div>
+                            
+                            <div className="mb-3">
+                                <label className="col-sm-10 col-form-label"><strong>Grado académico</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" value={gradoAcademico} onChange={(e)=>{e.target.value}} disabled/>
+                                </div>
+                            </div>
+                            
+
                             <div className="mb-3">
                                 <label className="col-sm-2 col-form-label"><strong>Carrera</strong></label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control text-white bg-dark" value={carrera} onChange={(e)=>{e.target.value}} disabled/>
                                 </div>
                             </div>
+
+                            <div className="mb-3">
+                                <label className="col-sm-10 col-form-label"><strong>Código de carrera</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" value={codigoCarrera} onChange={(e)=>{e.target.value}} disabled/>
+                                </div>
+                            </div>
+
                             <div className="mb-3">
                                 <label className="col-form-label"><strong>Cantidad de páginas</strong></label>
                                 <div className="col-sm-10">
