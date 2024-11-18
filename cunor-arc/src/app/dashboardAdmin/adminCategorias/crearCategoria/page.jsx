@@ -77,7 +77,7 @@ function CrearCategoriaPage(){
                                         </div>
 
                                         <div className="col"> 
-                                            <input type="text" placeholder="Carrera"  onChange={(e)=>{setCategoria(e.target.value)}}  {...register("nombreCategoria", {required: {value: true, message:'Es necesario escribir la categoria...'}})} className="form-control bg-secondary text-white" />
+                                            <input type="text" placeholder="Categoria"  onChange={(e)=>{setCategoria(e.target.value)}}  {...register("nombreCategoria", {required: {value: true, message:'Es necesario escribir la categoria...'}})} className="form-control bg-secondary text-white" />
                                         </div> 
 
                                         {
