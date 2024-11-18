@@ -490,13 +490,18 @@ function SubaArchivoPage(){
     return(
         <>
             <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
-                    <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
+                    <div className="card-header border-dark"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
-                        <legend className="text-center mb-4"><strong>Nombre de facultad:</strong> {facultad}</legend>
-                        <legend className="text-center mb-4"><strong>Publicación de trabajos de graduación:</strong> {carrera} <strong>/</strong> {codigoCarrera}</legend>
-                        <legend className="text-center mb-4"><strong>Código de carrera:</strong> {codigoCarrera}</legend>
-                        <legend className="text-center mb-4"><strong>Nivel educativo:</strong> {nivelEducativo}</legend>
-                        <legend className="text-center mb-4"><strong>Grado Académico:</strong> {gradoAcademico}</legend>                       
+                        <legend className="text-center mb-2"><strong>Nombre de facultad:</strong> {facultad}</legend>
+                        <legend className="text-center"><strong>Publicación de trabajos de graduación:</strong> {carrera}</legend>
+                        {/* <legend className="text-center mb-4"><strong>Nivel educativo:</strong> {nivelEducativo}</legend>
+                        <legend className="text-center"><strong>Grado Académico:</strong> {gradoAcademico}</legend>                        */}
+                    </div>
+                    <div className="card-footer bg-transparent border-dark">
+                        <strong>Código de carrera:</strong> {codigoCarrera} -  
+                        <strong> Nivel educativo:</strong> {nivelEducativo} - 
+                        <strong> Grado académico:</strong> {gradoAcademico}
+
                     </div>
             </div>
 
