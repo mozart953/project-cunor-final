@@ -637,6 +637,24 @@ function SubaArchivoPage(){
                         <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
 
                         <div className="col">
+
+                            <div className="mb-3">
+                                <label className="col-sm-2 col-form-label"><strong>Correlativo</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" {...register("correlativo", {required: {value: true, message:'Es necesario escribir el correlativo...'}})}/>
+                                </div>
+
+                                
+                                    {
+                                        errors.correlativo && (                                  
+                                            
+                                            <span className="badge rounded-pill text-bg-danger">{errors.correlativo.message}</span>
+
+
+                                        )
+                                    }
+
+                            </div>
                             
                             <div className="mb-3">
                                 <label className="col-sm-2 col-form-label"><strong>Título</strong></label>
@@ -739,6 +757,44 @@ function SubaArchivoPage(){
                                 }
                                 
                             </div>
+
+                            <div className="mb-3 ">
+                                <label className="form-label"><strong>Editorial</strong></label>
+
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" {...register("editorial", {required: {value: true, message:'Es necesario escribir la editorial'}})} />
+                                </div>
+
+                                {
+                                        errors.editorial && (                                  
+                                            
+                                            <span className="badge rounded-pill text-bg-danger">{errors.editorial.message}</span>
+
+
+                                        )
+                                }
+                                
+                            </div>
+
+                            <div className="mb-3 ">
+                                <label className="form-label"><strong>Nota de tesis</strong></label>
+
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control text-white bg-dark" {...register("notaTesis", {required: {value: true, message:'Es necesario escribir nota de tesis'}})} />
+                                </div>
+
+                                {
+                                        errors.notaTesis && (                                  
+                                            
+                                            <span className="badge rounded-pill text-bg-danger">{errors.notaTesis.message}</span>
+
+
+                                        )
+                                }
+                                
+                            </div>
+
+ 
 
                             <div className="mb-3 ">
                                 <label className="form-label"><strong>Palabras clave (separadas por ,)</strong></label>
