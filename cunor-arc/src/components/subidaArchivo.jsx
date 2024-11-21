@@ -38,6 +38,13 @@ function SubaArchivoPage(){
     const [codigoCarrera, setCodigoCarrera] = useState("");
     const [gradoAcademico, setGradoAcademico] = useState("");
     const [nivelEducativo, setNivelEducativo] = useState("");
+    const [isChecked, setIsChecked] = useState(false);
+    const [tipoMaterial, setTipoMaterial] = useState([]);
+    const [idMaterial, setIdMaterial] = useState(0);
+    const [paises, setPaises] = useState([]);
+    const [idPais, setIdPais] = useState(0);
+    const [idiomas, setIdiomas] = useState([]);
+    const [idIdioma, setIdIdioma] = useState(0);
     const [formularioenviado, setFormularioenviado] = useState(true);
     const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
@@ -100,7 +107,23 @@ function SubaArchivoPage(){
                 setCategorias([...datos,...categorias]);
                 setIdcategoria(datos[0].ID_Categoria);
             }
-        )
+        );
+
+        fetch('/api/datos/reMaterial').then(data=>data.json()).then(datos=>{console.log(datos);
+            setTipoMaterial([...datos, ...tipoMaterial]);
+            setIdMaterial(datos[0].ID_TipoMaterial);
+        });
+
+        fetch('/api/datos/rePaises').then(data=>data.json()).then(datos=>{console.log(datos);
+            setPaises([...datos, ...paises]);
+            setIdPais(datos[0].ID_Pais);
+        });
+
+        fetch('/api/datos/reIdiomas').then(data=>data.json()).then(datos=>{
+            console.log(datos);
+            setIdiomas([...datos, ...idiomas]);
+            setIdIdioma(datos[0].ID_Idioma);
+        })
 
     },[]);
 
@@ -271,9 +294,35 @@ function SubaArchivoPage(){
         setIdcategoria(selectCategoria);
     }
 
+    const obtenerIdMaterial = (e)=>{
+        e.preventDefault();
+
+        const selectMaterial = e.target.value;
+        console.log(selectMaterial);
+        setIdMaterial(selectMaterial);
+    }
+
+    const obtenerIdPais = (e)=>{
+        e.preventDefault();
+
+        const selectPais = e.target.value;
+        console.log(selectPais);
+        setIdPais(selectPais);
+    }
+
+    const obtenerIdIdioma = (e)=>{
+        e.preventDefault();
+
+        const selectIdioma = e.target.value;
+        console.log(selectIdioma);
+        setIdIdioma(selectIdioma);
+    }
+
     useEffect(()=>{
         console.log(autores3);
     },[autores3])
+
+    const handleCheckboxChange = (event) => { setIsChecked(event.target.checked); };
 
     const onSubmit= handleSubmit (async (data)=>{
         console.log(data);
@@ -740,6 +789,48 @@ function SubaArchivoPage(){
 
                             </div>
 
+                            <div className="mb-3">
+                                <label className="col-form-label"><strong>Material</strong></label>
+                                <div className="col-sm-10">
+                                    <select className='form-select text-white bg-dark' onChange={obtenerIdMaterial}>
+                                        {
+                                            tipoMaterial.map((data)=><option  key={data.ID_TipoMaterial} value={data.ID_TipoMaterial}>{data.nombreTipoMaterial}</option>)
+                                        }
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="col-form-label"><strong>País</strong></label>
+                                <div className="col-sm-10">
+                                    <select className='form-select text-white bg-dark' onChange={obtenerIdPais}>
+                                        {
+                                            paises.map((data)=><option  key={data.ID_Pais} value={data.ID_Pais}>{data.nombrePais}</option>)
+                                        }
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="col-form-label"><strong>Idioma</strong></label>
+                                <div className="col-sm-10">
+                                    <select className='form-select text-white bg-dark' onChange={obtenerIdIdioma}>
+                                        {
+                                            idiomas.map((data)=><option  key={data.ID_Idioma} value={data.ID_Idioma}>{data.nombre}</option>)
+                                        }
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
                             <div className="mb-3 ">
                                 <label className="form-label"><strong>Descripción (Resumen)</strong></label>
 
@@ -758,23 +849,35 @@ function SubaArchivoPage(){
                                 
                             </div>
 
-                            <div className="mb-3 ">
-                                <label className="form-label"><strong>Editorial</strong></label>
 
-                                <div className="col-sm-10">
-                                    <input type="text" className="form-control text-white bg-dark" {...register("editorial", {required: {value: true, message:'Es necesario escribir la editorial'}})} />
-                                </div>
-
-                                {
-                                        errors.editorial && (                                  
-                                            
-                                            <span className="badge rounded-pill text-bg-danger">{errors.editorial.message}</span>
-
-
-                                        )
-                                }
-                                
+                            <div className="form-check form-check-inline mb-3">
+                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked={isChecked} onChange={handleCheckboxChange} />
+                                    <label className="form-check-label" htmlFor="inlineCheckbox1"><strong>{!isChecked?"Agregar editorial":"Quitar editorial"}</strong></label>
                             </div>
+
+
+                            {
+                                isChecked&&(
+                                
+                                    <div className="mb-3 ">
+                                    <label className="form-label"><strong>Editorial</strong></label>
+
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control text-white bg-dark" {...register("editorial", {required: {value: true, message:'Es necesario escribir la editorial'}})} />
+                                    </div>
+
+                                    {
+                                            errors.editorial && (                                  
+                                                
+                                                <span className="badge rounded-pill text-bg-danger">{errors.editorial.message}</span>
+
+
+                                            )
+                                    }
+                                    
+                                </div>
+                                )
+                            }
 
                             <div className="mb-3 ">
                                 <label className="form-label"><strong>Nota de tesis</strong></label>
