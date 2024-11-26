@@ -45,6 +45,8 @@ function SubaArchivoPage(){
     const [idPais, setIdPais] = useState(0);
     const [idiomas, setIdiomas] = useState([]);
     const [idIdioma, setIdIdioma] = useState(0);
+    const [fechaPublicacion, SetFechaPublicacion] = useState(new Date().toISOString().split('T')[0]);
+    const [inteAutorC, setInteAutorC] = useState(false);
     const [formularioenviado, setFormularioenviado] = useState(true);
     const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
@@ -323,6 +325,7 @@ function SubaArchivoPage(){
     },[autores3])
 
     const handleCheckboxChange = (event) => { setIsChecked(event.target.checked); };
+    const handleCheckboxChange2 = (event) => { setInteAutorC(event.target.checked); };
 
     const onSubmit= handleSubmit (async (data)=>{
         console.log(data);
@@ -587,7 +590,7 @@ function SubaArchivoPage(){
                     <div className="row bg-secondary rounded" style={{width: '95%', margin: '0 auto'}}>
                         <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>    
                         {
-                            autores.map((autor, index)=> ( 
+                            !inteAutorC&&(autores.map((autor, index)=> ( 
                                     <div className="d-flex flex-row mb-4" key={index}>
 
                                         <div className="mb-3" >
@@ -675,11 +678,59 @@ function SubaArchivoPage(){
 
                             )
                             )
+                            )
                         }
 
-                        <div className="d-flex justify-content-center align-items-center mb-4">
-                            <button type="button" className="btn btn-primary" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> <strong>Agregar autor</strong></button>
+                        {
+                            !inteAutorC&&(
+                                <div className="d-flex justify-content-center align-items-center mb-4">
+                                    <button type="button" className="btn btn-primary" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> <strong>Agregar autor</strong></button>
+                                </div>
+                            )
+                        }
+
+                        <div className="d-flex justify-content-center align-items-center form-check form-check-inline mb-3">
+                                    <div>
+                                        <input className="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked={inteAutorC} onChange={handleCheckboxChange2} /> 
+                                    </div>
+                                    
+                                    <div className="ml-3">
+                                        <label className="form-check-label" htmlFor="inlineCheckbox2"><strong>{!inteAutorC?"Cambiar a autor corporativo":"Cambiar a autor individual"}</strong></label>
+                                    </div>
+                                    
                         </div>
+
+                        {
+                                inteAutorC&&(
+                                    <div className="mt-3">
+                                        <div className="mt-3">
+                                            <label className="col-sm-2 col-form-label"><strong>Autor Corporativo</strong></label>
+                                        </div>
+                                        <div className="d-flex align-items-center mb-3">
+                                            
+                                            <div className="col-sm-5">
+                                                <div>
+                                                    <input type="text" className="form-control text-white bg-dark" {...register("Acorporativo", {required: {value: true, message:'Es necesario escribir el nombre del autor corporativo...'}})}/>
+                                                </div>
+                                    
+                                                                    
+                                                {
+                                                errors.Acorporativo && (                                  
+                                                                                
+                                                    <span className="badge rounded-pill text-bg-danger">{errors.Acorporativo.message}</span>
+                                    
+                                    
+                                                )
+                                                }
+
+                                            </div>
+                                            
+                                
+                                        </div>
+                                    </div>
+                                   
+                                )
+                        }
 
                         
                         
@@ -703,6 +754,14 @@ function SubaArchivoPage(){
                                         )
                                     }
 
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="col-sm-12 col-form-label"><strong>Fecha de publicación</strong></label>
+                                <div className="col-sm-10">
+                                    <input type="date" className="form-control bg-dark text-white" value={fechaPublicacion || ''} onChange={(e)=>{SetFechaPublicacion(e.target.value)}}/>    
+                                </div>                                       
+                                    
                             </div>
                             
                             <div className="mb-3">
