@@ -16,23 +16,35 @@ function buildOrderBy(ordenCampo, orderDirection) {
 
 export async function POST(request){
     const datos = await request.json();
+    const fechaPublicacion = new Date(datos.fechaPublicacion);
 
-    const detalle = await db.registroTrabajoGraduacion.create(
-        {
-            data:{
-                ID_trabajo:Number(datos.ID_trabajo),
-                ID_categoria: Number(datos.ID_categoria),
-                ID_formato: Number(datos.ID_formato),
-                ID_carrera: Number(datos.ID_carrera),
-                //ID_autor: Number(datos.ID_autor),
-                ID_usuario: Number(datos.ID_usuario),
-                ID_estado: Number(datos.ID_estado),
+    try{
 
+        const detalle = await db.registroTrabajoGraduacion.create(
+            {
+                data:{
+                    fechaPublicacion: fechaPublicacion,
+                    ID_trabajo:Number(datos.ID_trabajo),
+                    ID_categoria: Number(datos.ID_categoria),
+                    ID_formato: Number(datos.ID_formato),
+                    ID_carrera: Number(datos.ID_carrera),
+                    //ID_autor: Number(datos.ID_autor),
+                    ID_usuario: Number(datos.ID_usuario),
+                    ID_estado: Number(datos.ID_estado),
+                    ID_TipoMaterial:Number(datos.ID_TipoMaterial),
+                    ID_Idioma:Number(datos.ID_Idioma),
+                    ID_Pais:Number(datos.ID_Pais),
+                    
+
+                }
             }
-        }
-    )
+        )
 
-    return NextResponse.json(detalle);
+        return NextResponse.json(detalle);
+    }catch(error){
+        console.log(error);
+        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
+    }
 }
 
 export async function GET(request){

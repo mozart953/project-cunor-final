@@ -47,6 +47,7 @@ function SubaArchivoPage(){
     const [idIdioma, setIdIdioma] = useState(0);
     const [fechaPublicacion, SetFechaPublicacion] = useState(new Date().toISOString().split('T')[0]);
     const [inteAutorC, setInteAutorC] = useState(false);
+    const [autorC, setAutorC] = useState("");
     const [formularioenviado, setFormularioenviado] = useState(true);
     const [autores, setAutores] = useState([{ Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
@@ -138,12 +139,15 @@ function SubaArchivoPage(){
                     const respuesta1 = await fetch('/api/datos/reTrabajoGraduacion', {
                         method: 'POST',
                         body: JSON.stringify({
+                            correlativo:data1.correlativo,                            
                             titulo: data1.titulo,
                             cantidadPaginas: Number(data1.cantidadPaginas),
                             descripcion:data1.descripcion,
                             tamanio:Number(file.size),
                             direccionGuardado:url,
                             paClave:data1.palabrasCla,
+                            notaTesis:data1.notaTesis,
+                            editorial:isChecked?data1.editorial:"",
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -174,7 +178,7 @@ function SubaArchivoPage(){
 
     useEffect(()=>{
         const actualizarDetalle= async()=>{
-            if(idtrabajo!==null && idusuario!==null && autores3.length!==0){
+            if(idtrabajo!==null && idusuario!==null && (autores3.length!==0 || (inteAutorC && autorC!==""))){
                 setBarraprogreso('0%');
 
                 try{
@@ -182,13 +186,18 @@ function SubaArchivoPage(){
                     const respuesta3 = await fetch('/api/datos/reDetalleTrabajo',{
                         method:'POST',
                         body:JSON.stringify({
+                            fechaPublicacion: Date(fechaPublicacion),
                             ID_trabajo: Number(idtrabajo),
                             ID_categoria:Number(idcategoria),
                             ID_formato: 1,
                             ID_carrera: Number(idcarrera),
                             //ID_autor: Number(idautor),
                             ID_usuario: Number(idusuario),
-                            ID_estado:1
+                            ID_estado:1,
+                            ID_TipoMaterial: Number(idMaterial),
+                            ID_Idioma:Number(idIdioma),
+                            ID_Pais:Number(idPais),
+
 
                         }),
                         headers:{
@@ -198,37 +207,67 @@ function SubaArchivoPage(){
                     const dato3 = await respuesta3.json();
                     console.log(dato3);
                     
+                    if(!inteAutorC){
+                        for(const autor of autores3 ){
+                            const respuesta2 = await fetch('/api/datos/reAutor',{
+                                method:'POST',
+                                body: JSON.stringify({
+                                    primerNombre: autor.primerNombre,
+                                    segundoNombre: autor.segundoNombre,
+                                    tercerNombre: autor.tercerNombre,
+                                    primerApellido: autor.primerApellido,
+                                    segundoApellido: autor.segundoApellido,
+                                    carnet:autor.Carnet,
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            
+                            const dato2= await respuesta2.json();
+                            console.log(dato2);
+                            //setIdautor(dato2.ID_Autor);
 
-                    for(const autor of autores3 ){
-                        const respuesta2 = await fetch('/api/datos/reAutor',{
+                            const respuesta4 = await fetch('/api/datos/reEnlaceAutorRegistro', {
+                                method:'POST',                            
+                                body:JSON.stringify({
+                                    ID_Autor:dato2.ID_Autor,
+                                    ID_Detalle:dato3.ID_Detalle,
+                                }),
+                                headers:{
+                                    'Content-Type':'application/json',
+                                }
+                            });
+                            const dato4 = await respuesta4.json();
+                            console.log(dato4);
+
+                        }
+                    }else{
+                        const respuesta2 = await fetch(`/api/datos/reAutorC`,{
                             method:'POST',
-                            body: JSON.stringify({
-                                primerNombre: autor.primerNombre,
-                                segundoNombre: autor.segundoNombre,
-                                tercerNombre: autor.tercerNombre,
-                                primerApellido: autor.primerApellido,
-                                segundoApellido: autor.segundoApellido,
-                                carnet:autor.Carnet,
+                            body:JSON.stringify({
+                                nombreAutor: autorC,
                             }),
                             headers:{
                                 'Content-Type':'application/json',
                             }
                         });
-                        
+
                         const dato2= await respuesta2.json();
                         console.log(dato2);
-                        //setIdautor(dato2.ID_Autor);
 
-                        const respuesta4 = await fetch('/api/datos/reEnlaceAutorRegistro', {
-                            method:'POST',                            
+                        const respuesta4 = await fetch(`/api/datos/reEnlaceTrabajoACorporativo`,{
+                            method:'POST',
                             body:JSON.stringify({
-                                ID_Autor:dato2.ID_Autor,
+                                ID_AutorC:dato2.ID_AutorC,
                                 ID_Detalle:dato3.ID_Detalle,
                             }),
                             headers:{
                                 'Content-Type':'application/json',
                             }
+
                         });
+
                         const dato4 = await respuesta4.json();
                         console.log(dato4);
 
@@ -268,7 +307,7 @@ function SubaArchivoPage(){
         actualizarDetalle();
         
 
-    },[idtrabajo, idusuario, autores3, urlfiles]);
+    },[idtrabajo, idusuario, autores3, urlfiles, inteAutorC, autorC]);
 
 
     useEffect(()=>{
@@ -331,30 +370,36 @@ function SubaArchivoPage(){
         console.log(data);
         console.log(autores);
         setFormularioenviado(false);
-        let autores2 = [];
-        //setAutores3(autores2);
-        for (let i = 0; i < autores.length; i++) {
-            let autor = autores[i];
-            // Crear un nuevo objeto autor2
-            let autor2 = {};
-            // Iterar sobre las claves del objeto autor
-            for (let key in autor) {
-              // Comprobar si la clave comienza con "autores"
-              if (key.startsWith("autores")) {
-                // Extraer la parte después de "autores[i]."
-                let newKey = key.split(".")[1];
-                // Agregar la nueva clave y su valor al objeto autor2
-                autor2[newKey] = autor[key];
-              }else{
-                autor2[key] = autor[key];
-              }
+
+        if(!inteAutorC){
+            setAutorC("");
+            let autores2 = [];
+            //setAutores3(autores2);
+            for (let i = 0; i < autores.length; i++) {
+                let autor = autores[i];
+                // Crear un nuevo objeto autor2
+                let autor2 = {};
+                // Iterar sobre las claves del objeto autor
+                for (let key in autor) {
+                // Comprobar si la clave comienza con "autores"
+                if (key.startsWith("autores")) {
+                    // Extraer la parte después de "autores[i]."
+                    let newKey = key.split(".")[1];
+                    // Agregar la nueva clave y su valor al objeto autor2
+                    autor2[newKey] = autor[key];
+                }else{
+                    autor2[key] = autor[key];
+                }
+                }
+                // Agregar el objeto autor2 al array autores2
+                autores2.push(autor2);
             }
-            // Agregar el objeto autor2 al array autores2
-            autores2.push(autor2);
-          }
-          
-        setAutores3(autores2);
-        console.log(autores3);
+            
+            setAutores3(autores2);
+            console.log(autores3);
+        }else{
+            setAutorC(data.Acorporativo);
+        }
         //e.preventDefault();
         setData1(data);
 
