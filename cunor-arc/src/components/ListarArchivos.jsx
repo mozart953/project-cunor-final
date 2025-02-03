@@ -778,17 +778,21 @@ function CompoListarArchivosPage(){
                                                 
                                                 {
                                                     data.carrera.gradoAcademico.map((data)=>(
-                                                        <>
-                                                            <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.nivelEducativo.ID_NivelEducativo}>
-                                                                <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nivel educativo:</strong> </h6>
-                                                                <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nivelEducativo.nombreNivelEducativo} </p>
+                                                           <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.nivelEducativo.ID_NivelEducativo}>
+                                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nivel educativo:</strong> </h6>
+                                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nivelEducativo.nombreNivelEducativo} </p>
                                                             </div>
 
+                                                    ))
+                                                }
+
+                                                {
+                                                    data.carrera.gradoAcademico.map((data)=>(
+                                                                                                                                                                             
                                                             <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.ID_Grado}>
                                                                 <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Grado académico:</strong> </h6>
                                                                 <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nombreGrado} </p>
                                                             </div>
-                                                        </>
                                                     ))
                                                 }
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
