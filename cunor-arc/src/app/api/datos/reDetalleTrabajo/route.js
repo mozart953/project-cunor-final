@@ -121,7 +121,21 @@ export async function GET(request){
                     trabajoGrad:true,
                     categoria:true,
                     formato:true,
-                    carrera:true,
+                    carrera:{
+                        include:{
+                            facultad:true,
+                            gradoAcademico:{
+                                include:{
+                                    gradoAcademico:{
+                                        include:{
+                                            nivelEducativo:true,
+                                        }
+                                    }
+                                }
+                            },
+                            
+                        }
+                    },
                     //autor: true,
                     usuario:true,
                     autores: {

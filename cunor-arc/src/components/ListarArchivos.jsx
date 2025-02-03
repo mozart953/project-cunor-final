@@ -776,6 +776,25 @@ function CompoListarArchivosPage(){
 
                                             <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                                                 
+                                                {
+                                                    data.carrera.gradoAcademico.map((data)=>(
+                                                        <>
+                                                            <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.nivelEducativo.ID_NivelEducativo}>
+                                                                <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nivel educativo:</strong> </h6>
+                                                                <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nivelEducativo.nombreNivelEducativo} </p>
+                                                            </div>
+
+                                                            <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.ID_Grado}>
+                                                                <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Grado académico:</strong> </h6>
+                                                                <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nombreGrado} </p>
+                                                            </div>
+                                                        </>
+                                                    ))
+                                                }
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Facultad:</strong> </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.facultad.nombreFacultad} </p>
+                                                </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Carrera:</strong> </h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
