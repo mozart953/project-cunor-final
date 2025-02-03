@@ -739,6 +739,13 @@ function CompoListarArchivosPage(){
                                             - <strong>No. de carnet:</strong>{data.autores.autor.carnet}
                                         </div> */}
 
+                                        <div className="card-header align-self-end mt-3">
+                                            <div>
+                                            <strong>Correlativo: </strong> {data.trabajoGrad.correlativo}
+                                            </div>
+
+                                        </div>
+
                                         {
                                             data.autores.length!==1?(
                                                 <div className="card-header">
@@ -760,7 +767,6 @@ function CompoListarArchivosPage(){
                                                 </div>
                                             ))}
 
-                                        
 
                                         <div className="card-body">
                                             
@@ -819,6 +825,13 @@ function CompoListarArchivosPage(){
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                                 </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de publicación:</strong></h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                        {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaPublicacion).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
+                                                    </p>
+                                                </div>
+
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
