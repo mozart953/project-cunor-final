@@ -4,14 +4,19 @@ import db from "@/libs/db";
 export async function POST(request){
     const datos = await request.json();
 
-    const autorC = await db.autorCorporativo.create(
-        {
-            data:{
-                nombreAutor: datos.nombreAutor,
+    try{
+        const autorC = await db.autorCorporativo.create(
+            {
+                data:{
+                    nombreAutor: datos.nombreAutor,
 
+                }
             }
-        }
-    )
+        )
 
-    return NextResponse.json(autorC);
+        return NextResponse.json(autorC);
+    }catch(error){
+        console.log(error);
+        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
+    }
 }
