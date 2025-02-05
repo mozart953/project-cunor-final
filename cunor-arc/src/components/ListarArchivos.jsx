@@ -848,7 +848,7 @@ function CompoListarArchivosPage(){
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de publicación:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
-                                                        {new Date(data.fechaCarga).getDate()}/{new Date(data.fechaPublicacion).getMonth()+1}/{new Date(data.fechaCarga).getFullYear()}
+                                                        {new Date(data.fechaPublicacion).getDate()}/{new Date(data.fechaPublicacion).getMonth()+1}/{new Date(data.fechaPublicacion).getFullYear()}
                                                     </p>
                                                 </div>
 

@@ -177,6 +177,8 @@ function SubaArchivoPage(){
 
 
     useEffect(()=>{
+        console.log("Fecha publicacion");
+        console.log(new Date(fechaPublicacion).toISOString());
         const actualizarDetalle= async()=>{
             if(idtrabajo!==null && idusuario!==null && (autores3.length!==0 || (inteAutorC && autorC!==""))){
                 setBarraprogreso('0%');
@@ -186,7 +188,7 @@ function SubaArchivoPage(){
                     const respuesta3 = await fetch('/api/datos/reDetalleTrabajo',{
                         method:'POST',
                         body:JSON.stringify({
-                            fechaPublicacion: Date(fechaPublicacion),
+                            fechaPublicacion: fechaPublicacion && fechaPublicacion !== "" ? new Date(fechaPublicacion).toISOString() : new Date().toISOString(),
                             ID_trabajo: Number(idtrabajo),
                             ID_categoria:Number(idcategoria),
                             ID_formato: 1,
@@ -307,7 +309,7 @@ function SubaArchivoPage(){
         actualizarDetalle();
         
 
-    },[idtrabajo, idusuario, autores3, urlfiles, inteAutorC, autorC]);
+    },[idtrabajo, idusuario, autores3, urlfiles, inteAutorC, autorC, fechaPublicacion]);
 
 
     useEffect(()=>{
@@ -804,7 +806,7 @@ function SubaArchivoPage(){
                             <div className="mb-3">
                                 <label className="col-sm-12 col-form-label"><strong>Fecha de publicación</strong></label>
                                 <div className="col-sm-10">
-                                    <input type="date" className="form-control bg-dark text-white" value={fechaPublicacion || ''} onChange={(e)=>{SetFechaPublicacion(e.target.value)}}/>    
+                                    <input type="date" className="form-control bg-dark text-white" value={fechaPublicacion ||  new Date().toISOString().split('T')[0]} onChange={(e)=>{SetFechaPublicacion(e.target.value)}}/>    
                                 </div>                                       
                                     
                             </div>
