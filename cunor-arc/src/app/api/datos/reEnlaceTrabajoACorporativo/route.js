@@ -6,11 +6,11 @@ export async function POST(request){
 
     try{
 
-        const enlaceTC = await db.enlaceTrabajoCorporativo.create(
+        const enlaceTC = await db.enlaceTrabajoACorporativo.create(
             {
                 data:{
-                    ID_AutorC:datos.ID_AutorC,
-                    ID_Detalle:datos.ID_Detalle,
+                    ID_AutorC:Number(datos.ID_AutorC),
+                    ID_Detalle:Number(datos.ID_Detalle),
                 }   
             }
         )
@@ -18,6 +18,6 @@ export async function POST(request){
         return NextResponse.json(enlaceTC);
     }catch(error){
         console.log(error);
-        return NextResponse.json({message: "Ha ocurrido un error inesperado."},{status:500});
+        return NextResponse.json({message: "Ha ocurrido un error inesperado." + error},{status:500});
     }
 }

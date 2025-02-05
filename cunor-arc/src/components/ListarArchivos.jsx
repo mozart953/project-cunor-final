@@ -738,8 +738,13 @@ function CompoListarArchivosPage(){
                                              <strong>Autor:</strong> {data.autores.autor.primerNombre} {data.autores.autor.segundoNombre} {data.autores.autor.tercerNombre} {data.autores.autor.primerApellido} {data.autores.autor.segundoApellido}
                                             - <strong>No. de carnet:</strong>{data.autores.autor.carnet}
                                         </div> */}
+                                        <div className="card-header align-self-end mt-3"> 
+                                            <div>
+                                                <strong>Código de carrera:</strong> {data.carrera.codigoCarrera}	
+                                            </div>
+                                        </div>
 
-                                        <div className="card-header align-self-end mt-3">
+                                        <div className="card-header align-self-end">
                                             <div>
                                             <strong>Correlativo: </strong> {data.trabajoGrad.correlativo}
                                             </div>
@@ -762,8 +767,8 @@ function CompoListarArchivosPage(){
                                                 <div className="card-header" key={autorData.ID_Autor}>
                                                 {/* <strong>Autor:</strong>{" "} */}
                                                 {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
-                                                - <strong>No. de carnet:</strong>
-                                                {autorData.autor.carnet}
+                                                - <strong>No. de carnet: </strong>
+                                                 {autorData.autor.carnet}
                                                 </div>
                                             ))}
 
@@ -771,6 +776,15 @@ function CompoListarArchivosPage(){
                                         <div className="card-body">
                                             
                                             <h5 className="card-title" style={{fontStyle: 'italic'}}><strong>Título:</strong> {data.trabajoGrad.titulo}</h5>
+                                            {
+                                                data.trabajoGrad.editorial!=""&&(<p className="card-text mt-3"><strong>Editorial:</strong> {data.trabajoGrad.editorial}</p>)
+                                            }
+                                            <p className="card-text">
+                                                <strong>Idioma:</strong> {data.idiomas.nombre}
+                                            </p>
+                                            <p className="card-text">
+                                                <strong>País:</strong> {data.paises.nombrePais}
+                                            </p>
 
                                             <div className="card text-bg-secondary mb-3" >
                                                 <div className="card-body">
@@ -825,6 +839,12 @@ function CompoListarArchivosPage(){
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                                 </div>
+                                                
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nota de tesis:</strong></h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.notaTesis} </p>
+                                                </div>
+                                                
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de publicación:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>

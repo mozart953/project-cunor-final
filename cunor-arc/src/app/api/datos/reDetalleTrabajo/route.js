@@ -136,6 +136,8 @@ export async function GET(request){
                             
                         }
                     },
+                    idiomas:true,
+                    paises:true,
                     //autor: true,
                     usuario:true,
                     autores: {
