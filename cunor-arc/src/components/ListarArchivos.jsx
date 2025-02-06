@@ -752,6 +752,49 @@ function CompoListarArchivosPage(){
                                         </div>
 
                                         {
+                                            
+                                            data.autoresCorp.length!==0?(
+                                                <>
+                                                    <div className="card-header">
+                                                        <strong>Autor corporativo:</strong>{" "}
+                                                    </div>
+ 
+                                                    {data.autoresCorp.map(data=>(
+                                                        <div className="card-header" key={data.ID_AutorC}>
+                                                            {data.autorCorp.nombreAutor}
+                                                        </div>
+                                                        
+                                                    ))}
+                                                </>              
+                                            ):(
+                                                <>
+                                                    {data.autores.length!==1?(
+                                                        <div className="card-header">
+                                                            <strong>Autores:</strong>{" "}
+                                                        </div>
+                                                    ):(
+                                                        <div className="card-header">
+                                                            <strong>Autor:</strong>{" "}
+                                                        </div>
+                                                    )
+                                                    }
+
+                                                    
+                                                    {data.autores.map((autorData) => (
+                                                            <div className="card-header" key={autorData.ID_Autor}>
+                                                            {/* <strong>Autor:</strong>{" "} */}
+                                                            {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
+                                                            - <strong>No. de carnet: </strong>
+                                                            {autorData.autor.carnet}
+                                                            </div>
+                                                        ))}
+
+                                                </>
+                                            )
+                                            
+                                        }
+{/* 
+                                        {
                                             data.autores.length!==1?(
                                                 <div className="card-header">
                                                     <strong>Autores:</strong>{" "}
@@ -765,12 +808,11 @@ function CompoListarArchivosPage(){
 
                                         {data.autores.map((autorData) => (
                                                 <div className="card-header" key={autorData.ID_Autor}>
-                                                {/* <strong>Autor:</strong>{" "} */}
                                                 {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
                                                 - <strong>No. de carnet: </strong>
                                                  {autorData.autor.carnet}
                                                 </div>
-                                            ))}
+                                            ))} */}
 
 
                                         <div className="card-body">
@@ -826,6 +868,10 @@ function CompoListarArchivosPage(){
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Categoría:</strong></h6>
                                                     <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
+                                                </div>
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Tipo de material:</strong></h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.tipoMaterial.nombreTipoMaterial} </p>
                                                 </div>
                                                 <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Palabras clave:</strong></h6>

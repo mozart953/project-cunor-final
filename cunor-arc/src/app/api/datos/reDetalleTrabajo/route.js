@@ -138,11 +138,17 @@ export async function GET(request){
                     },
                     idiomas:true,
                     paises:true,
+                    tipoMaterial:true,
                     //autor: true,
                     usuario:true,
                     autores: {
                         include: {
                             autor: true
+                        }
+                    },
+                    autoresCorp:{
+                        include:{
+                            autorCorp:true,
                         }
                     },
                     archivoAnexo:true, 
