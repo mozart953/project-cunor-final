@@ -86,6 +86,12 @@ export async function GET(request){
                 OR: [
                     {trabajoGrad:{titulo:{contains:term, mode: 'insensitive'}}},
                     {trabajoGrad:{paClave:{contains:term, mode: 'insensitive'}}},
+                    {trabajoGrad:{correlativo:{contains:term, mode: 'insensitive'}}},
+                    {trabajoGrad:{notaTesis:{contains:term, mode: 'insensitive'}}},
+                    {trabajoGrad:{editorial:{contains:term, mode: 'insensitive'}}},
+                    {idiomas:{nombre:{contains:term, mode: 'insensitive'}}},
+                    {paises:{nombrePais:{contains:term, mode: 'insensitive'}}},
+                    {tipoMaterial:{nombreTipoMaterial:{contains:term, mode: 'insensitive'}}},
                     {autores: {some: {autor: {primerNombre: {contains:term, mode: 'insensitive'}}}}},
                     {autores: {some: {autor: {segundoNombre: {contains:term, mode: 'insensitive'}}}}},
                     {autores: {some: {autor: {tercerNombre: {contains:term, mode: 'insensitive'}}}}},
