@@ -93,6 +93,7 @@ export async function GET(request){
                     {autores: {some: {autor: {segundoApellido: {contains:term, mode: 'insensitive'}}}}},
                     {autores: {some: {autor: {carnet: {contains:term, mode: 'insensitive'}}}}},
                     {categoria:{nombreCategoria:{contains:term, mode: 'insensitive'}}},
+                    {autoresCorp:{some:{autorCorp:{nombreAutor:{contains:term, mode: 'insensitive'}}}}},
                 ]
             }));
         
