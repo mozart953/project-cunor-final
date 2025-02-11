@@ -55,9 +55,22 @@ export async function GET(request){
     const itemsPerPage = Number(paramametros.get('itemsPagina'));
     const searchTerm = paramametros.get('searchTerm')||'';
     const orderDirection = paramametros.get('orderDirection') || 'desc';
-    const ordenCampo = paramametros.get('orderCampo')|| 'fechaCarga';
+    const ordenCampo = paramametros.get('orderCampo')|| 'fechaPublicacion';
     
     let whereClause = { ID_usuario: Number(idUsuario), ID_carrera: Number(idCarrera),};
+
+    if (ordenCampo === 'autorCorp.nombreAutor') {
+        whereClause = {
+            ...whereClause,
+            autoresCorp: { some: { autorCorp: { nombreAutor: { not: undefined} } } },  // Solo trabajos con autores corporativos
+        };
+    } else if (ordenCampo === 'autor.primerNombre' || ordenCampo === 'autor.carnet') {
+        whereClause = {
+            ...whereClause,
+            autores: { some: { autor: { primerNombre: { not: undefined } } } },  // Solo trabajos con autores no corporativos
+        };
+    }
+
 
     try{
 
@@ -116,10 +129,9 @@ export async function GET(request){
 
         let orderBy={};
 
-        if(ordenCampo !== 'autor.primerNombre' && ordenCampo!=='autor.carnet'){
+        if(ordenCampo !== 'autor.primerNombre' && ordenCampo!=='autor.carnet' && ordenCampo !== 'autorCorp.nombreAutor'){
              orderBy = buildOrderBy(ordenCampo, orderDirection);
-        }
-        
+        }            
 
         const detalles = await db.registroTrabajoGraduacion.findMany(
             {
@@ -191,6 +203,21 @@ export async function GET(request){
                     return primerCarneB.localeCompare(primerCarneA);
                 }
             });
+        }
+
+        if(ordenCampo === 'autorCorp.nombreAutor'){
+            detalles.sort((a, b) => {
+                const nombreAutorA = a.autoresCorp[0]?.autorCorp?.nombreAutor || '';
+                const nombreAutorB = b.autoresCorp[0]?.autorCorp?.nombreAutor || '';
+        
+                if (orderDirection === 'asc') {
+                    return nombreAutorA.localeCompare(nombreAutorB);
+                } else {
+                    return nombreAutorB.localeCompare(nombreAutorA);
+                }
+            })
+               
+
         }
     
 
