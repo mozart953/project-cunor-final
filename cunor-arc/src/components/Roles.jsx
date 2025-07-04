@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation";
 
-function CompoRolesPage({datos}){
+function compoRolesPage({datos}){
 
     const router = useRouter();
 
@@ -70,4 +70,4 @@ function CompoRolesPage({datos}){
 
 }
 
-export default CompoRolesPage;
+export default compoRolesPage;

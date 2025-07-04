@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function CompoCarrerasPage({datos, totalItems}){
+function compoCarrerasPage({datos, totalItems}){
     const router = useRouter();
 
     const [datoscarrera, setDatoscarrera] = useState([]);
@@ -245,4 +245,4 @@ function CompoCarrerasPage({datos, totalItems}){
 
 }
 
-export default CompoCarrerasPage;
+export default compoCarrerasPage;

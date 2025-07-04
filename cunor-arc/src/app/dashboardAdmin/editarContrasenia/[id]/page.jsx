@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import { useRouter } from "next/navigation";
 
-function EditarContrasenia ({params}){
+function editarContrasenia ({params}){
 
     const {register, handleSubmit, formState:{errors}} = useForm();
     const [registro, setRegistro] = useState(false);
@@ -140,4 +140,4 @@ function EditarContrasenia ({params}){
     );
 }
 
-export default EditarContrasenia;
+export default editarContrasenia;
