@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 
-function compoDetallesUsuarioPage({id}){
+function CompoDetallesUsuarioPage({id}){
 
     const [datos0, setDatos] = useState([]);
     const [datos1, setDatos1] = useState({usuario:{}});
@@ -81,4 +81,4 @@ function compoDetallesUsuarioPage({id}){
 
 }
 
-export default compoDetallesUsuarioPage;
+export default CompoDetallesUsuarioPage;
