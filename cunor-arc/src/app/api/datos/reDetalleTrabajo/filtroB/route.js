@@ -27,6 +27,11 @@ export async function GET(request){
                         autor:true
                     }
                 }, 
+                autoresCorp:{
+                    include:{
+                        autorCorp:true,
+                    }
+                },
                 usuario:true,
                 archivoAnexo:true,
 

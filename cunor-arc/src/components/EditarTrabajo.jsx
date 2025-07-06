@@ -1,19 +1,26 @@
 "use client"
 import { useEffect, useState } from "react";
-import {useForm} from 'react-hook-form';
+import {set, useForm} from 'react-hook-form';
 import { analytics } from "@/app/firebase/firebase-config";
 import {ref,deleteObject, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 import useLog2 from "@/hooks/log2";
+import useLog4 from "@/hooks/log4";
 
 
 function CompoEditarTrabajos({idDetalle}){
     const [datosg, setUsuario1] = useLog2(null);
+    const [datosg4, setUsuario4] = useLog4("");
     const [nombreusuario, setNombreusuario] = useState("");
     const [carrera, setCarrera] = useState("");
     const [idcarrera, setIdcarrera] = useState(0);
+    const [facultad, setFacultad] = useState("");
+    const [codigoCarrera, setCodigoCarrera] = useState("");
+    const [gradoAcademico, setGradoAcademico] = useState("");
+    const [nivelEducativo, setNivelEducativo] = useState("");
+    const [carreraG, setCarreraG] = useState(null);
     const [idusuario, setIdusuario] = useState(null);
     const [datostrabajo, setDatostrabajo] = useState({});
 
@@ -62,6 +69,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [iduser1, setIduser1] = useState(null);
     const [autores, setAutores] = useState([{ ID_Autor:'', Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
+    const [autorCorp,setAutorCorp]= useState("");
     const { data: session, status } = useSession();
 
     const router = useRouter();
@@ -83,6 +91,7 @@ function CompoEditarTrabajos({idDetalle}){
 
     useEffect(()=>{
         setUsuario1(nombreusuario);
+        setUsuario4(nombreusuario);
            
    },[nombreusuario]);
 
@@ -110,29 +119,48 @@ function CompoEditarTrabajos({idDetalle}){
         }
     },[idcarrera, idusuario]);
 
+    useEffect(()=>{
+        if(datosg4!==null && nombreusuario!==""){
+            setCarreraG(datosg4);
+            setFacultad(datosg4.carrera.facultad.nombreFacultad);
+            setCodigoCarrera(datosg4.carrera.codigoCarrera);
+            setGradoAcademico(datosg4.carrera.gradoAcademico[0].gradoAcademico.nombreGrado);
+            setNivelEducativo(datosg4.carrera.gradoAcademico[0].gradoAcademico.nivelEducativo.nombreNivelEducativo);
+            console.log(datosg4);
+        }
+    },[datosg4])
+
 
     useEffect(()=>{
-        if(datostrabajo && autores.length!==0 && !control3){
+        if(datostrabajo && (autores.length!==0 || autorCorp !=="") && !control3){
             setValue('titulo', titulo);
             setValue('cantidadPaginas',cantidadpaginas);
             setValue('descripcion', descripcion);
-            console.log(autores);
-            autores.map(
-                (autor, index)=>{
-                    setValue(`autores[${index}].primerNombre`, autor.primerNombre);
-                    setValue(`autores[${index}].segundoNombre`, autor.segundoNombre);
-                    setValue(`autores[${index}].tercerNombre`, autor.tercerNombre);
-                    setValue(`autores[${index}].primerApellido`, autor.primerApellido);
-                    setValue(`autores[${index}].segundoApellido`, autor.segundoApellido);
-                    setValue(`autores[${index}].Carnet`, autor.Carnet);
 
+            if(autores.length!==0){
+                console.log(autores);
+                autores.map(
+                    (autor, index)=>{
+                        setValue(`autores[${index}].primerNombre`, autor.primerNombre);
+                        setValue(`autores[${index}].segundoNombre`, autor.segundoNombre);
+                        setValue(`autores[${index}].tercerNombre`, autor.tercerNombre);
+                        setValue(`autores[${index}].primerApellido`, autor.primerApellido);
+                        setValue(`autores[${index}].segundoApellido`, autor.segundoApellido);
+                        setValue(`autores[${index}].Carnet`, autor.Carnet);
+
+                    }
+                )
+            }else{
+                if(autorCorp!==""){
+                    setValue('Acorporativo', autorCorp);
                 }
-            )
+            }
+
 
 
             setValue('palabrasCla', palcl);
         }
-    },[datostrabajo, autores, control3]);
+    },[datostrabajo, autores, autorCorp, control3]);
 
 
     useEffect(()=>{
@@ -160,6 +188,10 @@ function CompoEditarTrabajos({idDetalle}){
                 }));
                 console.log(autores);
                 setAutores(autores);
+
+                if(datos.autoresCorp.length!==0){
+                    setAutorCorp(datos.autoresCorp[0].autorCorp.nombreAutor);
+                }
 
 
                 setIdtrabajo(datos.trabajoGrad.ID_Trabajo);
@@ -664,7 +696,14 @@ function CompoEditarTrabajos({idDetalle}){
                 <div className="card text-bg-secondary mb-3" style={{width:'95%', margin:'0 auto'}}>
                     <div className="card-header"><strong>Usuario operativo:</strong> {nombreusuario}</div>
                     <div className="card-body">
+                        <legend className="text-center mb-2"><strong>Nombre de facultad:</strong> {facultad}</legend>
                         <legend className="text-center mb-4"><strong>Edición de trabajos de graduación:</strong> {carrera}</legend>                       
+                    </div>
+                    <div className="card-footer bg-transparent border-dark">
+                        <strong>Código de carrera:</strong> {codigoCarrera} -  
+                        <strong> Nivel educativo:</strong> {nivelEducativo} - 
+                        <strong> Grado académico:</strong> {gradoAcademico}
+
                     </div>
                 </div>
 
@@ -705,7 +744,7 @@ function CompoEditarTrabajos({idDetalle}){
                                         <legend className="text-center mb-4"><strong>Datos generales del autor</strong></legend>
                                             
                                             {
-                                                autores.map((autor, index)=>(
+                                                 autores.length!==0&&(autores.map((autor, index)=>(
                                                     <div className="d-flex flex-row mb-4" key={index}>
                                                             
                                                             <div className="mb-3">
@@ -786,13 +825,47 @@ function CompoEditarTrabajos({idDetalle}){
                                                     </div>
 
                                                 )
-                                                )
+                                                ))
 
                                             }
 
-                                            <div className="d-flex justify-content-center align-items-center mb-4">
-                                                <button type="button" className="btn btn-primary" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> <strong>Agregar autor</strong></button>
-                                            </div>
+                                            {
+                                                autores.length!==0&&(<div className="d-flex justify-content-center align-items-center mb-4">
+                                                    <button type="button" className="btn btn-primary" onClick={handleAddClick}><i className="bi bi-plus-circle-fill"></i> <strong>Agregar autor</strong></button>
+                                                </div>)
+                                            }
+
+                                            {
+                                                    autorCorp!==""&&(
+                                                        <div className="mt-3">
+                                                            <div className="mt-3">
+                                                                <label className="col-sm-2 col-form-label"><strong>Autor Corporativo</strong></label>
+                                                            </div>
+                                                            <div className="d-flex align-items-center mb-3">
+                                                                
+                                                                <div className="col-sm-5">
+                                                                    <div>
+                                                                        <input type="text" className="form-control text-white bg-dark" {...register("Acorporativo", {required: {value: true, message:'Es necesario escribir el nombre del autor corporativo...'}})}/>
+                                                                    </div>
+                                                        
+                                                                                        
+                                                                    {
+                                                                    errors.Acorporativo && (                                  
+                                                                                                    
+                                                                        <span className="badge rounded-pill text-bg-danger">{errors.Acorporativo.message}</span>
+                                                        
+                                                        
+                                                                    )
+                                                                    }
+
+                                                                </div>
+                                                                
+                                                    
+                                                            </div>
+                                                        </div>
+                                                    
+                                                    )
+                                        }
 
                                             <div className="col">
                                                 <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
