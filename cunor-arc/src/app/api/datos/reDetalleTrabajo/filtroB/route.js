@@ -19,6 +19,9 @@ export async function GET(request){
             include:{
                 trabajoGrad:true,
                 categoria:true,
+                tipoMaterial:true,
+                idiomas:true,
+                paises:true,
                 formato:true,
                 carrera:true,
                 //autor: true,

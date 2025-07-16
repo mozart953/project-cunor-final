@@ -64,6 +64,18 @@ function CompoEditarTrabajos({idDetalle}){
     const [barraprogreso2, setBarraprogreso2] = useState("0%");
     const [eliminado, setEliminado] = useState(false);
     const [interruptor, setInterruptor] = useState(false);
+
+    const [isChecked, setIsChecked] = useState(false);
+    const [tipoMaterial, setTipoMaterial] = useState([]);
+    const [idMaterial, setIdMaterial] = useState(0);
+    const [paises, setPaises] = useState([]);
+    const [idPais, setIdPais] = useState(0);
+    const [idiomas, setIdiomas] = useState([]);
+    const [idIdioma, setIdIdioma] = useState(0);
+    const [correlativo, setCorrelativo] = useState("");
+    const [notaTesis, setNotaTesis] = useState("");
+    const [editorial, setEditorial] = useState("");
+    const [fechaPublicacion, SetFechaPublicacion] = useState(new Date().toISOString().split('T')[0]);
             
     const [idcarrera1, setIdcarrera1]= useState(null);
     const [iduser1, setIduser1] = useState(null);
@@ -132,10 +144,17 @@ function CompoEditarTrabajos({idDetalle}){
 
 
     useEffect(()=>{
-        if(datostrabajo && (autores.length!==0 || autorCorp !=="") && !control3){
+        if(datostrabajo && (autores.length!==0 || autorCorp !=="") && !control3 && correlativo!=="" && notaTesis!==""){
             setValue('titulo', titulo);
             setValue('cantidadPaginas',cantidadpaginas);
             setValue('descripcion', descripcion);
+            setValue('correlativo', correlativo);
+            setValue('notaTesis', notaTesis);
+            setValue('editorial', editorial);
+
+            if(editorial!==""){
+                setIsChecked(true);
+            }
 
             if(autores.length!==0){
                 console.log(autores);
@@ -160,7 +179,7 @@ function CompoEditarTrabajos({idDetalle}){
 
             setValue('palabrasCla', palcl);
         }
-    },[datostrabajo, autores, autorCorp, control3]);
+    },[datostrabajo, autores, autorCorp, control3, correlativo, notaTesis, editorial]);
 
 
     useEffect(()=>{
@@ -201,8 +220,15 @@ function CompoEditarTrabajos({idDetalle}){
                 setTamanio(datos.trabajoGrad.tamanio);
                 setUrl(datos.trabajoGrad.direccionGuardado);
                 setPalcl(datos.trabajoGrad.paClave);
+                setCorrelativo(datos.trabajoGrad.correlativo);
+                setNotaTesis(datos.trabajoGrad.notaTesis);
+                setEditorial(datos.trabajoGrad.editorial);
+                SetFechaPublicacion(new Date(datos.fechaPublicacion).toISOString().split('T')[0]);
 
                 setIdcategoria(datos.categoria.ID_Categoria); 
+                setIdMaterial(datos.tipoMaterial.ID_TipoMaterial);
+                setIdPais(datos.paises.ID_Idioma);
+                setIdIdioma(datos.idiomas.ID_Idioma);
                 setArchivosanexos(datos.archivoAnexo);
                 console.log(datos.archivoAnexo);
             });
@@ -217,6 +243,24 @@ function CompoEditarTrabajos({idDetalle}){
                 //setIdcategoria(datos[0].ID_Categoria);
             }
         )
+
+        fetch('/api/datos/reMaterial').then(data=>data.json()).then(datos=>{console.log(datos);
+            setTipoMaterial([...datos, ...tipoMaterial]);
+            //setIdMaterial(datos[0].ID_TipoMaterial);
+        });
+
+        fetch('/api/datos/rePaises').then(data=>data.json()).then(datos=>{console.log(datos);
+            setPaises([...datos, ...paises]);
+            //setIdPais(datos[0].ID_Pais);
+        });
+
+        fetch('/api/datos/reIdiomas').then(data=>data.json()).then(datos=>{
+            console.log(datos);
+            setIdiomas([...datos, ...idiomas]);
+            //setIdIdioma(datos[0].ID_Idioma);
+        })
+
+
 
     },[]);
 
@@ -419,6 +463,32 @@ function CompoEditarTrabajos({idDetalle}){
         setIdcategoria(selectCategoria);
     }
 
+    const obtenerIdMaterial = (e)=>{
+        e.preventDefault();
+
+        const selectMaterial = e.target.value;
+        console.log(selectMaterial);
+        setIdMaterial(selectMaterial);
+    }
+
+    const obtenerIdPais = (e)=>{
+        e.preventDefault();
+
+        const selectPais = e.target.value;
+        console.log(selectPais);
+        setIdPais(selectPais);
+    } 
+
+    const obtenerIdIdioma = (e)=>{
+        e.preventDefault();
+
+        const selectIdioma = e.target.value;
+        console.log(selectIdioma);
+        setIdIdioma(selectIdioma);
+    }
+
+
+    const handleCheckboxChange = (event) => { setIsChecked(event.target.checked); };
 
 
     const onSubmit= handleSubmit (async (data)=>{
@@ -867,8 +937,37 @@ function CompoEditarTrabajos({idDetalle}){
                                                     )
                                         }
 
+                                            <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
+
                                             <div className="col">
-                                                <legend className="text-center mb-4"><strong>Datos generales del trabajo de graduación</strong></legend>
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-2 col-form-label"><strong>Correlativo</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" {...register("correlativo", {required: {value: true, message:'Es necesario escribir el correlativo...'}})}/>
+                                                    </div>
+
+                                                    
+                                                        {
+                                                            errors.correlativo && (                                  
+                                                                
+                                                                <span className="badge rounded-pill text-bg-danger">{errors.correlativo.message}</span>
+
+
+                                                            )
+                                                        }
+
+                                                </div>
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-12 col-form-label"><strong>Fecha de publicación</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="date" className="form-control bg-dark text-white" value={fechaPublicacion ||  new Date().toISOString().split('T')[0]} onChange={(e)=>{SetFechaPublicacion(e.target.value)}}/>    
+                                                    </div>                                       
+                                                        
+                                                </div>
+
+                                                
                                                 <div className="mb-3">
                                                     <label className="col-sm-2 col-form-label"><strong>Título</strong></label>
                                                     <div className="col-sm-10">
@@ -886,12 +985,43 @@ function CompoEditarTrabajos({idDetalle}){
                                                         }
 
                                                 </div>
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-10 col-form-label"><strong>Facultad</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" value={facultad} onChange={(e)=>{e.target.value}} disabled/>
+                                                    </div>
+                                                </div>
+
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-10 col-form-label"><strong>Nivel educativo</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" value={nivelEducativo} onChange={(e)=>{e.target.value}} disabled/>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-10 col-form-label"><strong>Grado académico</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" value={gradoAcademico} onChange={(e)=>{e.target.value}} disabled/>
+                                                    </div>
+                                                </div>
+
                                                 <div className="mb-3">
                                                     <label className="col-sm-2 col-form-label"><strong>Carrera</strong></label>
                                                     <div className="col-sm-10">
                                                         <input type="text" className="form-control text-white bg-dark" value={carrera} onChange={(e)=>{e.target.value}} disabled/>
                                                     </div>
                                                 </div>
+
+                                                <div className="mb-3">
+                                                    <label className="col-sm-10 col-form-label"><strong>Código de carrera</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" value={codigoCarrera} onChange={(e)=>{e.target.value}} disabled/>
+                                                    </div>
+                                                </div>
+
                                                 <div className="mb-3">
                                                     <label className="col-form-label"><strong>Cantidad de páginas</strong></label>
                                                     <div className="col-sm-10">
@@ -922,6 +1052,53 @@ function CompoEditarTrabajos({idDetalle}){
 
                                                 </div>
 
+                                                <div className="mb-3">
+                                                    <label className="col-form-label"><strong>Material</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <select className='form-select text-white bg-dark' value={idMaterial} onChange={obtenerIdMaterial}>
+                                                            {
+                                                                tipoMaterial.map((data)=><option  key={data.ID_TipoMaterial} value={data.ID_TipoMaterial}>{data.nombreTipoMaterial}</option>)
+                                                            }
+                                                        </select>
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                <div className="mb-3">
+                                                    <label className="col-form-label"><strong>País</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <select className='form-select text-white bg-dark' value={idPais} onChange={obtenerIdPais}>
+                                                            {
+                                                                paises.map((data)=><option  key={data.ID_Pais} value={data.ID_Pais}>{data.nombrePais}</option>)
+                                                            }
+                                                        </select>
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                <div className="mb-3">
+                                                    <label className="col-form-label"><strong>Idioma</strong></label>
+                                                    <div className="col-sm-10">
+                                                        <select className='form-select text-white bg-dark' value={idIdioma} onChange={obtenerIdIdioma}>
+                                                            {
+                                                                idiomas.map((data)=><option  key={data.ID_Idioma} value={data.ID_Idioma}>{data.nombre}</option>)
+                                                            }
+                                                        </select>
+
+                                                    </div>
+
+
+                                                </div>
+
+                                                
+
+
                                                 <div className="mb-3 ">
                                                     <label className="form-label"><strong>Descripción (Resumen)</strong></label>
 
@@ -933,6 +1110,58 @@ function CompoEditarTrabajos({idDetalle}){
                                                             errors.descripcion && (                                  
                                                                 
                                                                 <span className="badge rounded-pill text-bg-danger">{errors.descripcion.message}</span>
+
+
+                                                            )
+                                                    }
+                                                    
+                                                </div>
+
+
+                                                {
+                                                    editorial==""&&(
+                                                        <div className="form-check form-check-inline mb-3">
+                                                                <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked={isChecked} onChange={handleCheckboxChange} />
+                                                                <label className="form-check-label" htmlFor="inlineCheckbox1"><strong>{!isChecked?"Agregar editorial":"Quitar editorial"}</strong></label>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    isChecked&&(
+                                                    
+                                                        <div className="mb-3 ">
+                                                        <label className="form-label"><strong>Editorial</strong></label>
+
+                                                        <div className="col-sm-10">
+                                                            <input type="text" className="form-control text-white bg-dark" {...register("editorial", {required: {value: true, message:'Es necesario escribir la editorial'}})} />
+                                                        </div>
+
+                                                        {
+                                                                errors.editorial && (                                  
+                                                                    
+                                                                    <span className="badge rounded-pill text-bg-danger">{errors.editorial.message}</span>
+
+
+                                                                )
+                                                        }
+                                                        
+                                                    </div>
+                                                    )
+                                                }
+
+
+                                                <div className="mb-3 ">
+                                                    <label className="form-label"><strong>Nota de tesis</strong></label>
+
+                                                    <div className="col-sm-10">
+                                                        <input type="text" className="form-control text-white bg-dark" {...register("notaTesis", {required: {value: true, message:'Es necesario escribir nota de tesis'}})} />
+                                                    </div>
+
+                                                    {
+                                                            errors.notaTesis && (                                  
+                                                                
+                                                                <span className="badge rounded-pill text-bg-danger">{errors.notaTesis.message}</span>
 
 
                                                             )
