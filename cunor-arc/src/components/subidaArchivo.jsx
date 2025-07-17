@@ -178,7 +178,7 @@ function SubaArchivoPage(){
 
     useEffect(()=>{
         console.log("Fecha publicacion");
-        console.log(new Date(fechaPublicacion).toISOString());
+        //console.log(new Date(fechaPublicacion).toISOString());
         const actualizarDetalle= async()=>{
             if(idtrabajo!==null && idusuario!==null && (autores3.length!==0 || (inteAutorC && autorC!==""))){
                 setBarraprogreso('0%');
