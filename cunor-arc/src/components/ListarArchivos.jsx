@@ -59,13 +59,15 @@ function CompoListarArchivosPage(){
     const [showPDF2, setShowPDF2] = useState(null);
 
     const ordenQuery =[ {id:1,ord:'Descendente', ordBase:'desc'}, {id:2, ord:'Ascendente', ordBase:'asc'}];
-    const ordenQuery2 = [{id:1, ord:'Fecha de publicación', ordBase:'fechaCarga'}, 
+    const ordenQuery2 = [{id:1, ord:'Fecha de carga', ordBase:'fechaCarga'}, 
                          {id:2, ord:'Titulo', ordBase:'trabajoGrad.titulo'},
                          {id:3, ord:'Autor no corporativo', ordBase:'autor.primerNombre'},
                          {id:4, ord:'Carrera', ordBase:'carrera.nombreCarrera'},
                          {id:5, ord:'Categoria', ordBase:'categoria.nombreCategoria'},
                          {id:6, ord:'Carnet', ordBase:'autor.carnet'},
                          {id:7, ord:'Autor corporativo', ordBase:'autorCorp.nombreAutor'},
+                         {id:8, ord:'Correlativo', ordBase:'trabajoGrad.correlativo'},
+                         {id:9, ord:'Fecha de publicación', ordBase:'fechaPublicacion'}
                         
                         ];
 
