@@ -82,6 +82,7 @@ function CompoEditarTrabajos({idDetalle}){
     const [autores, setAutores] = useState([{ ID_Autor:'', Carnet:'',primerNombre: '', segundoNombre: '', tercerNombre: '', primerApellido: '', segundoApellido: '' }]);
     const [autores3, setAutores3]=useState([]);
     const [autorCorp,setAutorCorp]= useState("");
+    const [idautorCorp, setIdautorCorp] = useState(null);
     const { data: session, status } = useSession();
 
     const router = useRouter();
@@ -210,6 +211,7 @@ function CompoEditarTrabajos({idDetalle}){
 
                 if(datos.autoresCorp.length!==0){
                     setAutorCorp(datos.autoresCorp[0].autorCorp.nombreAutor);
+                    setIdautorCorp(datos.autoresCorp[0].autorCorp.ID_AutorC);
                 }
 
 
@@ -227,7 +229,7 @@ function CompoEditarTrabajos({idDetalle}){
 
                 setIdcategoria(datos.categoria.ID_Categoria); 
                 setIdMaterial(datos.tipoMaterial.ID_TipoMaterial);
-                setIdPais(datos.paises.ID_Idioma);
+                setIdPais(datos.paises.ID_Pais);
                 setIdIdioma(datos.idiomas.ID_Idioma);
                 setArchivosanexos(datos.archivoAnexo);
                 console.log(datos.archivoAnexo);
@@ -269,7 +271,7 @@ function CompoEditarTrabajos({idDetalle}){
     useEffect(()=>{
         const actualizarDatos= async ()=>{
 
-            if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null && autores.length!==0 && idtrabajo!==null){
+            if(tamanio>0 && barraprogreso=='100%' && url!=="" && data1 !==null && (autores.length!==0 || (autorCorp!=="" && idautorCorp!==null)) && idtrabajo!==null){
                 console.log("viendo datos" +JSON.stringify(data1));
                 //console.log(tamanio + " " + " " +barraprogreso + " " + url+  " " + idautor + " "+ idtrabajo );
 
@@ -278,12 +280,16 @@ function CompoEditarTrabajos({idDetalle}){
                     const respuesta1 = await fetch(`/api/datos/reTrabajoGraduacion/${idtrabajo}`, {
                         method: 'PUT',
                         body: JSON.stringify({
+                            correlativo:data1.correlativo,
                             titulo: data1.titulo,
                             cantidadPaginas: Number(data1.cantidadPaginas),
                             descripcion:data1.descripcion,
                             tamanio:Number(tamanio),
                             direccionGuardado:url,
                             paClave:data1.palabrasCla,
+                            notaTesis:data1.notaTesis,
+                            editorial:isChecked?data1.editorial:"",
+
                         }),
                         headers:{
                             'Content-Type':'application/json',
@@ -293,63 +299,80 @@ function CompoEditarTrabajos({idDetalle}){
                     console.log(datos1);
                     setControl1(true);
 
-                    for(let i=0;i< data1.autores.length;i++){
-                        let idAutor = autores[i].ID_Autor;
-                        console.log("el id del autor es> " + idAutor);
 
-                        if(idAutor!==undefined && idAutor!==''){
-                            
-                            const respuesta2 = await fetch(`/api/datos/reAutor/${idAutor}`,{
-                                method:'PUT',
-                                body: JSON.stringify({
-                                    primerNombre: data1.autores[i].primerNombre,
-                                    segundoNombre: data1.autores[i].segundoNombre,
-                                    tercerNombre: data1.autores[i].tercerNombre,
-                                    primerApellido: data1.autores[i].primerApellido,
-                                    segundoApellido: data1.autores[i].segundoApellido,
-                                    carnet:data1.autores[i].Carnet,
-                                }),
-                                headers:{
-                                    'Content-Type':'application/json',
-                                }
-                            });
-                            const datos2 = await respuesta2.json();
-                            console.log(datos2);
+                    if(autorCorp==""){
+                        for(let i=0;i< data1.autores.length;i++){
+                            let idAutor = autores[i].ID_Autor;
+                            console.log("el id del autor es> " + idAutor);
 
-                        }else{
-                            const respuesta2 = await fetch('/api/datos/reAutor',{
-                                method:'POST',
-                                body: JSON.stringify({
-                                    primerNombre: data1.autores[i].primerNombre,
-                                    segundoNombre: data1.autores[i].segundoNombre,
-                                    tercerNombre: data1.autores[i].tercerNombre,
-                                    primerApellido: data1.autores[i].primerApellido,
-                                    segundoApellido: data1.autores[i].segundoApellido,
-                                    carnet:data1.autores[i].Carnet,
-                                }),
-                                headers:{
-                                    'Content-Type':'application/json',
-                                }
-                            });
-                            
-                            const dato2= await respuesta2.json();
-                            console.log(dato2);
+                            if(idAutor!==undefined && idAutor!==''){
+                                
+                                const respuesta2 = await fetch(`/api/datos/reAutor/${idAutor}`,{
+                                    method:'PUT',
+                                    body: JSON.stringify({
+                                        primerNombre: data1.autores[i].primerNombre,
+                                        segundoNombre: data1.autores[i].segundoNombre,
+                                        tercerNombre: data1.autores[i].tercerNombre,
+                                        primerApellido: data1.autores[i].primerApellido,
+                                        segundoApellido: data1.autores[i].segundoApellido,
+                                        carnet:data1.autores[i].Carnet,
+                                    }),
+                                    headers:{
+                                        'Content-Type':'application/json',
+                                    }
+                                });
+                                const datos2 = await respuesta2.json();
+                                console.log(datos2);
 
-                            const respuesta4 = await fetch('/api/datos/reEnlaceAutorRegistro', {
-                                method:'POST',                            
-                                body:JSON.stringify({
-                                    ID_Autor:dato2.ID_Autor,
-                                    ID_Detalle:Number(idDetalle),
-                                }),
-                                headers:{
-                                    'Content-Type':'application/json',
-                                }
-                            });
-                            const dato4 = await respuesta4.json();
-                            console.log(dato4);
+                            }else{
+                                const respuesta2 = await fetch('/api/datos/reAutor',{
+                                    method:'POST',
+                                    body: JSON.stringify({
+                                        primerNombre: data1.autores[i].primerNombre,
+                                        segundoNombre: data1.autores[i].segundoNombre,
+                                        tercerNombre: data1.autores[i].tercerNombre,
+                                        primerApellido: data1.autores[i].primerApellido,
+                                        segundoApellido: data1.autores[i].segundoApellido,
+                                        carnet:data1.autores[i].Carnet,
+                                    }),
+                                    headers:{
+                                        'Content-Type':'application/json',
+                                    }
+                                });
+                                
+                                const dato2= await respuesta2.json();
+                                console.log(dato2);
+
+                                const respuesta4 = await fetch('/api/datos/reEnlaceAutorRegistro', {
+                                    method:'POST',                            
+                                    body:JSON.stringify({
+                                        ID_Autor:dato2.ID_Autor,
+                                        ID_Detalle:Number(idDetalle),
+                                    }),
+                                    headers:{
+                                        'Content-Type':'application/json',
+                                    }
+                                });
+                                const dato4 = await respuesta4.json();
+                                console.log(dato4);
+
+                            }
+
 
                         }
+                    }else{
+                        const respuesta2 = await fetch(`/api/datos/reAutorC/${idautorCorp}`,{
+                            method:'PUT',
+                            body:JSON.stringify({
+                                nombreAutor: data1.Acorporativo,
+                            }),
+                            headers:{
+                                'Content-Type':'application/json',
+                            }
+                        });
 
+                        const dato2= await respuesta2.json();
+                        console.log(dato2);
 
                     }
 
@@ -402,7 +425,7 @@ function CompoEditarTrabajos({idDetalle}){
         };
         actualizarDatos();    
 
-    },[tamanio,barraprogreso, url, data1, autores, idtrabajo, urlfiles]);
+    },[tamanio,barraprogreso, url, data1, autores, idtrabajo, urlfiles, autorCorp, idautorCorp]);
 
     useEffect(()=>{
         if(control1 && control2){
@@ -414,7 +437,11 @@ function CompoEditarTrabajos({idDetalle}){
                     method:'PUT',
                     body:JSON.stringify({
                         ID_categoria:Number(idcategoria),
-                        fechaActualizacion:fechaActualizacion,                        
+                        fechaActualizacion:fechaActualizacion,
+                        fechaPublicacion: fechaPublicacion && fechaPublicacion !== "" ? new Date(fechaPublicacion).toISOString() : new Date().toISOString(),
+                        ID_TipoMaterial: Number(idMaterial),
+                        ID_Idioma:Number(idIdioma),
+                        ID_Pais:Number(idPais),                        
     
                     }),
                     headers:{
