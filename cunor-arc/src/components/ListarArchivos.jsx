@@ -67,7 +67,9 @@ function CompoListarArchivosPage(){
                          {id:6, ord:'Carnet', ordBase:'autor.carnet'},
                          {id:7, ord:'Autor corporativo', ordBase:'autorCorp.nombreAutor'},
                          {id:8, ord:'Correlativo', ordBase:'trabajoGrad.correlativo'},
-                         {id:9, ord:'Fecha de publicación', ordBase:'fechaPublicacion'}
+                         {id:9, ord:'Fecha de publicación', ordBase:'fechaPublicacion'},
+                         {id:10, ord:'Material', ordBase:'tipoMaterial.nombreTipoMaterial'},
+                         {id:11, ord:'Idioma', ordBase:'idiomas.nombre'}
                         
                         ];
 
