@@ -44,7 +44,7 @@ export async function GET(request){
 
         let orderBy={};
 
-        if(ordenCampo !== 'autor.primerNombre' && ordenCampo!=='autor.carnet'){
+        if(ordenCampo !== 'autor.primerNombre' && ordenCampo!=='autor.carnet' && ordenCampo !== 'autorCorp.nombreAutor'){
              orderBy = buildOrderBy(ordenCampo, orderDirection);
         }
 
@@ -55,11 +55,33 @@ export async function GET(request){
                     trabajoGrad:true,
                     categoria:true,
                     formato:true,
-                    carrera:true,
+                    carrera:{
+                        include:{
+                            facultad:true,
+                            gradoAcademico:{
+                                include:{
+                                    gradoAcademico:{
+                                        include:{
+                                            nivelEducativo:true,
+                                        }
+                                    }
+                                }
+                            },
+                            
+                        }
+                    },
+                    idiomas:true,
+                    paises:true,
+                    tipoMaterial:true,
                     //autor: true,
                     autores:{
                         include:{
                             autor:true
+                        }
+                    },
+                    autoresCorp:{
+                        include:{
+                            autorCorp:true,
                         }
                     },
                     archivoAnexo:true,
@@ -98,6 +120,23 @@ export async function GET(request){
                 }
             });
         }
+
+        if(ordenCampo === 'autorCorp.nombreAutor'){
+            detalles.sort((a, b) => {
+                const nombreAutorA = a.autoresCorp[0]?.autorCorp?.nombreAutor || '';
+                const nombreAutorB = b.autoresCorp[0]?.autorCorp?.nombreAutor || '';
+        
+                if (orderDirection === 'asc') {
+                    return nombreAutorA.localeCompare(nombreAutorB);
+                } else {
+                    return nombreAutorB.localeCompare(nombreAutorA);
+                }
+            })
+               
+
+        }
+
+
 
         return NextResponse.json({items:detalles, total:totalItems});
     }catch(error){
