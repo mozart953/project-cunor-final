@@ -684,31 +684,70 @@ function CompoInicioTr(){
                                 {/* <div className="card-header">
                                      <strong>Autor:</strong> {data.autor.primerNombre} {data.autor.segundoNombre} {data.autor.tercerNombre} {data.autor.primerApellido} {data.autor.segundoApellido}
                                 </div> */}
+
+                                        <div className="card-header align-self-end mt-3"> 
+                                            <div>
+                                                <strong>Código de carrera:</strong> {data.carrera.codigoCarrera}	
+                                            </div>
+                                        </div>
+
+
                                             {
-                                                data.autores.length!==1?(
-                                                    <div className="card-header">
-                                                        <strong>Autores:</strong>{" "}
-                                                    </div>
+                                                data.autoresCorp.length!==0?(
+                                                    <>
+                                                        <div className="card-header">
+                                                            <strong>Autor corporativo:</strong>{" "}
+                                                        </div>
+    
+                                                        {data.autoresCorp.map(data=>(
+                                                            <div className="card-header" key={data.ID_AutorC}>
+                                                                {data.autorCorp.nombreAutor}
+                                                            </div>
+                                                            
+                                                        ))}
+                                                    </>
+                                                    
+
+
                                                 ):(
-                                                    <div className="card-header">
-                                                        <strong>Autor:</strong>{" "}
-                                                    </div>
+                                                    <>
+                                                        {
+                                                            data.autores.length!==1?(
+                                                                <div className="card-header">
+                                                                    <strong>Autores:</strong>{" "}
+                                                                </div>
+                                                            ):(
+                                                                <div className="card-header">
+                                                                    <strong>Autor:</strong>{" "}
+                                                                </div>
+                                                            )
+                                                        }
+                                                    
+                                                        {data.autores.map((autorData) => (
+                                                                <div className="card-header" key={autorData.ID_Autor}>
+                                                                {/* <strong>Autor:</strong>{" "} */}
+                                                                {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
+                                                                - <strong>No. de carnet:</strong>
+                                                                {autorData.autor.carnet}
+                                                                </div>
+                                                        ))}
+                                                    </>
                                                 )
                                             }
-                                           
-                                           {data.autores.map((autorData) => (
-                                                <div className="card-header" key={autorData.ID_Autor}>
-                                                {/* <strong>Autor:</strong>{" "} */}
-                                                {autorData.autor.primerNombre} {autorData.autor.segundoNombre} {autorData.autor.tercerNombre} {autorData.autor.primerApellido} {autorData.autor.segundoApellido}
-                                                - <strong>No. de carnet:</strong>
-                                                {autorData.autor.carnet}
-                                                </div>
-                                            ))}
                                 
 
                                 <div className="card-body">
                                     
                                     <h5 className="card-title"  style={{fontStyle: 'italic'}}><strong>Título:</strong> {data.trabajoGrad.titulo}</h5>
+                                    {
+                                        data.trabajoGrad.editorial!=""&&(<p className="card-text mt-3"><strong>Editorial:</strong> {data.trabajoGrad.editorial}</p>)
+                                    }
+                                    <p className="card-text">
+                                            <strong>Idioma:</strong> {data.idiomas.nombre}
+                                    </p>
+                                    <p className="card-text">
+                                            <strong>País:</strong> {data.paises.nombrePais}
+                                    </p>
 
                                     <div className="card text-bg-secondary mb-3" >
                                         <div className="card-body">
@@ -719,7 +758,32 @@ function CompoInicioTr(){
 
 
                                     <div className="card-body mt-0" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                                        
+                                        {
+                                            data.carrera.gradoAcademico.map((data)=>(
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.nivelEducativo.ID_NivelEducativo}>
+                                                       <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nivel educativo:</strong> </h6>
+                                                       <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nivelEducativo.nombreNivelEducativo} </p>
+                                                </div>
+
+                                            ))
+                                        }
+
+                                        {
+                                            data.carrera.gradoAcademico.map((data)=>(
+                                                                                                                                                                          
+                                                <div className="col" style={{ display: 'flex', alignItems: 'center'}} key={data.gradoAcademico.ID_Grado}>
+                                                    <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Grado académico:</strong> </h6>
+                                                    <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.gradoAcademico.nombreGrado} </p>
+                                                </div>
+                                            ))
+                                        }
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Facultad:</strong> </h6>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.facultad.nombreFacultad} </p>
+                                        </div>
+
+
+
                                         <div className="col" style={{ display: 'flex', alignItems: 'center'}}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Carrera:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.carrera.nombreCarrera} </p>
@@ -727,6 +791,10 @@ function CompoInicioTr(){
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Categoría:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.categoria.nombreCategoria} </p>
+                                        </div>
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Tipo de material:</strong></h6>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.tipoMaterial.nombreTipoMaterial} </p>
                                         </div>
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Palabras clave:</strong></h6>
@@ -740,6 +808,20 @@ function CompoInicioTr(){
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Formato:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.formato.nombreFormato} </p>
                                         </div>
+
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                            <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Nota de tesis:</strong></h6>
+                                            <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>{data.trabajoGrad.notaTesis} </p>
+                                        </div>
+                                                
+                                        <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
+                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de publicación:</strong></h6>
+                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
+                                                {new Date(data.fechaPublicacion).getDate()}/{new Date(data.fechaPublicacion).getMonth()+1}/{new Date(data.fechaPublicacion).getFullYear()}
+                                             </p>
+                                        </div>
+
+
                                         <div className="col" style={{ display: 'flex', alignItems: 'center' }}>
                                             <h6 className="card-title" style={{ margin: 0, padding: 0 }}><strong>Fecha de carga:</strong></h6>
                                             <p className="card-text ps-2" style={{ margin: 0, padding: 0 }}>
