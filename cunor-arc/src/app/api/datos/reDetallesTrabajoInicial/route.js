@@ -22,10 +22,21 @@ export async function GET(request){
     const idEstado = Number(paramametros.get('idEstado'));
     const searchTerm = paramametros.get('searchTerm')||'';
     const orderDirection = paramametros.get('orderDirection') || 'desc';
-    const ordenCampo = paramametros.get('orderCampo')|| 'fechaCarga';    
+    const ordenCampo = paramametros.get('orderCampo')|| 'fechaPublicacion';    
  
 
     let whereClause = {ID_estado:Number(idEstado)};
+    if (ordenCampo === 'autorCorp.nombreAutor') {
+        whereClause = {
+            ...whereClause,
+            autoresCorp: { some: { autorCorp: { nombreAutor: { not: undefined} } } },  // Solo trabajos con autores corporativos
+        };
+    } else if (ordenCampo === 'autor.primerNombre' || ordenCampo === 'autor.carnet') {
+        whereClause = {
+            ...whereClause,
+            autores: { some: { autor: { primerNombre: { not: undefined } } } },  // Solo trabajos con autores no corporativos
+        };
+    }
 
     try{
 
