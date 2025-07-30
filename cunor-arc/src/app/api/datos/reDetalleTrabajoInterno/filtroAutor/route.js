@@ -25,6 +25,17 @@ export async function GET(request){
     const ordenCampo = paramametros.get('orderCampo')|| 'fechaCarga';
     
     let whereClause = { ID_usuario: Number(idUsuario), ID_carrera: Number(idCarrera),};
+    if (ordenCampo === 'autorCorp.nombreAutor') {
+        whereClause = {
+            ...whereClause,
+            autoresCorp: { some: { autorCorp: { nombreAutor: { not: undefined} } } },  // Solo trabajos con autores corporativos
+        };
+    } else if (ordenCampo === 'autor.primerNombre' || ordenCampo === 'autor.carnet') {
+        whereClause = {
+            ...whereClause,
+            autores: { some: { autor: { primerNombre: { not: undefined } } } },  // Solo trabajos con autores no corporativos
+        };
+    }
 
     try{
 
